@@ -1,6 +1,5 @@
-
-Vows.js
-=======
+Vows
+====
 
 asynchronous promise-based testing for node.js
 
