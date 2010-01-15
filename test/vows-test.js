@@ -21,13 +21,19 @@ vows.tell("Vows", {
     "and now something a little more complex": {
         setup: function () {
             var promise = new(process.Promise);
-            setTimeout(function () { promise.emitSuccess({f: 1, z: 2}) }, 100);
+            setTimeout(function () {
+                promise.emitSuccess({
+                    f: function (a) { return a; }, 
+                    z: 2
+                }) 
+            }, 100);
             return promise;
         },
         "testing member equality": function (it) {
-            it.should.beA(Object);
-            it['f'].should.equal(1);
-            it['z'].should.equal(2);
+            it.f({a:function(){return {j:11}}}).a().j.should.equal(11);
+            it.f([1,2,3])[1].should.equal(2)
+            //it['f'].should.equal(1);
+            //it['z'].should.equal(2);
         }
     },
 });
