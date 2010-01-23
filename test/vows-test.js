@@ -1,39 +1,39 @@
-var vows = require('../lib/vows');
+var path = require('path');
+
+require.paths.unshift(path.join(path.dirname(__filename), '..', 'lib'));
+
+var events = require('events'),
+    assert = require('assert');
+var vows = require('vows');
+
+var promiser = function (val) {
+    return function () {
+        var promise = new(events.Promise);
+        process.nextTick(function () { promise.emitSuccess(val) });
+        return promise;
+    }
+};
 
 vows.tell("Vows", {
-    "let's start with some basics": {
-        setup: function () {
-            var promise = new(process.Promise);
-            setTimeout(function () { promise.emitSuccess("hello world.") }, 100);
-            return promise;
-        },
+    "a context": {
+        setup: promiser("hello world"),
+
         "testing equality": function (it) {
-            it.should.equal("hello world.");
-            it.should.beA(String);
+            assert.equal(it, "hello world");
         },
         "testing match": function (it) {
-            it.should.match(/[a-z]+ [a-z]+/);
+            assert.match(it, /[a-z]+ [a-z]+/);
         },
         "testing inclusion": function (it) {
-            it.should.include("world");
-        }
-    },
-    "and now something a little more complex": {
-        setup: function () {
-            var promise = new(process.Promise);
-            setTimeout(function () {
-                promise.emitSuccess({
-                    f: function (a) { return a; }, 
-                    z: 2
-                }) 
-            }, 100);
-            return promise;
+            assert.include(it, "world");
         },
-        "testing member equality": function (it) {
-            it.f({a:function(){return {j:11}}}).a().j.should.equal(11);
-            it.f([1,2,3])[1].should.equal(2)
-            //it['f'].should.equal(1);
-            //it['z'].should.equal(2);
+        "a nested context": {
+            setup: function (parent) {
+                return parent;
+            },
+            "with equality": function (it) {
+                assert.equal(it, "hello world");
+            }
         }
-    },
+    }
 });
