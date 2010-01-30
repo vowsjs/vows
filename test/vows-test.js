@@ -15,7 +15,7 @@ var promiser = function (val) {
 };
 
 vows.tell("Vows", {
-    "a context": {
+    "A context": {
         setup: promiser("hello world"),
 
         "testing equality": function (it) {
@@ -27,12 +27,36 @@ vows.tell("Vows", {
         "testing inclusion": function (it) {
             assert.include(it, "world");
         },
-        "a nested context": {
+        "with a nested context": {
             setup: function (parent) {
-                return parent;
+                return promiser(parent)();
             },
-            "with equality": function (it) {
+            "testing equality": function (it) {
                 assert.equal(it, "hello world");
+            }
+        }
+    },
+    "Nested contexts": {
+        setup: promiser(1),
+        ".": {
+            setup: function (a) {
+                assert.equal(a, 1);
+                return promiser(2)();
+            },
+            ".": {
+                setup: function (b, a) {
+                    assert.equal(b, 2);
+                    assert.equal(a, 1);
+                    return promiser(3)();
+                },
+                ".": {
+                    setup: function (c, b, a) {
+                        assert.equal(c, 3);
+                        assert.equal(b, 2);
+                        assert.equal(a, 1);
+                        return promiser(4)();
+                    },
+                }
             }
         }
     }
