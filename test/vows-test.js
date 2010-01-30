@@ -38,24 +38,19 @@ vows.tell("Vows", {
     },
     "Nested contexts": {
         setup: promiser(1),
-        ".": {
-            setup: function (a) {
-                assert.equal(a, 1);
-                return promiser(2)();
-            },
-            ".": {
-                setup: function (b, a) {
-                    assert.equal(b, 2);
-                    assert.equal(a, 1);
-                    return promiser(3)();
-                },
-                ".": {
-                    setup: function (c, b, a) {
-                        assert.equal(c, 3);
-                        assert.equal(b, 2);
-                        assert.equal(a, 1);
-                        return promiser(4)();
-                    },
+
+        "have": {
+            setup: function (a) { return promiser(2)() },
+
+            "access": {
+                setup: function (b, a) { return promiser(3)() },
+
+                "to": {
+                    setup: function (c, b, a) { return promiser([4, c, b, a])() },
+
+                    "the parent topics": function (topics) {
+                        assert.equal(topics.join(), [4, 3, 2, 1].join());
+                    }
                 }
             }
         }
