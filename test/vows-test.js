@@ -54,5 +54,11 @@ vows.tell("Vows", {
                 }
             }
         }
+    },
+    "Non-promise return value": {
+        setup: function () { return 1 },
+        "should be converted to a promise": function (val) {
+            assert.equal(val, 1);
+        }
     }
 });
