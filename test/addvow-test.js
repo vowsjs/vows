@@ -8,8 +8,8 @@ var vows = require('vows');
 
 var promiser = function (val) {
     return function () {
-        var promise = new(events.Promise);
-        process.nextTick(function () { promise.emitSuccess(val) });
+        var promise = new(events.EventEmitter);
+        process.nextTick(function () { promise.emit('success', val) });
         return promise;
     }
 };
