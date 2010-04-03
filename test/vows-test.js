@@ -6,6 +6,13 @@ var events = require('events'),
     assert = require('assert');
 var vows = require('vows');
 
+var api = vows.prepare({
+    get: function (id, callback) {
+        process.nextTick(function () { callback(null, id) });
+    },
+    version: function () { return '1.0' }
+}, ['get']);
+
 var promiser = function (val) {
     return function () {
         var promise = new(events.EventEmitter);
@@ -59,6 +66,20 @@ vows.tell("Vows", {
         setup: function () { return 1 },
         "should be converted to a promise": function (val) {
             assert.equal(val, 1);
+        }
+    },
+    "A 'prepared' interface": {
+        "with a wrapped function": {
+            setup: function () { return api.get(42) },
+            "should work as expected": function (val) {
+                assert.equal(val, 42);
+            }
+        },
+        "with a non-wrapped function": {
+            setup: function () { return api.version() },
+            "should work as expected": function (val) {
+                assert.equal(val, '1.0');
+            }
         }
     }
 });
