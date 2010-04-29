@@ -58,6 +58,14 @@ vows.tell("Vows", {
                     "the parent topics": function (topics) {
                         assert.equal(topics.join(), [4, 3, 2, 1].join());
                     }
+                },
+
+                "from": {
+                    setup: function (c, b, a) { return promiser([4, c, b, a])() },
+
+                    "the parent topics": function(topics) {
+                        assert.equal(topics.join(), [4, 3, 2, 1].join());
+                    }
                 }
             }
         }
