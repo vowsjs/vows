@@ -16,12 +16,14 @@ var api = vows.prepare({
 var promiser = function (val) {
     return function () {
         var promise = new(events.EventEmitter);
+        setTimeout(function () {
         process.nextTick(function () { promise.emit('success', val) });
+    }, 200);
         return promise;
     }
 };
 
-vows.tell("Vows", {
+return vows.tell("Vows", {
     "A context": {
         setup: promiser("hello world"),
 
