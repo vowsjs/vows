@@ -34,6 +34,16 @@ vows.tell("Vows", {
         "testing inclusion": function (it) {
             assert.include(it, "world");
         },
+        "testing type": function (it) {
+            assert.typeOf(it, 'string');
+            assert.isArray([]);
+            assert.isObject({});
+        },
+        "testing emptiness": function (it) {
+            assert.isEmpty({});
+            assert.isEmpty([]);
+            assert.isEmpty("");
+        },
         "with a nested context": {
             setup: function (parent) {
                 this.state = 42;
