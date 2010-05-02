@@ -42,13 +42,20 @@ vows.tell("Vows", {
             "testing equality": function (it) {
                 assert.equal(it, "hello world");
             },
+            "has access to the environment": function () {
+                assert.equal(this.state, 42);
+            },
             "a sub context": {
                 setup: function () {
                     return this.state;
                 },
-                "has access to the parent context object": function (r) {
+                "has access to the parent environment": function (r) {
                     assert.equal(r, 42);
                     assert.equal(this.state, 42);
+                },
+                "has access to the parent context object": function (r) {
+                    assert.ok(Array.isArray(this.context.topics));
+                    assert.include(this.context.topics, "hello world");
                 }
             }
         }
