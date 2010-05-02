@@ -36,10 +36,20 @@ return vows.tell("Vows", {
         },
         "with a nested context": {
             setup: function (parent) {
+                this.state = 42;
                 return promiser(parent)();
             },
             "testing equality": function (it) {
                 assert.equal(it, "hello world");
+            },
+            "a sub context": {
+                setup: function () {
+                    return this.state;
+                },
+                "has access to the parent context object": function (r) {
+                    assert.equal(r, 42);
+                    assert.equal(this.state, 42);
+                }
             }
         }
     },
