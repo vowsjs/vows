@@ -61,7 +61,7 @@ if (argv.length > 0) {
             runningTests = false,
             statusText = '',
             testFolder,
-            colors = ['\033[32m', '\033[33m', '\033[91m'],
+            colors = ['32m', '33m', '91m'],
             timer = setInterval(tick, 100),
             root = fs.readdirSync('.');
 
@@ -79,16 +79,16 @@ if (argv.length > 0) {
         function tick() {
             cursorSave();
             eraseLine();
-            print(colors[status]);
+            esc(colors[status]);
             print(clock[current]);    
 
             if (runningTests) {
-                print(' \033[39mrunning tests...');
+                print(' ' + esc('39m') + 'running tests...');
             } else {
                 print(' ' + statusText);
             }
 
-            print('\033[39m');
+            esc('39m');
             cursorRestore();
             current = (current == clock.length - 1) ? 0 : current + 1;
         }
@@ -97,11 +97,12 @@ if (argv.length > 0) {
         // Utility functions
         //
         function print(str)      { process.stdout.write(str) }
-        function eraseLine()     { print("\033[2K") }
-        function cursorSave()    { print("\033[s") }
-        function cursorRestore() { print("\033[u") }
-        function cursorHide()    { print("\033[?25l") }
-        function cursorShow()    { print("\033[?25h") }
+        function esc(str)        { print("\033[" + str) }
+        function eraseLine()     { esc("2K") }
+        function cursorSave()    { esc("s") }
+        function cursorRestore() { esc("u") }
+        function cursorHide()    { esc("?25l") }
+        function cursorShow()    { esc("?25h") }
         function cleanup()       { cursorShow(), print('\n') }
 
         //
