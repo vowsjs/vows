@@ -172,6 +172,7 @@ if (argv.length > 0) {
 function runTest(file) {
     var code = (function (require, __filename, __dirname) {
         /* content */
+        return vows.promise;
     }).toString().replace('/* content */', fs.readFileSync(file));
 
     return Script.runInThisContext('(' + code + ')', file)

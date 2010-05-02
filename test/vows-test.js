@@ -21,7 +21,7 @@ var promiser = function (val) {
     }
 };
 
-return vows.tell("Vows", {
+vows.tell("Vows", {
     "A context": {
         setup: promiser("hello world"),
 
