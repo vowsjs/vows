@@ -116,5 +116,12 @@ vows.tell("Vows", {
                 assert.equal(val, '1.0');
             }
         }
+    },
+    "Non-functions as subjects": {
+        setup: 45,
+
+        "should work as expected": function (subject) {
+            assert.equal(subject, 45);
+        }
     }
 });
