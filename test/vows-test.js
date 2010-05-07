@@ -21,9 +21,9 @@ var promiser = function (val) {
     }
 };
 
-vows.tell("Vows", {
+vows.describe("Vows", {
     "A context": {
-        setup: promiser("hello world"),
+        topic: promiser("hello world"),
 
         "testing equality": function (it) {
             assert.equal(it, "hello world");
@@ -45,7 +45,7 @@ vows.tell("Vows", {
             assert.isEmpty("");
         },
         "with a nested context": {
-            setup: function (parent) {
+            topic: function (parent) {
                 this.state = 42;
                 return promiser(parent)();
             },
@@ -56,7 +56,7 @@ vows.tell("Vows", {
                 assert.equal(this.state, 42);
             },
             "a sub context": {
-                setup: function () {
+                topic: function () {
                     return this.state;
                 },
                 "has access to the parent environment": function (r) {
@@ -71,16 +71,16 @@ vows.tell("Vows", {
         }
     },
     "Nested contexts": {
-        setup: promiser(1),
+        topic: promiser(1),
 
         "have": {
-            setup: function (a) { return promiser(2)() },
+            topic: function (a) { return promiser(2)() },
 
             "access": {
-                setup: function (b, a) { return promiser(3)() },
+                topic: function (b, a) { return promiser(3)() },
 
                 "to": {
-                    setup: function (c, b, a) { return promiser([4, c, b, a])() },
+                    topic: function (c, b, a) { return promiser([4, c, b, a])() },
 
                     "the parent topics": function (topics) {
                         assert.equal(topics.join(), [4, 3, 2, 1].join());
@@ -88,7 +88,7 @@ vows.tell("Vows", {
                 },
 
                 "from": {
-                    setup: function (c, b, a) { return promiser([4, c, b, a])() },
+                    topic: function (c, b, a) { return promiser([4, c, b, a])() },
 
                     "the parent topics": function(topics) {
                         assert.equal(topics.join(), [4, 3, 2, 1].join());
@@ -98,27 +98,27 @@ vows.tell("Vows", {
         }
     },
     "Non-promise return value": {
-        setup: function () { return 1 },
+        topic: function () { return 1 },
         "should be converted to a promise": function (val) {
             assert.equal(val, 1);
         }
     },
     "A 'prepared' interface": {
         "with a wrapped function": {
-            setup: function () { return api.get(42) },
+            topic: function () { return api.get(42) },
             "should work as expected": function (val) {
                 assert.equal(val, 42);
             }
         },
         "with a non-wrapped function": {
-            setup: function () { return api.version() },
+            topic: function () { return api.version() },
             "should work as expected": function (val) {
                 assert.equal(val, '1.0');
             }
         }
     },
     "Non-functions as subjects": {
-        setup: 45,
+        topic: 45,
 
         "should work as expected": function (subject) {
             assert.equal(subject, 45);
