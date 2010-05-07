@@ -34,12 +34,12 @@ writing specs
 
     vows.tell('A Database library', {
         // run this once, and execute the following tests when it completes
-        setup: function () { return new(DB) },
+        topic: function () { return new(DB) },
 
         'set() should store a k/v pair': {
             // the inner context gets the return values of the outer contexts
             // passed as arguments. Here, `db` is new(DB).
-            setup: function (db) { return db.set('pulp', 'orange') },
+            topic: function (db) { return db.set('pulp', 'orange') },
             
             // `res` is the value emitted by the above `db.set`
             'and return OK': function (res) {
@@ -47,9 +47,9 @@ writing specs
             },
             'and when checked for existence': {
                 // here, we need to access `db`, from the parent context.
-                // It's passed as the 2nd argument to `setup`, we discard the first,
+                // It's passed as the 2nd argument to `topic`, we discard the first,
                 // which would have been the above `res`.
-                setup: function (_, db) { return db.exists('pulp') },
+                topic: function (_, db) { return db.exists('pulp') },
 
                 'return true': function (re) {
                     assert.equal(re, true); 
@@ -57,7 +57,7 @@ writing specs
             }
         },
         'get()': {
-            setup: function (db) { return db.get('dream') },
+            topic: function (db) { return db.get('dream') },
             'should return the stored value': function (res) {
                 assert.equal(res, 'catcher'); 
             }
