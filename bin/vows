@@ -55,13 +55,17 @@ if (argv.length > 0) {
             '.   ', '..  ', '... ', ' ...',
             '  ..', '   .', '   .', '  ..',
             '... ', '..  ', '.   '
+        ], wheel = [
+            '-', '\\', '|', '/'
         ];
         var current = 0,
             status = 0,
             runningTests = false,
+            gracePeriod = 0,
             statusText = '',
+            lastRun,
             testFolder,
-            colors = ['32m', '33m', '91m'],
+            colors = ['32m', '33m', '31m'],
             timer = setInterval(tick, 100),
             root = fs.readdirSync('.');
 
@@ -80,17 +84,26 @@ if (argv.length > 0) {
             cursorSave();
             eraseLine();
             esc(colors[status]);
-            print(clock[current]);    
 
-            if (runningTests) {
-                print(' ' + esc('39m') + 'running tests...');
+            if (runningTests || gracePeriod) {
+                gracePeriod--;
+                print(wheel[current]);
+                esc('39m');
+                print('    working...');
+                if (current == wheel.length - 1) { current = -1 }
             } else {
+                print(clock[current]);
                 print(' ' + statusText);
+                if (lastRun) {
+                  esc('90m');
+                  print( ' (' + lastRun.valueOf() + ')');
+                }
+                if (current == clock.length - 1) { current = -1 }
             }
 
+            current++;
             esc('39m');
             cursorRestore();
-            current = (current == clock.length - 1) ? 0 : current + 1;
         }
 
         //
@@ -111,6 +124,9 @@ if (argv.length > 0) {
         //
         function changed(file) {
             runningTests = true;
+            gracePeriod = 5;
+            current = 0;
+
             file = /-(test|spec)$/.test(file) ? path.join(testFolder, file + '.js')
                                               : path.join(testFolder, file + '-' + testFolder + '.js');
 
@@ -119,6 +135,7 @@ if (argv.length > 0) {
                 statusText = h + " honored, " +
                              b + " broken, "  +
                              e + " errored";
+                lastRun = new(Date);
 
                 if (b || e) {
                     eraseLine();
