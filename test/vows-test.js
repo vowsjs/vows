@@ -97,6 +97,16 @@ vows.describe("Vows", {
             }
         }
     },
+    "Nested contexts with no topics": {
+        topic: 45,
+        "should": {
+            "pass": {
+                "the value down": function (topic) {
+                    assert.equal(topic, 45);
+                }
+            }
+        }
+    },
     "Non-promise return value": {
         topic: function () { return 1 },
         "should be converted to a promise": function (val) {
