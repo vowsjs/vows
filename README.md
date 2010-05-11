@@ -1,7 +1,7 @@
 Vows
 ====
 
-asynchronous testing for node.js
+> Asynchronous BDD & continuous integration for node.js
 
 introduction
 ------------
@@ -17,7 +17,7 @@ synopsis
     var vows = require('vows'),
         assert = require('assert');
 
-    vows.tell('Deep Thought', function () {
+    vows.describe('Deep Thought').addVows(function () {
         question('what is the answer to the universe?').addVow(function (answer) {
             assert.equals(answer, 42);
         }, 'it should know the answer to the ultimate question of life');
@@ -32,7 +32,7 @@ Vows are run as soon as the promise completes, so the order in which they are ru
 writing specs
 -------------
 
-    vows.tell('A Database library', {
+    vows.describe('A Database library').addVows({
         // run this once, and execute the following tests when it completes
         topic: function () { return new(DB) },
 
