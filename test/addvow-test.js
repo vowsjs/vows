@@ -14,7 +14,7 @@ var promiser = function (val) {
     }
 };
 
-vows.tell("Vows:unit").addVows(function () {
+vows.describe("Vows/unit").addVows(function () {
     promiser("hello world")().addVow(function (val) {
        assert.equal(val, "hello world"); 
     }, "addVow()");     

@@ -136,6 +136,17 @@ vows.describe("Vows").addVows({
     }
 }).addVows({
     "A 2nd test suite": {
+        topic: function () {
+            var p = new(events.EventEmitter);
+            setTimeout(function () {
+                p.emit("success");
+            }, 100);
+            return p;
+        },
         "should run after the first": function () {}
+    }
+}).addVows({
+    "A 3rd test suite": {
+        "should run last": function () {}
     }
 });
