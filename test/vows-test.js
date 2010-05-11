@@ -21,7 +21,7 @@ var promiser = function (val) {
     }
 };
 
-vows.describe("Vows", {
+vows.describe("Vows").addVows({
     "A context": {
         topic: promiser("hello world"),
 
