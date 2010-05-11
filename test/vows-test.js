@@ -31,6 +31,9 @@ vows.describe("Vows").addVows({
         "testing match": function (it) {
             assert.match(it, /[a-z]+ [a-z]+/);
         },
+        "testing length": function (it) {
+            assert.length(it, 11);
+        },
         "testing inclusion": function (it) {
             assert.include(it, "world");
         },
