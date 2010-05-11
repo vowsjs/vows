@@ -124,4 +124,8 @@ vows.describe("Vows").addVows({
             assert.equal(subject, 45);
         }
     }
+}).addVows({
+    "A 2nd test suite": {
+        "should run after the first": function () {}
+    }
 });
