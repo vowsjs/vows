@@ -130,13 +130,42 @@ vows.describe("Vows").addVows({
             }
         }
     },
-    "Non-functions as subjects": {
+    "Non-functions as topics": {
         topic: 45,
 
-        "should work as expected": function (subject) {
-            assert.equal(subject, 45);
+        "should work as expected": function (topic) {
+            assert.equal(topic, 45);
         }
-    }
+    },
+    "A topic emitting an error": {
+        topic: function () {
+            var promise = new(events.EventEmitter);
+            process.nextTick(function () {
+                promise.emit("error", 404);
+            });
+            return promise;
+        },
+        "shouldn't raise an exception if the test expects it": function (e, res) {
+            assert.equal(e, 404);
+            assert.ok(! res);
+        }
+    },
+    "A topic not emitting an error": {
+        topic: function () {
+            var promise = new(events.EventEmitter);
+            process.nextTick(function () {
+                promise.emit("success", true);
+            });
+            return promise;
+        },
+        "should pass `null` as first argument, if the test is expecting an error": function (e, res) {
+            assert.strictEqual(e, null);
+            assert.equal(res, true);
+        },
+        "should pass the result as first argument if the test isn't expecting an error": function (res) {
+            assert.equal(res, true);
+        }
+    },
 }).addVows({
     "A 2nd test suite": {
         topic: function () {
