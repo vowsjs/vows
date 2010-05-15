@@ -137,6 +137,22 @@ vows.describe("Vows").addVows({
             assert.equal(topic, 45);
         }
     },
+    "topics returning functions": {
+        topic: function () {
+            return function () { return 42 };
+        },
+
+        "should work as expected": function (topic) {
+            assert.isFunction(topic);
+            assert.equal(topic(), 42);
+        },
+        "in a sub-context": {
+            "should work as expected": function (topic) {
+                assert.isFunction(topic);
+                assert.equal(topic(), 42);
+            },
+        }
+    },
     "A topic emitting an error": {
         topic: function () {
             var promise = new(events.EventEmitter);
