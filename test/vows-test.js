@@ -110,6 +110,26 @@ vows.describe("Vows").addVows({
             }
         }
     },
+    "Nested contexts with topic gaps": {
+        topic: 45,
+        "should": {
+            "pass": {
+                topic: 101,
+                "the": {
+                    "values": {
+                        topic: function (prev, prev2) {
+                            return this.context.topics.slice(0);
+                        },
+                        "down": function (topics) {
+                            assert.length(topics, 2);
+                            assert.equal(topics[0], 101);
+                            assert.equal(topics[1], 45);
+                        }
+                    }
+                }
+            }
+        }
+    },
     "Non-promise return value": {
         topic: function () { return 1 },
         "should be converted to a promise": function (val) {
