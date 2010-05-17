@@ -38,10 +38,10 @@ if (argv.length > 0) {
             '-', '\\', '|', '/'
         ];
         var current = 0,
-            runningTests = false,
+            runningTests = 0,
             currentFile,
             gracePeriod = 0,
-            statusText,
+            status,
             lastRun,
             testFolder,
             colors = ['32m', '33m', '31m'],
@@ -62,7 +62,7 @@ if (argv.length > 0) {
         function tick() {
             cursorSave();
             eraseLine();
-            lastRun && esc(colors[statusText.errored ? 2 : (statusText.broken ? 1 : 0)]);
+            lastRun && esc(colors[status.errored ? 2 : (status.broken ? 1 : 0)]);
 
             if (runningTests > 0 || gracePeriod) {
                 gracePeriod--;
@@ -73,7 +73,7 @@ if (argv.length > 0) {
             } else {
                 print(clock[current]);
                 print(' ');
-                statusText && print(console.report(['finish', statusText], null));
+                status && print(console.report(['finish', status], null));
                 if (lastRun) {
                   esc('90m');
                   print( ' (' + lastRun.valueOf() + ')');
@@ -103,7 +103,7 @@ if (argv.length > 0) {
         // Run the matching tests and change the status.
         //
         function changed(file) {
-            statusText = { honored: 0, broken: 0, errored: 0 };
+            status = { honored: 0, broken: 0, errored: 0 };
             gracePeriod = 10;
             current = 0;
 
@@ -117,9 +117,9 @@ if (argv.length > 0) {
                 runTest(p).addListener('finish', function (obj) {
                     runningTests --;
                     delete obj.time;
-                    statusText.honored += obj.honored;
-                    statusText.broken  += obj.broken;
-                    statusText.errored += obj.errored;
+                    status.honored += obj.honored;
+                    status.broken  += obj.broken;
+                    status.errored += obj.errored;
                     lastRun = new(Date);
                 });
             });
