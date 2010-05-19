@@ -29,6 +29,11 @@ and the results output to the console.
 
 Vows are run as soon as the promise completes, so the order in which they are run is undefined.
 
+installaiton
+------------
+
+    $ make install
+
 writing specs
 -------------
 
