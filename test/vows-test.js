@@ -41,6 +41,8 @@ vows.describe("Vows").addVows({
             assert.typeOf(it, 'string');
             assert.isArray([]);
             assert.isObject({});
+            assert.isNumber(0);
+            assert.isNaN(0/0);
         },
         "testing emptiness": function (it) {
             assert.isEmpty({});
