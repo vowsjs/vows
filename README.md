@@ -9,7 +9,7 @@ There are two reasons why we might want asynchronous testing. The first, and obv
 
 _Vows_ is an experiment in making this possible, while adding a minimum of overhead.
 
-![vows-ss](http://dl.dropbox.com/u/251849/vows-ss.gif)
+![vows-ss](http://files.droplr.com/files/36156834/ZfmbC.Screen%20shot%202010-05-11%20at%2020:19:25.png)
 
 synopsis
 --------
