@@ -32,7 +32,7 @@ Vows are run as soon as the promise completes, so the order in which they are ru
 installaiton
 ------------
 
-    $ make install
+    $ npm install vows
 
 writing specs
 -------------

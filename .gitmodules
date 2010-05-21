@@ -1,3 +1,0 @@
-[submodule "lib/vendor/eyes"]
-	path = lib/vendor/eyes
-	url = git://github.com/cloudhead/eyes.js
