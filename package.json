@@ -5,7 +5,7 @@
   "keywords"      : ["testing", "spec", "test", "BDD"],
   "author"        : "Alexis Sellier <self@cloudhead.net>",
   "contributors"  : [],
-  "dependencies"  : ["eyes"],
+  "dependencies"  : {"eyes": ">=0.1.0"},
   "directories"   : {"lib": "./lib"},
   "main"          : "./lib/vows",
   "version"       : "0.2.1"
