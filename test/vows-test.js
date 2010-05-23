@@ -204,6 +204,39 @@ vows.describe("Vows").addVows({
             assert.equal(res, true);
         }
     },
+    "a topic with callback-style async": {
+        "when successful": {
+            topic: function () {
+                function async(callback) {
+                    process.nextTick(function () {
+                        callback(null, "OK");
+                    });
+                }
+                async(this.callback);
+            },
+            "should work like an event-emitter": function (res) {
+                assert.equal(res, "OK");
+            },
+            "should assign `null` to the error argument": function (e, res) {
+                assert.strictEqual(e, null);
+                assert.equal(res, "OK");
+            }
+        },
+        "when unsuccessful": {
+            topic: function () {
+                function async(callback) {
+                    process.nextTick(function () {
+                        callback("ERROR");
+                    });
+                }
+                async(this.callback);
+            },
+            "should work like an event-emitter": function (e, res) {
+                assert.equal(e, "ERROR");
+                assert.equal(res, undefined);
+            }
+        }
+    }
 }).addVows({
     "A 2nd test suite": {
         topic: function () {
