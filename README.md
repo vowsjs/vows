@@ -70,3 +70,39 @@ writing specs
             }
         }
     });
+
+assertion macros
+----------------
+
+### equality #
+
+- assert.equal
+- assert.notEqual
+- assert.strictEqual
+- assert.strictNotEqual
+
+### type #
+
+- assert.isFunction
+- assert.isObject
+- assert.isNaN
+- assert.isString
+- assert.isArray
+- assert.isBoolean
+- assert.isNumber
+- assert.isNull
+- assert.isUndefined
+- assert.typeOf
+- assert.instanceOf
+
+### properties #
+
+- assert.include
+- assert.match
+- assert.length
+- assert.isEmpty
+
+### exceptions #
+
+- assert.throws
+- assert.doesNotThrow
