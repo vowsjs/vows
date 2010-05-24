@@ -238,6 +238,26 @@ vows.describe("Vows").addVows({
         }
     }
 }).addVows({
+    "Sibling contexts": {
+        "'A', with `this.foo = true`": {
+            topic: function () {
+                this.foo = true;
+                return this.foo;
+            },
+            "should have `this.foo` set to true": function (res) {
+                assert.equal(res, true);
+            }
+        },
+        "'B', with nothing set": {
+            topic: function () {
+                return this.foo;
+            },
+            "should have `this.foo` be undefined": function (res) {
+                assert.isUndefined(res);
+            }
+        }
+    }
+}).addVows({
     "A 2nd test suite": {
         topic: function () {
             var p = new(events.EventEmitter);
