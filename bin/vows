@@ -8,7 +8,7 @@ var path   = require('path'),
 
 require.paths.unshift(path.join(__dirname, '..', 'lib'));
 
-var console = require('vows/reporters/console');
+var console = require('vows/reporters/dot-matrix');
 
 var options = [];
 
