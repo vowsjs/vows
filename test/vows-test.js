@@ -272,4 +272,4 @@ vows.describe("Vows").addVows({
     "A 3rd test suite": {
         "should run last": function () {}
     }
-}).export(this);
+}).export(module);

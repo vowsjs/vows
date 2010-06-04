@@ -12,4 +12,4 @@ vows.describe("Vows/other").addVows({
             assert.ok (topic);
         }
     }
-}).export(this);
+}).export(module);
