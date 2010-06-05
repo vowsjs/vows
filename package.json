@@ -8,5 +8,5 @@
   "dependencies"  : {"eyes": ">=0.1.0"},
   "directories"   : {"lib": "./lib"},
   "main"          : "./lib/vows",
-  "version"       : "0.2.5"
+  "version"       : "0.3.0"
 }
