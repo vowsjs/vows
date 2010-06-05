@@ -6,7 +6,7 @@
   "author"        : "Alexis Sellier <self@cloudhead.net>",
   "contributors"  : [],
   "dependencies"  : {"eyes": ">=0.1.0"},
-  "directories"   : {"lib": "./lib"},
+  "directories"   : {"lib": "./lib/vows"},
   "main"          : "./lib/vows",
   "bin"           : { "vows": "./bin/vows" },
   "version"       : "0.3.0"
