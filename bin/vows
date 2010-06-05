@@ -64,8 +64,6 @@ if (args.length === 0) {
     options.reporter = reporter = require('vows/reporters/watch');
 }
 
-vows.config(options);
-
 msg('bin', 'argv', args);
 msg('bin', 'options', { reporter: options.reporter.name, matcher: options.matcher });
 
@@ -263,7 +261,7 @@ function runSuites(suites, callback) {
         var suite = suites.shift();
         if (suite) {
             msg('runner', "running", suite.subject);
-            suite.run(function (result) {
+            suite.run(options, function (result) {
                 Object.keys(result).forEach(function (k) {
                     results[k] += result[k];
                 });
