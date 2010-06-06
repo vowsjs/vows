@@ -260,7 +260,7 @@ function runSuites(suites, callback) {
     (function run(suites, callback) {
         var suite = suites.shift();
         if (suite) {
-            msg('runner', "running", suite.subject);
+            msg('runner', "running", suite.subject + ' ', true);
             suite.run(options, function (result) {
                 Object.keys(result).forEach(function (k) {
                     results[k] += result[k];
@@ -273,12 +273,12 @@ function runSuites(suites, callback) {
     })(suites, callback);
 }
 
-function msg(cmd, subject, str) {
+function msg(cmd, subject, str, p) {
     if (options.verbose) {
-        sys.puts( stylize('vows ', 'green')
-                + stylize(cmd, 'bold')
-                + ' ' + subject + ' '
-                + (str ? (str[0] === '/' ? str : inspect(str)) : '')
-                );
+        sys[p ? 'print' : 'puts']( stylize('vows ', 'green')
+              + stylize(cmd, 'bold')
+              + ' ' + subject + ' '
+              + (str ? (typeof(str) === 'string' ? str : inspect(str)) : '')
+              );
     }
 }
