@@ -17,17 +17,18 @@ synopsis
     var vows = require('vows'),
         assert = require('assert');
 
-    vows.describe('Deep Thought').addVows(function () {
-        question('what is the answer to the universe?').addVow(function (answer) {
-            assert.equals(answer, 42);
-        }, 'it should know the answer to the ultimate question of life');
+    vows.describe('Deep Thought').addVows({
+        'An instance of DeepThought': {
+            topic: new DeepThought,
+
+            'should know the answer to the ultimate question of life': function (deepThought) {
+                assert.equal (deepThought.question('what is the answer to the universe?'), 42);
+            }
+        }
     });
 
-In the example above, `question()` would be a function which returns an `EventEmitter`.
-When the `"success"` event is emitted, the function passed to `addVow` is run,
-and the results output to the console.
-
-Vows are run as soon as the promise completes, so the order in which they are run is undefined.
+Documenation coming soon. For now, have a look at the tests in <http://github.com/cloudhead/resourcer> to
+get an idea.
 
 installation
 ------------
@@ -69,7 +70,7 @@ writing specs
                 }
             }
         }
-    });
+    }).run();
 
 assertion macros
 ----------------
