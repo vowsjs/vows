@@ -235,6 +235,14 @@ vows.describe("Vows").addVows({
                 assert.equal(e, "ERROR");
                 assert.equal(res, undefined);
             }
+        },
+        "using this.callback synchronously": {
+            topic: function () {
+                this.callback(null, 'hello');
+            },
+            "should work the same as returning a value": function (res) {
+                assert.equal(res, 'hello');
+            }
         }
     }
 }).addVows({
