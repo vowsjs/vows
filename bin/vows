@@ -171,7 +171,7 @@ if (args.length > 0) {
         // Run the matching tests and change the status.
         //
         function changed(file) {
-            status = { honored: 0, broken: 0, errored: 0 };
+            status = { honored: 0, broken: 0, errored: 0, pending: 0 };
 
             msg('watcher', 'detected change in', file + '.js');
 
@@ -254,6 +254,7 @@ function runSuites(suites, callback) {
         honored: 0,
         broken:  0,
         errored: 0,
+        pending: 0,
         total:   0,
         time:    0
     };
