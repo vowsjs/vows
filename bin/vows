@@ -18,7 +18,6 @@ var _reporter = require('vows/reporters/dot-matrix'), reporter = {
 
 var options = {
     reporter: reporter,
-    brief: false,
     matcher: /.*/
 };
 
