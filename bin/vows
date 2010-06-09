@@ -83,6 +83,8 @@ if (args.length > 0) {
                 options.verbose ? _reporter.print('\n') : _reporter.print(' ');
         }
     };
+    reporter.reset = function () { _reporter.reset && _reporter.reset() };
+
     suites = args.map(function (a) {
         a = path.join(process.cwd(), a.replace(/\.js$/, ''));
         msg('runner', "loading", a);
@@ -257,6 +259,8 @@ function runSuites(suites, callback) {
         total:   0,
         time:    0
     };
+    reporter.reset();
+
     (function run(suites, callback) {
         var suite = suites.shift();
         if (suite) {
