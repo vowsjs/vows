@@ -132,8 +132,7 @@ if (args.length > 0) {
         process.addListener('uncaughtException', cleanup);
         process.addListener('exit', cleanup);
         process.addListener('SIGINT', function () {
-            cleanup();
-            process.exit();
+            process.exit(0);
         });
         process.addListener('SIGQUIT', function () {
             changed();
@@ -171,7 +170,7 @@ if (args.length > 0) {
         function cursorRestore() { esc("u") }
         function cursorHide()    { esc("?25l") }
         function cursorShow()    { esc("?25h") }
-        function cleanup()       { cursorShow(), print('\n') }
+        function cleanup()       { eraseLine(), cursorShow(), print('\n') }
 
         //
         // Called when a file has been modified.
