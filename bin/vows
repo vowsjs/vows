@@ -105,12 +105,14 @@ if (args.length > 0) {
     // Watch mode
     //
     (function () {
-        var clock = [
+        var pendulum = [
             '.   ', '..  ', '... ', ' ...',
             '  ..', '   .', '   .', '  ..',
             '... ', '..  ', '.   '
         ];
+        var strobe = ['.', ' '];
         var status,
+            cue,
             current = 0,
             testFolder,
             running = 0,
@@ -141,14 +143,18 @@ if (args.length > 0) {
 
         // Run every 100ms
         function tick() {
-            if (running) { return }
+            if (running && (cue !== strobe)) {
+                cue = strobe, current = 0;
+            } else if (!running && (cue !== pendulum)) {
+                cue = pendulum, current = 0;
+            }
 
             cursorSave();
             eraseLine();
-            lastRun && esc(colors[status.errored ? 2 : (status.broken ? 1 : 0)]);
-            print(clock[current]);
+            lastRun && !running && esc(colors[status.errored ? 2 : (status.broken ? 1 : 0)]);
+            print(cue[current]);
 
-            if (current == clock.length - 1) { current = -1 }
+            if (current == cue.length - 1) { current = -1 }
 
             current ++;
             esc('39m');
