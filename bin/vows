@@ -89,7 +89,7 @@ if (args.length === 0) {
     } else if (root.indexOf('spec') !== -1) {
         testFolder = 'spec';
     } else {
-        throw new(Error)("Couldn't find test folder");
+        abort("runner", "couldn't find test folder");
     }
 
     args = paths(testFolder);
@@ -310,4 +310,10 @@ function msg(cmd, subject, str, p) {
               + (str ? (typeof(str) === 'string' ? str : inspect(str)) : '')
               );
     }
+}
+
+function abort(cmd, str) {
+    sys.puts(stylize('vows ', 'red') + stylize(cmd, 'bold') + ' ' + str);
+    sys.puts(stylize('vows ', 'red') + stylize(cmd, 'bold') + ' exiting');
+    process.exit(-1);
 }
