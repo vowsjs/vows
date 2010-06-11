@@ -22,7 +22,7 @@ var options = {
     watch: false
 };
 
-var suites = [];
+var files = [];
 
 // Get rid of process runner
 // ('node' in most cases)
@@ -82,6 +82,7 @@ msg('bin', 'argv', args);
 msg('bin', 'options', { reporter: options.reporter.name, matcher: options.matcher });
 
 if (args.length === 0) {
+    msg('bin', 'discovering', 'folder structure');
     root = fs.readdirSync('.');
 
     if (root.indexOf('test') !== -1) {
@@ -91,6 +92,7 @@ if (args.length === 0) {
     } else {
         abort("runner", "couldn't find test folder");
     }
+    msg('bin', 'discovered', "./" + testFolder);
 
     args = paths(testFolder);
 }
@@ -114,12 +116,11 @@ if (! options.watch) {
     };
     reporter.reset = function () { _reporter.reset && _reporter.reset() };
 
-    suites = args.map(function (a) {
-        a = path.join(process.cwd(), a.replace(/\.js$/, ''));
-        msg('runner', "loading", a);
-        return require(a).vows;
+    files = args.map(function (a) {
+        return path.join(process.cwd(), a.replace(/\.js$/, ''));
     });
-    runSuites(suites, function (results) {
+
+    runSuites(importSuites(files), function (results) {
         !options.verbose && _reporter.print('\n');
         msg('runner', 'finish');
         _reporter.report(['finish', results], {
@@ -210,17 +211,16 @@ if (! options.watch) {
                 file = null;
             }
 
-            var suites = (/-(test|spec)\.js$/.test(file) ? [file] : paths(testFolder)).map(function (p) {
+            var files = (/-(test|spec)\.js$/.test(file) ? [file] : paths(testFolder)).map(function (p) {
                 return path.join(process.cwd(), p.replace(/\.js$/, ''));
             }).map(function (p) {
                 delete(require.main.moduleCache[p]);
                 return p;
             });
 
-            msg('watcher', 'loading', suites);
             running ++;
 
-            runSuites(suites.map(function (s) { return require(s).vows }), function (results) {
+            runSuites(importSuites(files), function (results) {
                 delete(results.time);
                 print(console.result(results).join('') + '\n\n');
                 lastRun = new(Date);
@@ -270,6 +270,17 @@ function runSuites(suites, callback) {
             callback(results);
         }
     })(suites, callback);
+}
+
+function importSuites(files) {
+    msg(options.watcher ? 'watcher' : 'runner', 'loading', files);
+
+    return files.reduce(function (suites, f) {
+        var obj = require(f);
+        return suites.concat(Object.keys(obj).map(function (s) {
+            return obj[s];
+        }));
+    }, [])
 }
 
 //
