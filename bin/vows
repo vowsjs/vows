@@ -38,8 +38,14 @@ while (arg = argv.shift()) {
     } else {
         arg = arg.match(/^--?(.+)/)[1];
 
-        if (arg[0] === 'R') {
+        if (arg[0] === 'r') {
             options.matcher = new(RegExp)(arg.slice(1));
+        } else if (arg[0] === 'm') {
+            options.matcher = (function (str) { // Create an escaped RegExp
+                var specials = '. * + ? | ( ) [ ] { } \\ ^ ? ! = : $'.split(' ').join('|\\'),
+                    regex    = new(RegExp)('(\\' + specials + ')', 'g');
+                return new(RegExp)(str.replace(regex, '\\$1'));
+            })(arg.slice(1));
         } else if (arg in options) {
             options[arg] = true;
         } else {
