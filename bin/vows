@@ -18,7 +18,8 @@ var _reporter = require('vows/reporters/dot-matrix'), reporter = {
 
 var options = {
     reporter: reporter,
-    matcher: /.*/
+    matcher: /.*/,
+    watch: false
 };
 
 var suites = [];
@@ -26,6 +27,10 @@ var suites = [];
 // Get rid of process runner
 // ('node' in most cases)
 var arg, args = [], argv = process.argv.slice(2);
+
+// Current directory index,
+// and path of test folder.
+var root, testFolder;
 
 //
 // Parse command-line parameters
@@ -60,19 +65,37 @@ while (arg = argv.shift()) {
                 case 'v':
                     options.verbose = true;
                     break;
+                case 'watch':
+                case 'w':
+                    options.watch = true;
+                    break;
             }
         }
     }
 }
 
-if (args.length === 0) {
+if (options.watch) {
     options.reporter = reporter = require('vows/reporters/watch');
 }
 
 msg('bin', 'argv', args);
 msg('bin', 'options', { reporter: options.reporter.name, matcher: options.matcher });
 
-if (args.length > 0) {
+if (args.length === 0) {
+    root = fs.readdirSync('.');
+
+    if (root.indexOf('test') !== -1) {
+        testFolder = 'test';
+    } else if (root.indexOf('spec') !== -1) {
+        testFolder = 'spec';
+    } else {
+        throw new(Error)("Couldn't find test folder");
+    }
+
+    args = paths(testFolder);
+}
+
+if (! options.watch) {
     reporter.report = function (data) {
         switch (data[0]) {
             case 'subject':
@@ -120,20 +143,10 @@ if (args.length > 0) {
         var status,
             cue,
             current = 0,
-            testFolder,
             running = 0,
             lastRun,
             colors = ['32m', '33m', '31m'],
-            timer = setInterval(tick, 100),
-            root = fs.readdirSync('.');
-
-        if (root.indexOf('test') !== -1) {
-            testFolder = 'test';
-        } else if (root.indexOf('spec') !== -1) {
-            testFolder = 'spec';
-        } else {
-            throw new(Error)("Couldn't find test folder");
-        }
+            timer = setInterval(tick, 100);
 
         process.addListener('uncaughtException', cleanup);
         process.addListener('exit', cleanup);
@@ -215,35 +228,6 @@ if (args.length > 0) {
                 running --;
             });
         }
-        //
-        // Recursively traverse a hierarchy, returning
-        // a list of all relevant .js files.
-        //
-        function paths(dir) {
-            var paths = [];
-
-            try { fs.statSync(dir) }
-            catch (e) { return [] }
-
-            (function traverse(dir, stack) {
-                stack.push(dir);
-                fs.readdirSync(stack.join('/')).forEach(function (file) {
-                    var path = stack.concat([file]).join('/'),
-                        stat = fs.statSync(path);
-
-                    if (file[0] == '.' || file === 'vendor') {
-                        return;
-                    } else if (stat.isFile() && /\.js$/.test(file)) {
-                        paths.push(path);
-                    } else if (stat.isDirectory()) {
-                        traverse(file, stack);
-                    }
-                });
-                stack.pop();
-            })(dir || '.', []);
-
-            return paths;
-        }
 
         //
         // Watch all relevant files in lib/ and src/,
@@ -286,6 +270,36 @@ function runSuites(suites, callback) {
             callback(results);
         }
     })(suites, callback);
+}
+
+//
+// Recursively traverse a hierarchy, returning
+// a list of all relevant .js files.
+//
+function paths(dir) {
+    var paths = [];
+
+    try { fs.statSync(dir) }
+    catch (e) { return [] }
+
+    (function traverse(dir, stack) {
+        stack.push(dir);
+        fs.readdirSync(stack.join('/')).forEach(function (file) {
+            var path = stack.concat([file]).join('/'),
+                stat = fs.statSync(path);
+
+            if (file[0] == '.' || file === 'vendor') {
+                return;
+            } else if (stat.isFile() && /\.js$/.test(file)) {
+                paths.push(path);
+            } else if (stat.isDirectory()) {
+                traverse(file, stack);
+            }
+        });
+        stack.pop();
+    })(dir || '.', []);
+
+    return paths;
 }
 
 function msg(cmd, subject, str, p) {
