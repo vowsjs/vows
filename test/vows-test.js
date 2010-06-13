@@ -44,6 +44,16 @@ vows.describe("Vows").addVows({
             assert.isNumber(0);
             assert.isNaN(0/0);
         },
+        "testing value": function (it) {
+            assert.isFalse(false);
+            assert.isTrue(true);
+            assert.isZero(0);
+            assert.isNotZero(1);
+            assert.isNull(null);
+            assert.isNotNull(0);
+            assert.greater(5, 4);
+            assert.lesser(4, 5);
+        },
         "testing emptiness": function (it) {
             assert.isEmpty({});
             assert.isEmpty([]);
