@@ -5,7 +5,10 @@ var path   = require('path'),
     fs     = require('fs'),
     events = require('events');
 
-var inspect = require('eyes').inspector({ stream: null });
+var inspect = require('eyes').inspector({
+    stream: null,
+    styles: { string: 'grey', regexp: 'grey' }
+});
 
 require.paths.unshift(path.join(__dirname, '..', 'lib'));
 
