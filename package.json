@@ -9,5 +9,5 @@
   "directories"   : {"lib": "./lib/vows"},
   "main"          : "./lib/vows",
   "bin"           : { "vows": "./bin/vows" },
-  "version"       : "0.3.5"
+  "version"       : "0.4.0"
 }
