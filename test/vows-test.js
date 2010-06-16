@@ -30,13 +30,10 @@ vows.describe("Vows").addVows({
                 this.state = 42;
                 return promiser(parent)();
             },
-            "testing equality": function (it) {
-                assert.equal(it, "hello world");
-            },
             "has access to the environment": function () {
                 assert.equal(this.state, 42);
             },
-            "a sub context": {
+            "and a sub nested context": {
                 topic: function () {
                     return this.state;
                 },
@@ -51,19 +48,19 @@ vows.describe("Vows").addVows({
             }
         }
     },
-    "Nested contexts": {
+    "A nested context": {
         topic: promiser(1),
 
-        "have": {
+        ".": {
             topic: function (a) { return promiser(2)() },
 
-            "access": {
+            ".": {
                 topic: function (b, a) { return promiser(3)() },
 
-                "to": {
+                ".": {
                     topic: function (c, b, a) { return promiser([4, c, b, a])() },
 
-                    "the parent topics": function (topics) {
+                    "should have access to the parent topics": function (topics) {
                         assert.equal(topics.join(), [4, 3, 2, 1].join());
                     }
                 },
@@ -78,27 +75,27 @@ vows.describe("Vows").addVows({
             }
         }
     },
-    "Nested contexts with no topics": {
+    "A nested context with no topics": {
         topic: 45,
-        "should": {
-            "pass": {
-                "the value down": function (topic) {
+        ".": {
+            ".": {
+                "should pass the value down": function (topic) {
                     assert.equal(topic, 45);
                 }
             }
         }
     },
-    "Nested contexts with topic gaps": {
+    "A Nested context with topic gaps": {
         topic: 45,
-        "should": {
-            "pass": {
+        ".": {
+            ".": {
                 topic: 101,
-                "the": {
-                    "values": {
+                ".": {
+                    ".": {
                         topic: function (prev, prev2) {
                             return this.context.topics.slice(0);
                         },
-                        "down": function (topics) {
+                        "should pass the topics down": function (topics) {
                             assert.length(topics, 2);
                             assert.equal(topics[0], 101);
                             assert.equal(topics[1], 45);
@@ -108,7 +105,7 @@ vows.describe("Vows").addVows({
             }
         }
     },
-    "Non-promise return value": {
+    "A non-promise return value": {
         topic: function () { return 1 },
         "should be converted to a promise": function (val) {
             assert.equal(val, 1);
@@ -128,14 +125,14 @@ vows.describe("Vows").addVows({
             }
         }
     },
-    "Non-functions as topics": {
+    "A non-function topic": {
         topic: 45,
 
         "should work as expected": function (topic) {
             assert.equal(topic, 45);
         }
     },
-    "topics returning functions": {
+    "A topic returning a function": {
         topic: function () {
             return function () { return 42 };
         },
@@ -180,7 +177,7 @@ vows.describe("Vows").addVows({
             assert.equal(res, true);
         }
     },
-    "a topic with callback-style async": {
+    "A topic with callback-style async": {
         "when successful": {
             topic: function () {
                 function async(callback) {
@@ -207,8 +204,10 @@ vows.describe("Vows").addVows({
                 }
                 async(this.callback);
             },
-            "should work like an event-emitter": function (e, res) {
+            "should have a non-null error value": function (e, res) {
                 assert.equal(e, "ERROR");
+            },
+            "should work like an event-emitter": function (e, res) {
                 assert.equal(res, undefined);
             }
         },
@@ -222,7 +221,7 @@ vows.describe("Vows").addVows({
         }
     }
 }).addVows({
-    "Sibling contexts": {
+    "A Sibling context": {
         "'A', with `this.foo = true`": {
             topic: function () {
                 this.foo = true;
@@ -236,13 +235,13 @@ vows.describe("Vows").addVows({
             topic: function () {
                 return this.foo;
             },
-            "should have `this.foo` be undefined": function (res) {
+            "shouldn't have access to `this.foo`": function (res) {
                 assert.isUndefined(res);
             }
         }
     }
 }).addVows({
-    "A 2nd test suite": {
+    "A 2nd batch": {
         topic: function () {
             var p = new(events.EventEmitter);
             setTimeout(function () {
@@ -253,7 +252,7 @@ vows.describe("Vows").addVows({
         "should run after the first": function () {}
     }
 }).addVows({
-    "A 3rd test suite": {
-        "should run last": function () {}
+    "A 3rd batch": {
+        topic: true, "should run last": function () {}
     }
 }).export(module);
