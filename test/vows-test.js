@@ -25,40 +25,6 @@ vows.describe("Vows").addVows({
     "A context": {
         topic: promiser("hello world"),
 
-        "testing equality": function (it) {
-            assert.equal(it, "hello world");
-        },
-        "testing match": function (it) {
-            assert.match(it, /[a-z]+ [a-z]+/);
-        },
-        "testing length": function (it) {
-            assert.length(it, 11);
-        },
-        "testing inclusion": function (it) {
-            assert.include(it, "world");
-        },
-        "testing type": function (it) {
-            assert.typeOf(it, 'string');
-            assert.isArray([]);
-            assert.isObject({});
-            assert.isNumber(0);
-            assert.isNaN(0/0);
-        },
-        "testing value": function (it) {
-            assert.isFalse(false);
-            assert.isTrue(true);
-            assert.isZero(0);
-            assert.isNotZero(1);
-            assert.isNull(null);
-            assert.isNotNull(0);
-            assert.greater(5, 4);
-            assert.lesser(4, 5);
-        },
-        "testing emptiness": function (it) {
-            assert.isEmpty({});
-            assert.isEmpty([]);
-            assert.isEmpty("");
-        },
         "with a nested context": {
             topic: function (parent) {
                 this.state = 42;
