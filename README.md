@@ -17,7 +17,7 @@ synopsis
     var vows = require('vows'),
         assert = require('assert');
 
-    vows.describe('Deep Thought').addVows({
+    vows.describe('Deep Thought').addBatch({
         'An instance of DeepThought': {
             topic: new DeepThought,
 
@@ -38,7 +38,7 @@ installation
 writing specs
 -------------
 
-    vows.describe('A Database library').addVows({
+    vows.describe('A Database library').addBatch({
         'A DB object': {
             // run this once, and execute the following tests when it completes
             topic: function () { return new(DB) },

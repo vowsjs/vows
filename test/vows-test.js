@@ -21,7 +21,7 @@ var promiser = function (val) {
     }
 };
 
-vows.describe("Vows").addVows({
+vows.describe("Vows").addBatch({
     "A context": {
         topic: promiser("hello world"),
 
@@ -220,7 +220,7 @@ vows.describe("Vows").addVows({
             }
         }
     }
-}).addVows({
+}).addBatch({
     "A Sibling context": {
         "'A', with `this.foo = true`": {
             topic: function () {
@@ -240,7 +240,7 @@ vows.describe("Vows").addVows({
             }
         }
     }
-}).addVows({
+}).addBatch({
     "A 2nd batch": {
         topic: function () {
             var p = new(events.EventEmitter);
@@ -251,7 +251,7 @@ vows.describe("Vows").addVows({
         },
         "should run after the first": function () {}
     }
-}).addVows({
+}).addBatch({
     "A 3rd batch": {
         topic: true, "should run last": function () {}
     }
