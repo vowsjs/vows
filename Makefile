@@ -2,6 +2,6 @@
 # Run all tests
 #
 test: 
-	@@bin/vows test/vows-test.js test/other-test.js
+	@@bin/vows test/*
 
 .PHONY: test install
