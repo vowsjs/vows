@@ -19,6 +19,23 @@ var _reporter = require('vows/reporters/dot-matrix'), reporter = {
     name: _reporter.name,
 };
 
+var help = [
+    "usage: vows [FILE, ...] [options]",
+    "",
+    "options:",
+    "  -v, --verbose     Enable verbose output",
+    "  -w, --watch       Watch mode",
+    "  -s, --silent      Don't report",
+    "  -m'abc'           Only run tests matching the string",
+    "  -r'^abc$'         Only run tests matching the regexp",
+    "  --json            Use JSON reporter",
+    "  --spec            Use Spec reporter",
+    "  --dot-matrix      Use Dot-Matrix reporter",
+    //"  --no-color        Don't use terminal colors",
+    "  --version         Show version",
+    "  -h, --help        You're staring at it"
+].join('\n');
+
 var options = {
     reporter: reporter,
     matcher: /.*/,
@@ -64,6 +81,13 @@ while (arg = argv.shift()) {
                 case 'spec':
                     _reporter = require('vows/reporters/spec');
                     break;
+                case 'dot-matrix':
+                    _reporter = require('vows/reporters/dot-matrix');
+                    break;
+                case 'silent':
+                case 's':
+                    _reporter = require('vows/reporters/silent');
+                    break;
                 case 'verbose':
                 case 'v':
                     options.verbose = true;
@@ -71,6 +95,19 @@ while (arg = argv.shift()) {
                 case 'watch':
                 case 'w':
                     options.watch = true;
+                    break;
+                case 'no-color':
+                    options.nocolor = true;
+                    break;
+                case 'version':
+                    sys.print('vows ');
+                    sys.puts(fs.readFileSync(path.join(__dirname, '..', 'package.json'))
+                               .toString().match(/"version"\s*:\s*"([\d.]+)"/)[1]);
+                    process.exit(0);
+                case 'help':
+                case 'h':
+                    sys.puts(help);
+                    process.exit(0);
                     break;
             }
         }
