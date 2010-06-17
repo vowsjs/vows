@@ -64,13 +64,13 @@ while (arg = argv.shift()) {
         arg = arg.match(/^--?(.+)/)[1];
 
         if (arg[0] === 'r') {
-            options.matcher = new(RegExp)(arg.slice(1));
+            options.matcher = new(RegExp)(argv.shift());
         } else if (arg[0] === 'm') {
             options.matcher = (function (str) { // Create an escaped RegExp
                 var specials = '. * + ? | ( ) [ ] { } \\ ^ ? ! = : $'.split(' ').join('|\\'),
                     regex    = new(RegExp)('(\\' + specials + ')', 'g');
                 return new(RegExp)(str.replace(regex, '\\$1'));
-            })(arg.slice(1));
+            })(argv.shift());
         } else if (arg in options) {
             options[arg] = true;
         } else {
