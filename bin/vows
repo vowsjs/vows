@@ -141,10 +141,9 @@ if (! options.watch) {
     reporter.report = function (data) {
         switch (data[0]) {
             case 'subject':
-                _reporter.report(data);
-                break;
             case 'vow':
             case 'context':
+            case 'error':
                 _reporter.report(data);
                 break;
             case 'end':
@@ -152,6 +151,7 @@ if (! options.watch) {
                 break;
             case 'finish':
                 options.verbose ? _reporter.print('\n') : _reporter.print(' ');
+                break;
         }
     };
     reporter.reset = function () { _reporter.reset && _reporter.reset() };
