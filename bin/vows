@@ -208,7 +208,6 @@ if (! options.watch) {
                 cue = pendulum, current = 0;
             }
 
-            cursorSave();
             eraseLine();
             lastRun && !running && esc(colors[status.errored ? 2 : (status.broken ? 1 : 0)]);
             print(cue[current]);
@@ -224,10 +223,9 @@ if (! options.watch) {
         // Utility functions
         //
         function print(str)      { sys.print(str) }
-        function esc(str)        { print("\033[" + str) }
-        function eraseLine()     { esc("2K") }
-        function cursorSave()    { esc("s") }
-        function cursorRestore() { esc("u") }
+        function esc(str)        { print("\x1b[" + str) }
+        function eraseLine()     { esc("0K") }
+        function cursorRestore() { esc("0G") }
         function cursorHide()    { esc("?25l") }
         function cursorShow()    { esc("?25h") }
         function cleanup()       { eraseLine(), cursorShow(), print('\n') }
