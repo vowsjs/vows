@@ -180,12 +180,10 @@ vows.describe("Vows").addBatch({
     "A topic with callback-style async": {
         "when successful": {
             topic: function () {
-                function async(callback) {
-                    process.nextTick(function () {
-                        callback(null, "OK");
-                    });
-                }
-                async(this.callback);
+                var that = this;
+                process.nextTick(function () {
+                    that.callback(null, "OK");
+                });
             },
             "should work like an event-emitter": function (res) {
                 assert.equal(res, "OK");
@@ -225,18 +223,18 @@ vows.describe("Vows").addBatch({
         "'A', with `this.foo = true`": {
             topic: function () {
                 this.foo = true;
-                return this.foo;
+                return this;
             },
             "should have `this.foo` set to true": function (res) {
-                assert.equal(res, true);
+                assert.equal(res.foo, true);
             }
         },
         "'B', with nothing set": {
             topic: function () {
-                return this.foo;
+                return this;
             },
-            "shouldn't have access to `this.foo`": function (res) {
-                assert.isUndefined(res);
+            "shouldn't have access to `this.foo`": function (e, res) {
+                assert.isUndefined(res.foo);
             }
         }
     }
