@@ -168,6 +168,7 @@ if (! options.watch) {
                 sys.print(str.replace(/^\n\n/, '\n'));
             }
         });
+        process.exit(results.honored + results.pending == results.total ? 0 : 1);
     });
 } else {
     msg('watcher', 'watching files in', process.cwd() + '/');
