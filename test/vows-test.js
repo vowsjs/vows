@@ -3,7 +3,9 @@ var path = require('path');
 require.paths.unshift(path.join(__dirname, '..', 'lib'));
 
 var events = require('events'),
-    assert = require('assert');
+    assert = require('assert'),
+    fs     = require('fs');
+
 var vows = require('vows');
 
 var api = vows.prepare({
@@ -71,6 +73,24 @@ vows.describe("Vows").addBatch({
                     "the parent topics": function(topics) {
                         assert.equal(topics.join(), [4, 3, 2, 1].join());
                     }
+                }
+            }
+        }
+    },
+    "Nested contexts with callback-style async": {
+        topic: function () {
+            fs.stat(__dirname + '/vows-test.js', this.callback);
+        },
+        'after a successful `fs.stat`': {
+            topic: function (stat) {
+                fs.open(__dirname + '/vows-test.js', "r", stat.mode, this.callback);
+            },
+            'after a successful `fs.open`': {
+                topic: function (fd, stat) {
+                    fs.read(fd, stat.size, 0, "utf8", this.callback);
+                },
+                'after a successful `fs.read`': function (data) {
+                    assert.match (data, /after a successful `fs.read`/);
                 }
             }
         }
