@@ -132,6 +132,13 @@ vows.describe("Vows").addBatch({
             assert.equal(topic, 45);
         }
     },
+    "A non-function topic with a falsy value": {
+        topic: 0,
+
+        "should work as expected": function (topic) {
+            assert.equal(topic, 0);
+        }
+    },
     "A topic returning a function": {
         topic: function () {
             return function () { return 42 };
