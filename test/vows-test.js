@@ -280,4 +280,4 @@ vows.describe("Vows").addBatch({
     "A 3rd batch": {
         topic: true, "should run last": function () {}
     }
-}).export(module);
+}).addBatch({}).export(module);
