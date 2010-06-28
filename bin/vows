@@ -100,9 +100,7 @@ while (arg = argv.shift()) {
                     options.nocolor = true;
                     break;
                 case 'version':
-                    sys.print('vows ');
-                    sys.puts(fs.readFileSync(path.join(__dirname, '..', 'package.json'))
-                               .toString().match(/"version"\s*:\s*"([\d.]+)"/)[1]);
+                    sys.puts('vows ' + vows.version);
                     process.exit(0);
                 case 'help':
                 case 'h':
