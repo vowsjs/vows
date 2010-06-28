@@ -1,7 +1,7 @@
 {
   "name"          : "vows",
   "description"   : "Asynchronous BDD & continuous integration for node.js",
-  "url"           : "http://cloudhead.io/vows",
+  "url"           : "http://vowsjs.org",
   "keywords"      : ["testing", "spec", "test", "BDD"],
   "author"        : "Alexis Sellier <self@cloudhead.net>",
   "contributors"  : [],
@@ -9,5 +9,5 @@
   "directories"   : {"lib": "./lib/vows"},
   "main"          : "./lib/vows",
   "bin"           : { "vows": "./bin/vows" },
-  "version"       : "0.4.3"
+  "version"       : "0.4.4"
 }
