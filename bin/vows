@@ -39,8 +39,7 @@ var help = [
 var options = {
     reporter: reporter,
     matcher: /.*/,
-    watch: false,
-    error: true
+    watch: false
 };
 
 var files = [];
