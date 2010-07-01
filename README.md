@@ -3,7 +3,7 @@ Vows
 
 > Asynchronous BDD & continuous integration for node.js
 
-### <http://vows.js.org> #
+#### <http://vowsjs.org> #
 
 introduction
 ------------
