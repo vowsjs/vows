@@ -39,7 +39,8 @@ var help = [
 var options = {
     reporter: reporter,
     matcher: /.*/,
-    watch: false
+    watch: false,
+    error: true
 };
 
 var files = [];
@@ -98,6 +99,9 @@ while (arg = argv.shift()) {
                     break;
                 case 'no-color':
                     options.nocolor = true;
+                    break;
+                case 'no-error':
+                    options.error = false;
                     break;
                 case 'version':
                     sys.puts('vows ' + vows.version);
