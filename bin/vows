@@ -5,6 +5,21 @@ var path   = require('path'),
     fs     = require('fs'),
     events = require('events');
 
+//
+// Attempt to load Coffee-Script.  If it's not available, continue on our
+// merry way, if it is available, set it up so we can include `*.coffee`
+// scripts and start searching for them.
+//
+try {
+    var coffee = require('coffee-script');
+    require.registerExtension('.coffee', function(content) { return coffee.compile(content); });
+    var fileExtRegex        = /\.(js|coffee)$/,
+        specFileExtRegex    = /-(test|spec)\.(js|coffee)$/;
+} catch (err) {
+    var fileExtRegex        = /\.js$/,
+        specFileExtRegex    = /-(test|spec)\.js$/;
+}
+
 var inspect = require('eyes').inspector({
     stream: null,
     styles: { string: 'grey', regexp: 'grey' }
@@ -165,7 +180,7 @@ if (! options.watch) {
     reporter.reset = function () { _reporter.reset && _reporter.reset() };
 
     files = args.map(function (a) {
-        return path.join(process.cwd(), a.replace(/\.js$/, ''));
+        return path.join(process.cwd(), a.replace(fileExtRegex, ''));
     });
 
     runSuites(importSuites(files), function (results) {
@@ -249,7 +264,7 @@ if (! options.watch) {
 
             msg('watcher', 'detected change in', file);
 
-            file = (/-(test|spec)\.js$/.test(file) ? path.join(testFolder, file)
+            file = (specFileExtRegex.test(file) ? path.join(testFolder, file)
                                                    : path.join(testFolder, file + '-' + testFolder));
 
             try {
@@ -259,8 +274,8 @@ if (! options.watch) {
                 file = null;
             }
 
-            var files = (/-(test|spec)\.js$/.test(file) ? [file] : paths(testFolder)).map(function (p) {
-                return path.join(process.cwd(), p.replace(/\.js$/, ''));
+            var files = (specFileExtRegex.test(file) ? [file] : paths(testFolder)).map(function (p) {
+                return path.join(process.cwd(), p.replace(fileExtRegex, ''));
             }).map(function (p) {
                 delete(require.main.moduleCache[p]);
                 return p;
@@ -351,7 +366,7 @@ function paths(dir) {
 
             if (file[0] == '.' || file === 'vendor') {
                 return;
-            } else if (stat.isFile() && /\.js$/.test(file)) {
+            } else if (stat.isFile() && fileExtRegex.test(file)) {
                 paths.push(path);
             } else if (stat.isDirectory()) {
                 traverse(file, stack);
