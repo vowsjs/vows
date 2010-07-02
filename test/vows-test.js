@@ -281,3 +281,24 @@ vows.describe("Vows").addBatch({
         topic: true, "should run last": function () {}
     }
 }).addBatch({}).export(module);
+
+vows.describe("Vows with a single batch", {
+    "This is a batch that's added as the optional parameter to describe()": {
+        topic: true,
+        "A batch added without calling addBatch()": function() {}
+    }
+}).export(module);
+
+
+vows.describe("Vows with multiple batches added as optional parameters", {
+    "First batch": {
+        topic: true,
+        "should be run first": function() {}
+    }
+}, {
+    "Second batch": {
+        topic: true,
+        "should be run second": function() {}
+    }
+}).export(module);
+
