@@ -193,9 +193,20 @@ if (! options.watch) {
                 sys.print(str.replace(/^\n\n/, '\n'));
             }
         });
-        process.stdout.addListener('drain', function () {
+
+        // If our output is finished, return an appropriate status code
+        // immediately.  Otherwise, wait until our I/O is finished.  There's
+        // probably a much better way to do this.  But we can't just use a
+        // drain handler, because it won't be called when there's no pending
+        // output.
+        function exitWithStatus() {
             process.exit(results.honored + results.pending == results.total ? 0 : 1);
-        });
+        }
+        if (process.stdout.write('')) { // HACK: See if output is done.
+            exitWithStatus();
+        } else {
+            process.stdout.addListener('drain', exitWithStatus);
+        }
     });
 } else {
     //
