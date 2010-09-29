@@ -49,6 +49,7 @@ var help = [
     "  --spec            Use Spec reporter",
     "  --dot-matrix      Use Dot-Matrix reporter",
     //"  --no-color        Don't use terminal colors",
+    "  -R MODULE         Require a module before running specs",
     "  --version         Show version",
     "  -h, --help        You're staring at it"
 ].join('\n');
@@ -88,6 +89,8 @@ while (arg = argv.shift()) {
                     regex    = new(RegExp)('(\\' + specials + ')', 'g');
                 return new(RegExp)(str.replace(regex, '\\$1'));
             })(argv.shift());
+        } else if (arg[0] == 'R') {
+            require(argv.shift());
         } else if (arg in options) {
             options[arg] = true;
         } else {
