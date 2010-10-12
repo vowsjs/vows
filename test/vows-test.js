@@ -301,3 +301,23 @@ vows.describe("Vows with multiple batches added as optional parameters", {
     }
 }).export(module);
 
+vows.describe("Vows with teardowns").addBatch({
+    "A context": {
+        topic: function () {
+            return { flag: true };
+        },
+        "And a vow": function (topic) {
+            assert.isTrue(topic.flag);
+        },
+        "And another vow": function (topic) {
+            assert.isTrue(topic.flag);
+        },
+        "And a final vow": function (topic) {
+            assert.isTrue(topic.flag);
+        },
+        teardown: function (topic) {
+            topic.flag = false;
+        }
+    }
+}).export(module);
+
