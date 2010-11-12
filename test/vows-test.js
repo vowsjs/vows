@@ -95,6 +95,25 @@ vows.describe("Vows").addBatch({
             }
         }
     },
+    "a callback-style return": {
+        topic: function() {
+            var target = {a: 1};
+            function f(callback) {
+                callback.call(target, null, 1);
+            }
+            f(this.callback);
+        },
+        'should pass on the user\'s callback arguments': function(err, status) {
+            assert.isNull(err);
+            assert.equal(status, 1);
+        },
+        'should set this to the target of the user\'s callback': function(err, status) {
+            assert.deepEqual(this, {a: 1});
+        },
+        'should pass test context as extra parameter': function(err, status, context) {
+            assert.equal(context.name, "a callback-style return");
+        }
+    },
     "A nested context with no topics": {
         topic: 45,
         ".": {
