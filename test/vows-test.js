@@ -91,12 +91,6 @@ vows.describe("Vows").addBatch({
                 },
                 'after a successful `fs.read`': function (data) {
                     assert.match (data, /after a successful `fs.read`/);
-                },
-                'should set this to the target of fs.read callback': function(data) {
-                    assert.deepEqual(this, {});
-                },
-                'should pass context as extra parameter': function(_, _, _, context) {
-                    assert.equal(context.name, 'after a successful `fs.open`');
                 }
             }
         }
