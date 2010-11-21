@@ -317,6 +317,17 @@ vows.describe("Vows with teardowns").addBatch({
         },
         teardown: function (topic) {
             topic.flag = false;
+        },
+        "with a subcontext" : {
+            topic: function (topic) {
+                var that = this;
+                process.nextTick(function () {
+                    that.callback(null, topic);
+                });
+            },
+            "Waits for the subcontext before teardown" : function(topic) {
+                assert.isTrue(topic.flag);
+            }
         }
     }
 }).export(module);
