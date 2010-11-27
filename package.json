@@ -5,7 +5,10 @@
   "keywords"      : ["testing", "spec", "test", "BDD"],
   "author"        : "Alexis Sellier <self@cloudhead.net>",
   "contributors"  : [],
-  "dependencies"  : {"eyes": ">=0.1.6"},
+  "dependencies"  : {
+    "eyes": ">=0.1.6",
+    "colors": ">=0.1.0"
+  },
   "main"          : "./lib/vows",
   "bin"           : { "vows": "./bin/vows" },
   "directories"   : { "test": "./test" },

@@ -31,7 +31,7 @@ require.paths.unshift(path.join(__dirname, '..', 'lib'));
 
 var vows = require('vows');
 var console = require('vows/console');
-var stylize = require('vows/console').stylize;
+var colors = require('colors');
 var _reporter = require('vows/reporters/dot-matrix'), reporter = {
     name: _reporter.name,
 };
@@ -341,13 +341,21 @@ function runSuites(suites, callback) {
 
 function importSuites(files) {
     msg(options.watcher ? 'watcher' : 'runner', 'loading', files);
-
     return files.reduce(function (suites, f) {
-        var obj = require(f);
+    
+        try{
+          var obj = require(f);        
+        }
+        catch(err){
+          sys.puts(('Could not find test suite: ' + f).red.bold);
+          return [];
+        }
+        
         return suites.concat(Object.keys(obj).map(function (s) {
             return obj[s];
         }));
-    }, [])
+
+    }, []);
 }
 
 //
@@ -382,8 +390,8 @@ function paths(dir) {
 
 function msg(cmd, subject, str, p) {
     if (options.verbose) {
-        sys[p ? 'print' : 'puts']( stylize('vows ', 'green')
-              + stylize(cmd, 'bold')
+        sys[p ? 'print' : 'puts']( 'vows '.green
+              + cmd.bold
               + ' ' + subject + ' '
               + (str ? (typeof(str) === 'string' ? str : inspect(str)) : '')
               );
@@ -391,7 +399,7 @@ function msg(cmd, subject, str, p) {
 }
 
 function abort(cmd, str) {
-    sys.puts(stylize('vows ', 'red') + stylize(cmd, 'bold') + ' ' + str);
-    sys.puts(stylize('vows ', 'red') + stylize(cmd, 'bold') + ' exiting');
+    sys.puts('vows '.red + cmd.bold + ' ' + str);
+    sys.puts('vows '.red + cmd.bold + ' exiting');
     process.exit(-1);
 }
