@@ -277,10 +277,15 @@ if (! options.watch) {
             }
 
             var files = (specFileExt.test(file) ? [file] : paths(testFolder)).map(function (p) {
-                return path.join(process.cwd(), p.replace(fileExt, ''));
+                return path.join(process.cwd(), p);
             }).map(function (p) {
-                delete(require.main.moduleCache[p]);
+                var cache = (require.main.moduleCache) ? require.main.moduleCache : require.cache;
+                if(cache[p]) {
+            	  delete(cache[p]);
+                }
                 return p;
+            }).map(function (p) {
+                return p.replace(fileExt, '');
             });
 
             running ++;
