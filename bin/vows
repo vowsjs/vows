@@ -186,6 +186,8 @@ if (! options.watch) {
     });
 
     runSuites(importSuites(files), function (results) {
+        var status = results.errored ? 2 : (results.broken ? 1 : 0);
+
         !options.verbose && _reporter.print('\n');
         msg('runner', 'finish');
         _reporter.report(['finish', results], {
@@ -193,9 +195,13 @@ if (! options.watch) {
                 sys.print(str.replace(/^\n\n/, '\n'));
             }
         });
-        process.stdout.addListener('drain', function () {
-            process.exit(results.honored + results.pending == results.total ? 0 : 1);
-        });
+        if (process.stdout.write('')) { // Check if stdout is drained
+            process.exit(status);
+        } else {
+            process.stdout.on('drain', function () {
+                process.exit(status);
+            });
+        }
     });
 } else {
     //
