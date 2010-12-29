@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 var path   = require('path'),
-    sys    = require('sys'),
     fs     = require('fs'),
+    util   = require('util'),
     events = require('events');
 
 //
@@ -30,7 +30,7 @@ var inspect = require('eyes').inspector({
 require.paths.unshift(path.join(__dirname, '..', 'lib'));
 
 var vows = require('vows');
-var console = require('vows/console');
+var cutils = require('vows/console');
 var stylize = require('vows/console').stylize;
 var _reporter = require('vows/reporters/dot-matrix'), reporter = {
     name: _reporter.name,
@@ -120,11 +120,11 @@ while (arg = argv.shift()) {
                     options.error = false;
                     break;
                 case 'version':
-                    sys.puts('vows ' + vows.version);
+                    console.log('vows ' + vows.version);
                     process.exit(0);
                 case 'help':
                 case 'h':
-                    sys.puts(help);
+                    console.log(help);
                     process.exit(0);
                     break;
             }
@@ -194,7 +194,7 @@ if (! options.watch) {
         msg('runner', 'finish');
         _reporter.report(['finish', results], {
             write: function (str) {
-                sys.print(str.replace(/^\n\n/, '\n'));
+                util.print(str.replace(/^\n\n/, '\n'));
             }
         });
         if (process.stdout.write('')) { // Check if stdout is drained
@@ -224,12 +224,12 @@ if (! options.watch) {
             colors = ['32m', '33m', '31m'],
             timer = setInterval(tick, 100);
 
-        process.addListener('uncaughtException', cleanup);
-        process.addListener('exit', cleanup);
-        process.addListener('SIGINT', function () {
+        process.on('uncaughtException', cleanup);
+        process.on('exit', cleanup);
+        process.on('SIGINT', function () {
             process.exit(0);
         });
-        process.addListener('SIGQUIT', function () {
+        process.on('SIGQUIT', function () {
             changed();
         });
 
@@ -257,7 +257,7 @@ if (! options.watch) {
         //
         // Utility functions
         //
-        function print(str)      { sys.print(str) }
+        function print(str)      { util.print(str) }
         function esc(str)        { print("\x1b[" + str) }
         function eraseLine()     { esc("0K") }
         function cursorRestore() { esc("0G") }
@@ -295,7 +295,7 @@ if (! options.watch) {
 
             runSuites(importSuites(files), function (results) {
                 delete(results.time);
-                print(console.result(results).join('') + '\n\n');
+                print(cutils.result(results).join('') + '\n\n');
                 lastRun = new(Date);
                 status = results;
                 running --;
@@ -390,7 +390,7 @@ function paths(dir) {
 
 function msg(cmd, subject, str, p) {
     if (options.verbose) {
-        sys[p ? 'print' : 'puts']( stylize('vows ', 'green')
+        util[p ? 'print' : 'puts']( stylize('vows ', 'green')
               + stylize(cmd, 'bold')
               + ' ' + subject + ' '
               + (str ? (typeof(str) === 'string' ? str : inspect(str)) : '')
@@ -399,7 +399,7 @@ function msg(cmd, subject, str, p) {
 }
 
 function abort(cmd, str) {
-    sys.puts(stylize('vows ', 'red') + stylize(cmd, 'bold') + ' ' + str);
-    sys.puts(stylize('vows ', 'red') + stylize(cmd, 'bold') + ' exiting');
+    console.log(stylize('vows ', 'red') + stylize(cmd, 'bold') + ' ' + str);
+    console.log(stylize('vows ', 'red') + stylize(cmd, 'bold') + ' exiting');
     process.exit(-1);
 }
