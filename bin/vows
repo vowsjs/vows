@@ -48,6 +48,7 @@ var help = [
     "  --json            Use JSON reporter",
     "  --spec            Use Spec reporter",
     "  --dot-matrix      Use Dot-Matrix reporter",
+    "  --xunit           Use xUnit reporter",
     //"  --no-color        Don't use terminal colors",
     "  --version         Show version",
     "  -h, --help        You're staring at it"
@@ -104,6 +105,9 @@ while (arg = argv.shift()) {
                 case 'silent':
                 case 's':
                     _reporter = require('vows/reporters/silent');
+                    break;
+                case 'xunit':
+                    _reporter = require('vows/reporters/xunit');
                     break;
                 case 'verbose':
                 case 'v':
