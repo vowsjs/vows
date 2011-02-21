@@ -260,7 +260,7 @@ vows.describe("Vows").addBatch({
                 };
                 async(this.callback);
             },
-            "should give access to the topic context": function (e, t, tt) {
+            "should give access to the topic context": function () {
                 assert.isTrue(this.boo);
             }
         },
