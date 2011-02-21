@@ -248,7 +248,19 @@ vows.describe("Vows").addBatch({
             topic: function () {
                 this.callback.call({ boo: true }, null, 'hello');
             },
-            "should work the same as returning a value": function (res) {
+            "should give access to the user context": function (res) {
+                assert.isTrue(this.boo);
+            }
+        },
+        "passing this.callback to a function": {
+            topic: function () {
+                this.boo = true;
+                var async = function (callback) {
+                    callback(null);
+                };
+                async(this.callback);
+            },
+            "should give access to the topic context": function (e, t, tt) {
                 assert.isTrue(this.boo);
             }
         },
