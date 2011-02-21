@@ -16,10 +16,10 @@ try {
     var coffee = require('coffee-script');
     require.registerExtension('.coffee', function (content) { return coffee.compile(content) });
     fileExt     = /\.(js|coffee)$/;
-    specFileExt = /-(test|spec)\.(js|coffee)$/;
+    specFileExt = /[.-](test|spec)\.(js|coffee)$/;
 } catch (_) {
     fileExt     = /\.js$/;
-    specFileExt = /-(test|spec)\.js$/;
+    specFileExt = /[.-](test|spec)\.js$/;
 }
 
 var inspect = require('eyes').inspector({
