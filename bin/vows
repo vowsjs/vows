@@ -169,13 +169,13 @@ if (args.length === 0 || options.watch) {
 }
 
 if (! options.watch) {
-    reporter.report = function (data) {
+    reporter.report = function (data, filename) {
         switch (data[0]) {
             case 'subject':
             case 'vow':
             case 'context':
             case 'error':
-                _reporter.report(data);
+                _reporter.report(data, filename);
                 break;
             case 'end':
                 (options.verbose || _reporter.name === 'json') && _reporter.report(data);
@@ -186,6 +186,7 @@ if (! options.watch) {
         }
     };
     reporter.reset = function () { _reporter.reset && _reporter.reset() };
+    reporter.print = _reporter.print;
 
     files = args.map(function (a) {
         return path.join(process.cwd(), a.replace(fileExt, ''));
@@ -360,6 +361,7 @@ function importSuites(files) {
     return files.reduce(function (suites, f) {
         var obj = require(f);
         return suites.concat(Object.keys(obj).map(function (s) {
+            obj[s]._filename = f.replace(process.cwd() + '/', '') + '.js';
             return obj[s];
         }));
     }, [])
