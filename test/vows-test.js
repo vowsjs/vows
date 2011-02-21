@@ -244,6 +244,14 @@ vows.describe("Vows").addBatch({
                 assert.equal(res, 'hello');
             }
         },
+        "using this.callback with a user context": {
+            topic: function () {
+                this.callback.call({ boo: true }, null, 'hello');
+            },
+            "should work the same as returning a value": function (res) {
+                assert.isTrue(this.boo);
+            }
+        },
         "with multiple arguments": {
             topic: function () {
                 this.callback(null, 1, 2, 3);
