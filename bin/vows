@@ -14,7 +14,14 @@ var fileExt, specFileExt;
 
 try {
     var coffee = require('coffee-script');
-    require.registerExtension('.coffee', function (content) { return coffee.compile(content) });
+    if(require.extensions) {
+        require.extensions['.coffee'] = function(module, filename) {
+            var content = coffee.compile(fs.readFileSync(filename, 'utf8'));
+            return module._compile(content, filename);
+        };
+    } else {
+        require.registerExtension('.coffee', function (content) { return coffee.compile(content) });
+    }
     fileExt     = /\.(js|coffee)$/;
     specFileExt = /[.-](test|spec)\.(js|coffee)$/;
 } catch (_) {
