@@ -175,6 +175,14 @@ vows.describe("Vows").addBatch({
             },
         }
     },
+    "A topic with a function that errors": {
+        topic: function() {
+            throw("Something wrong here");
+        },
+        "should error out": function(topic) {
+            assert.equal(topic, "Something wrong here");
+        }
+    },
     "A topic emitting an error": {
         topic: function () {
             var promise = new(events.EventEmitter);
