@@ -14,8 +14,8 @@ var fileExt, specFileExt;
 
 try {
     var coffee = require('coffee-script');
-    if(require.extensions) {
-        require.extensions['.coffee'] = function(module, filename) {
+    if (require.extensions) {
+        require.extensions['.coffee'] = function (module, filename) {
             var content = coffee.compile(fs.readFileSync(filename, 'utf8'));
             return module._compile(content, filename);
         };
