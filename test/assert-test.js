@@ -21,6 +21,11 @@ vows.describe('vows/assert').addBatch({
             assert.include([0, 42, 0],    42);
             assert.include({goo:true},    'goo');
         },
+        "`deepInclude`": function (assert) {
+            assert.deepInclude([{a:'b'},{c:'d'}], {a:'b'});
+            assert.deepInclude("hello world", "world");
+            assert.deepInclude({goo:true},    'goo');
+        },
         "`typeOf`": function (assert) {
             assert.typeOf('goo', 'string');
             assert.typeOf(42,    'number');
