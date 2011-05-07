@@ -196,7 +196,9 @@ if (! options.watch) {
     reporter.print = _reporter.print;
 
     files = args.map(function (a) {
-        return path.join(process.cwd(), a.replace(fileExt, ''));
+        return (!a.match(/^\//))
+            ? path.join(process.cwd(), a.replace(fileExt, ''))
+            : a.replace(fileExt, '');
     });
 
     runSuites(importSuites(files), function (results) {
