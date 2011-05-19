@@ -47,18 +47,19 @@ var help = [
     "usage: vows [FILE, ...] [options]",
     "",
     "options:",
-    "  -v, --verbose     Enable verbose output",
-    "  -w, --watch       Watch mode",
-    "  -s, --silent      Don't report",
-    "  -m  PATTERN       Only run tests matching the PATTERN string",
-    "  -r  PATTERN       Only run tests matching the PATTERN regexp",
-    "  --json            Use JSON reporter",
-    "  --spec            Use Spec reporter",
-    "  --dot-matrix      Use Dot-Matrix reporter",
-    "  --xunit           Use xUnit reporter",
-    //"  --no-color        Don't use terminal colors",
-    "  --version         Show version",
-    "  -h, --help        You're staring at it"
+    "  -v, --verbose        Enable verbose output",
+    "  -w, --watch          Watch mode",
+    "  -s, --silent         Don't report",
+    "  -m  PATTERN          Only run tests matching the PATTERN string",
+    "  -r  PATTERN          Only run tests matching the PATTERN regexp",
+    "  -i, --include PATH   Push given path into require.paths",
+    "  --json               Use JSON reporter",
+    "  --spec               Use Spec reporter",
+    "  --dot-matrix         Use Dot-Matrix reporter",
+    "  --xunit              Use xUnit reporter",
+    //"  --no-color           Don't use terminal colors",
+    "  --version            Show version",
+    "  -h, --help           You're staring at it"
 ].join('\n');
 
 var options = {
@@ -96,6 +97,8 @@ while (arg = argv.shift()) {
                     regex    = new(RegExp)('(\\' + specials + ')', 'g');
                 return new(RegExp)(str.replace(regex, '\\$1'));
             })(argv.shift());
+        } else if (arg[0] === 'i') {
+            require.paths.unshift(argv.shift());
         } else if (arg in options) {
             options[arg] = true;
         } else {
