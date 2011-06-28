@@ -51,6 +51,11 @@ vows.describe('vows/assert').addBatch({
         "`isNumber`": function (assert) {
             assert.isNumber(0);
         },
+        "`isBoolean`": function (assert){
+            assert.isBoolean(true);
+            assert.isBoolean(false);
+            assertError(assert.isBoolean, 0);
+        },
         "`isNan`": function (assert) {
             assert.isNaN(0/0);
         },
