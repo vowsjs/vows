@@ -85,6 +85,13 @@ vows.describe('vows/assert').addBatch({
             assert.greater(5, 4);
             assert.lesser(4, 5);
         },
+        "`inDelta`": function (assert) {
+            assert.inDelta(42, 40, 5);
+            assert.inDelta(42, 40, 2);
+            assert.inDelta(42, 42, 0);
+            assert.inDelta(3.1, 3.0, 0.2);
+            assertError(assert.inDelta, [42, 40, 1]);
+        },
         "`isEmpty`": function (assert) {
             assert.isEmpty({});
             assert.isEmpty([]);
@@ -93,13 +100,14 @@ vows.describe('vows/assert').addBatch({
     }
 }).export(module);
 
-function assertError(assertion, value, fail) {
+function assertError(assertion, args, fail) {
+    if (!Array.isArray(args)) { args = [args]; }
     try {
-        assertion(value);
+        assertion.apply(null, args);
         fail = true;
     } catch (e) {/* Success */}
 
-    fail && assert.fail(value, assert.AssertionError, 
+    fail && assert.fail(args.join(' '), assert.AssertionError,
                                "expected an AssertionError for {actual}",
                                "assertError", assertError);
 }
