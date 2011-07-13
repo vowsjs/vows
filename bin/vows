@@ -10,7 +10,7 @@ var path   = require('path'),
 // merry way, if it is available, set it up so we can include `*.coffee`
 // scripts and start searching for them.
 //
-var fileExt, specFileExt;
+var fileExt, specFileExt, helperFileExt;
 
 try {
     var coffee = require('coffee-script');
@@ -24,9 +24,11 @@ try {
     }
     fileExt     = /\.(js|coffee)$/;
     specFileExt = /[.-](test|spec)\.(js|coffee)$/;
+    helperFileExt = /(test|spec)[.-]helper\.js$/;
 } catch (_) {
     fileExt     = /\.js$/;
     specFileExt = /[.-](test|spec)\.js$/;
+    helperFileExt = /(test|spec)[.-]helper\.js$/;
 }
 
 var inspect = require('eyes').inspector({
@@ -165,7 +167,8 @@ if (args.length === 0 || options.watch) {
 
     if (args.length === 0) {
         args = paths(testFolder).filter(function (f) {
-            return new(RegExp)('-' + testFolder + '.(js|coffee)$').test(f);
+            return (new(RegExp)('-' + testFolder + '.(js|coffee)$').test(f) || 
+                    helperFileExt.test(f) ); 
         });
 
         if (options.watch) {
@@ -194,10 +197,12 @@ if (! options.watch) {
     };
     reporter.reset = function () { _reporter.reset && _reporter.reset() };
     reporter.print = _reporter.print;
-
+     
     files = args.map(function (a) {
         return path.join(process.cwd(), a.replace(fileExt, ''));
     });
+
+    files = importHelpers(files);
 
     runSuites(importSuites(files), function (results) {
         var status = results.errored ? 2 : (results.broken ? 1 : 0);
@@ -307,6 +312,8 @@ if (! options.watch) {
             });
 
             running ++;
+            
+            files = importHelpers(files);
 
             runSuites(importSuites(files), function (results) {
                 delete(results.time);
@@ -360,6 +367,31 @@ function runSuites(suites, callback) {
             callback(results);
         }
     })(suites, callback);
+}
+
+function importHelpers(files) {
+  return files.reduce(function (otherFiles, f) {
+    if (/(test|spec)[.-]helper/.test(f)==true)
+    {
+      processHelper(f);
+      return otherFiles;
+    }
+    else
+    {
+      return otherFiles.concat(f); 
+    }
+  }, [])
+}
+
+function processHelper(file) {
+  if ( typeof vows.helpers == 'undefined' )
+  {
+    vows.helpers = {};
+  }
+  var helper = require(file); 
+  Object.keys(helper).map(function (key) {
+    vows.helpers[key] = helper[key];
+  });
 }
 
 function importSuites(files) {
