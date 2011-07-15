@@ -17,11 +17,12 @@ vows.describe("Vows helpers").addBatch({
             topic: function (helper) {
                 var that = this;
                 fs.readFile("test-helper.js", function(err,data) {
-                    if (data) that.callback(helper);
-                    else that.callback("NO FILE");
+                    if (data) that.callback(null,helper);
+                    else that.callback("NO FILE",null);
                 });
             },
             "vows.helpers includes functions from helper files": function(err,res) {
+              console.log("there");
               if (typeof res == "undefined") assert.equal(err,"NO FILE");
               else assert.equal( res.add(2,2), 4 );
             }
