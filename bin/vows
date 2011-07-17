@@ -42,6 +42,7 @@ var stylize = require('vows/console').stylize;
 var _reporter = require('vows/reporters/dot-matrix'), reporter = {
     name: _reporter.name,
 };
+var _coverage;
 
 var help = [
     "usage: vows [FILE, ...] [options]",
@@ -56,6 +57,8 @@ var help = [
     "  --spec            Use Spec reporter",
     "  --dot-matrix      Use Dot-Matrix reporter",
     "  --xunit           Use xUnit reporter",
+    "  --cover-plain     Print plain coverage map if detected",
+    "  --cover-html      Write coverage map to \"coverage.html\"",
     //"  --no-color        Don't use terminal colors",
     "  --version         Show version",
     "  -h, --help        You're staring at it"
@@ -64,7 +67,8 @@ var help = [
 var options = {
     reporter: reporter,
     matcher: /.*/,
-    watch: false
+    watch: false,
+    coverage: false
 };
 
 var files = [];
@@ -115,6 +119,14 @@ while (arg = argv.shift()) {
                     break;
                 case 'xunit':
                     _reporter = require('vows/reporters/xunit');
+                    break;
+                case 'cover-plain':
+                    options.coverage = true;
+                    _coverage = require('vows/coverage/report-plain');
+                    break;
+                case 'cover-html':
+                    options.coverage = true;
+                    _coverage = require('vows/coverage/report-html');
                     break;
                 case 'verbose':
                 case 'v':
@@ -209,6 +221,9 @@ if (! options.watch) {
                 util.print(str.replace(/^\n\n/, '\n'));
             }
         });
+        if (options.coverage === true && _$jscoverage !== undefined) {
+            _coverage.report(_$jscoverage);
+        }
         if (process.stdout.write('')) { // Check if stdout is drained
             process.exit(status);
         } else {
