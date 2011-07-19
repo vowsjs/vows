@@ -1,5 +1,5 @@
-var vows = require('vows');
-var assert = require('assert');
+var vows = require(__dirname + '/../lib/vows'),
+    assert = require('assert');
 
 vows.describe('vows/assert').addBatch({
     "The Assertion module": {
