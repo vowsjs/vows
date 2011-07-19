@@ -1,4 +1,4 @@
-var path   = require('path').
+var path   = require('path'),
     events = require('events'),
     assert = require('assert'),
     fs     = require('fs'),
