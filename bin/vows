@@ -30,57 +30,57 @@ try {
 }
 
 var inspect = require('eyes').inspector({
-    stream: null,
-    styles: { string: 'grey', regexp: 'grey' }
-});
-
-require.paths.unshift(path.join(__dirname, '..', 'lib'));
-
-var vows = require('vows');
-var cutils = require('vows/console');
-var stylize = require('vows/console').stylize;
-var _reporter = require('vows/reporters/dot-matrix'), reporter = {
-    name: _reporter.name,
-};
-var _coverage;
-
-var help = [
-    "usage: vows [FILE, ...] [options]",
-    "",
-    "options:",
-    "  -v, --verbose     Enable verbose output",
-    "  -w, --watch       Watch mode",
-    "  -s, --silent      Don't report",
-    "  -m  PATTERN       Only run tests matching the PATTERN string",
-    "  -r  PATTERN       Only run tests matching the PATTERN regexp",
-    "  --json            Use JSON reporter",
-    "  --spec            Use Spec reporter",
-    "  --dot-matrix      Use Dot-Matrix reporter",
-    "  --xunit           Use xUnit reporter",
-    "  --cover-plain     Print plain coverage map if detected",
-    "  --cover-html      Write coverage map to \"coverage.html\"",
-    //"  --no-color        Don't use terminal colors",
-    "  --version         Show version",
-    "  -h, --help        You're staring at it"
-].join('\n');
-
-var options = {
-    reporter: reporter,
-    matcher: /.*/,
-    watch: false,
-    coverage: false
-};
-
-var files = [];
-
-// Get rid of process runner
-// ('node' in most cases)
-var arg, args = [], argv = process.argv.slice(2);
-
-// Current directory index,
-// and path of test folder.
-var root, testFolder;
-
+        stream: null,
+        styles: { string: 'grey', regexp: 'grey' }
+    }),
+    prefix = __dirname + '/../lib',
+    vows = require(prefix + '/vows'),
+    cutils = require(prefix + '/vows/console'),
+    stylize = cutils.stylize,
+    _reporter = require(prefix + '/vows/reporters/dot-matrix'),
+    reporter = {
+        name : _reporter.name
+    },
+    help = [
+        "usage: vows [FILE, ...] [options]",
+        "",
+        "options:",
+        "  -v, --verbose     Enable verbose output",
+        "  -w, --watch       Watch mode",
+        "  -s, --silent      Don't report",
+        "  -m  PATTERN       Only run tests matching the PATTERN string",
+        "  -r  PATTERN       Only run tests matching the PATTERN regexp",
+        "  --json            Use JSON reporter",
+        "  --spec            Use Spec reporter",
+        "  --dot-matrix      Use Dot-Matrix reporter",
+        "  --xunit           Use xUnit reporter",
+        "  --cover-plain     Print plain coverage map if detected",
+        "  --cover-html      Write coverage map to \"coverage.html\"",
+        //"  --no-color        Don't use terminal colors",
+        "  --version         Show version",
+        "  -h, --help        You're staring at it"
+    ].join('\n'),
+    
+    _coverage,
+    
+    options = {
+        reporter: reporter,
+        matcher: /.*/,
+        watch: false,
+        coverage: false
+    },
+    files = [],
+    
+    // Get rid of the process runner.
+    // (`node` in most cases)
+    arg,
+    args = [],
+    argv = process.argv.slice(2),
+    
+    // Current directory index, and path of test folder.
+    root,
+    testFolder;
+    
 //
 // Parse command-line parameters
 //

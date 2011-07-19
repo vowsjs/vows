@@ -1,27 +1,22 @@
-var path = require('path');
-
-require.paths.unshift(path.join(__dirname, '..', 'lib'));
-
-var events = require('events'),
+var path   = require('path'),
+    events = require('events'),
     assert = require('assert'),
-    fs     = require('fs');
-
-var vows = require('vows');
-
-var api = vows.prepare({
-    get: function (id, callback) {
-        process.nextTick(function () { callback(null, id) });
-    },
-    version: function () { return '1.0' }
-}, ['get']);
-
-var promiser = function (val) {
-    return function () {
-        var promise = new(events.EventEmitter);
-        process.nextTick(function () { promise.emit('success', val) });
-        return promise;
-    }
-};
+    fs     = require('fs'),
+    vows = require(__dirname + '/../lib/vows'),
+    api = vows.prepare({
+        get: function (id, callback) {
+            process.nextTick(function () { callback(null, id) });
+        },
+        version: function () { return '1.0' }
+    }, ['get']),
+    
+    promiser = function (val) {
+        return function () {
+            var promise = new(events.EventEmitter);
+            process.nextTick(function () { promise.emit('success', val) });
+            return promise;
+        }
+    };
 
 vows.describe("Vows").addBatch({
     "A context": {
