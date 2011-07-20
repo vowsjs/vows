@@ -34,12 +34,10 @@ var inspect = require('eyes').inspector({
     styles: { string: 'grey', regexp: 'grey' }
 });
 
-require.paths.unshift(path.join(__dirname, '..', 'lib'));
-
-var vows = require('vows');
-var cutils = require('vows/console');
-var stylize = require('vows/console').stylize;
-var _reporter = require('vows/reporters/dot-matrix'), reporter = {
+var vows = require('../lib/vows');
+var cutils = require('../lib/vows/console');
+var stylize = require('../lib/vows/console').stylize;
+var _reporter = require('../lib/vows/reporters/dot-matrix'), reporter = {
     name: _reporter.name,
 };
 var _coverage;
