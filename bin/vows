@@ -103,28 +103,28 @@ while (arg = argv.shift()) {
         } else {
             switch (arg) {
                 case 'json':
-                    _reporter = require('vows/reporters/json');
+                    _reporter = require('../lib/vows/reporters/json');
                     break;
                 case 'spec':
-                    _reporter = require('vows/reporters/spec');
+                    _reporter = require('../lib/vows/reporters/spec');
                     break;
                 case 'dot-matrix':
-                    _reporter = require('vows/reporters/dot-matrix');
+                    _reporter = require('../lib/vows/reporters/dot-matrix');
                     break;
                 case 'silent':
                 case 's':
-                    _reporter = require('vows/reporters/silent');
+                    _reporter = require('../lib/vows/reporters/silent');
                     break;
                 case 'xunit':
-                    _reporter = require('vows/reporters/xunit');
+                    _reporter = require('../lib/vows/reporters/xunit');
                     break;
                 case 'cover-plain':
                     options.coverage = true;
-                    _coverage = require('vows/coverage/report-plain');
+                    _coverage = require('../lib/vows/coverage/report-plain');
                     break;
                 case 'cover-html':
                     options.coverage = true;
-                    _coverage = require('vows/coverage/report-html');
+                    _coverage = require('../lib/vows/coverage/report-html');
                     break;
                 case 'verbose':
                 case 'v':
@@ -154,7 +154,7 @@ while (arg = argv.shift()) {
 }
 
 if (options.watch) {
-    options.reporter = reporter = require('vows/reporters/watch');
+    options.reporter = reporter = require('../lib/vows/reporters/watch');
 }
 
 msg('bin', 'argv', args);
