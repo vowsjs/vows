@@ -1,4 +1,4 @@
-var vows = require('vows');
+var vows = require('../lib/vows');
 var assert = require('assert');
 
 vows.describe('vows/assert').addBatch({

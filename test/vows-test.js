@@ -1,12 +1,8 @@
-var path = require('path');
-
-require.paths.unshift(path.join(__dirname, '..', 'lib'));
-
-var events = require('events'),
+var path   = require('path'),
+    events = require('events'),
     assert = require('assert'),
-    fs     = require('fs');
-
-var vows = require('vows');
+    fs     = require('fs'),
+    vows   = require('../lib/vows');
 
 var api = vows.prepare({
     get: function (id, callback) {
