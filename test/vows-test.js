@@ -350,6 +350,11 @@ vows.describe("Vows with teardowns").addBatch({
         "And a final vow": function (topic) {
             assert.isTrue(topic.flag);
         },
+        'subcontext': {
+          'nested': function (_, topic) {
+            assert.isTrue(topic.flag);
+          }
+        },
         teardown: function (topic) {
             topic.flag = false;
         },
