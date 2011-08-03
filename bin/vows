@@ -49,6 +49,7 @@ var help = [
     "  -v, --verbose     Enable verbose output",
     "  -w, --watch       Watch mode",
     "  -s, --silent      Don't report",
+    "  -i, --isolate     Run each test in it's own vows process",
     "  -m  PATTERN       Only run tests matching the PATTERN string",
     "  -r  PATTERN       Only run tests matching the PATTERN regexp",
     "  --json            Use JSON reporter",
@@ -66,7 +67,8 @@ var options = {
     reporter: reporter,
     matcher: /.*/,
     watch: false,
-    coverage: false
+    coverage: false,
+    isolate: false
 };
 
 var files = [];
@@ -133,6 +135,10 @@ while (arg = argv.shift()) {
                 case 'watch':
                 case 'w':
                     options.watch = true;
+                    break;
+                case 'isolate':
+                case 'i':
+                    options.isolate = true;
                     break;
                 case 'no-color':
                     options.nocolor = true;
