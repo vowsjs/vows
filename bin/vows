@@ -384,47 +384,62 @@ function runSuites(suites, callback) {
 function importSuites(files) {
     msg(options.watcher ? 'watcher' : 'runner', 'loading', files);
 
-    var exec = require('child_process').exec;
+    var spawn = require('child_process').spawn;
 
-    function wrapExec(f) {
+    function cwdname(f) {
+        return f.replace(process.cwd() + '/', '') + '.js';
+    }
+
+    function wrapSpawn(f) {
+        f = cwdname(f);
         return function(options, callback) {
-            var cmd = process.argv.slice(0, 2).concat('--json');
+            var args = [process.argv[1], '--json', f],
+                p = spawn(process.argv[0], args),
+                result;
 
-            exec(cmd.join(' '), function (err, stdout, stderr) {
-                if (err) {
-                    reporter.report(['error', stderr]);
-                    callback({
-                        errored: 1,
-                        total: 1
-                    });
-                    return;
-                }
+            p.on('exit', function(code) {
+                callback(
+                    (code != 0 || !result) ?
+                         {errored: 1, total: 1}
+                         :
+                         result
+                );
+            });
 
-                stdout = stdout.split(/\n/g);
+            var buffer = [];
+            p.stdout.on('data', function(data) {
+                data = data.toString().split(/\n/g);
+                if (data.length == 1) {
+                    buffer.push(data[0]);
+                } else {
+                    data[0] = buffer.concat(data[0]).join('');
+                    buffer = [data.pop()];
 
-                var result = stdout.pop();
-                stdout.map(function(i) {
-                    if (i) {
-                        i = JSON.parse(i);
-                        if (i && i[0] === 'finish') {
-                            callback(i[1]);
-                        } else {
-                            reporter.report(i);
+                    data.forEach(function(data) {
+                        if (data) {
+                            data = JSON.parse(data);
+                            if (data && data[0] === 'finish') {
+                                result = data[1];
+                            } else {
+                                reporter.report(data);
+                            }
                         }
-                    }
-                });
-            })
+                    });
+                }
+            });
+
+            p.stderr.pipe(process.stderr);
         }
     }
 
     return files.reduce(options.isolate ? function (suites, f) {
         return suites.concat({
-            run: wrapExec(f)
+            run: wrapSpawn(f)
         });
     } : function (suites, f) {
         var obj = require(f);
         return suites.concat(Object.keys(obj).map(function (s) {
-            obj[s]._filename = f.replace(process.cwd() + '/', '') + '.js';
+            obj[s]._filename = cwdname(f);
             return obj[s];
         }));
     }, [])
