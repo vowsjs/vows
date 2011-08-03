@@ -384,7 +384,36 @@ function runSuites(suites, callback) {
 function importSuites(files) {
     msg(options.watcher ? 'watcher' : 'runner', 'loading', files);
 
-    return files.reduce(function (suites, f) {
+    var exec = require('child_process').exec;
+
+    function wrapExec(f) {
+        return function(options, callback) {
+            var cmd = process.argv.slice(0, 2).concat('--json');
+
+            exec(cmd.join(' '), function (err, stdout, stderr) {
+                if (err) {
+                    reporter.report(['error', stderr]);
+                    callback({
+                        errored: 1,
+                        total: 1
+                    });
+                    return;
+                }
+
+                var result = stdout.split(/\n/g).map(function(i) {
+                    if (i) {
+                        reporter.report(JSON.parse(i));
+                    }
+                });
+            })
+        }
+    }
+
+    return files.reduce(options.isolate ? function (suites, f) {
+        return suites.concat({
+            run: wrapExec(f)
+        });
+    } : function (suites, f) {
         var obj = require(f);
         return suites.concat(Object.keys(obj).map(function (s) {
             obj[s]._filename = f.replace(process.cwd() + '/', '') + '.js';
