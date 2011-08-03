@@ -38,7 +38,7 @@ var vows = require('../lib/vows');
 var cutils = require('../lib/vows/console');
 var stylize = require('../lib/vows/console').stylize;
 var _reporter = require('../lib/vows/reporters/dot-matrix'), reporter = {
-    name: _reporter.name,
+    name: _reporter.name
 };
 var _coverage;
 
@@ -136,6 +136,9 @@ while (arg = argv.shift()) {
                 case 'w':
                     options.watch = true;
                     break;
+                case 'supress-stdout':
+                    options.supressStdout = true;
+                    break;
                 case 'isolate':
                 case 'i':
                     options.isolate = true;
@@ -157,6 +160,11 @@ while (arg = argv.shift()) {
             }
         }
     }
+}
+
+if (options.supressStdout) {
+  _reporter.setStream && _reporter.setStream(process.stdout);
+  process.stdout = fs.createWriteStream('/dev/null');
 }
 
 if (options.watch) {
@@ -201,10 +209,14 @@ if (! options.watch) {
                 _reporter.report(data, filename);
                 break;
             case 'end':
-                (options.verbose || _reporter.name === 'json') && _reporter.report(data);
+                (options.verbose || _reporter.name === 'json') &&
+                _reporter.report(data);
                 break;
             case 'finish':
-                options.verbose ? _reporter.print('\n') : _reporter.print(' ');
+                options.verbose ?
+                    _reporter.print('\n')
+                    :
+                    _reporter.print(' ');
                 break;
         }
     };
@@ -393,13 +405,13 @@ function importSuites(files) {
     function wrapSpawn(f) {
         f = cwdname(f);
         return function(options, callback) {
-            var args = [process.argv[1], '--json', f],
+            var args = [process.argv[1], '--json', '--supress-stdout', f],
                 p = spawn(process.argv[0], args),
                 result;
 
             p.on('exit', function(code) {
                 callback(
-                    (code != 0 || !result) ?
+                    !result ?
                          {errored: 1, total: 1}
                          :
                          result
