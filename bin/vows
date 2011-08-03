@@ -400,9 +400,17 @@ function importSuites(files) {
                     return;
                 }
 
-                var result = stdout.split(/\n/g).map(function(i) {
+                stdout = stdout.split(/\n/g);
+
+                var result = stdout.pop();
+                stdout.map(function(i) {
                     if (i) {
-                        reporter.report(JSON.parse(i));
+                        i = JSON.parse(i);
+                        if (i && i[0] === 'finish') {
+                            callback(i[1]);
+                        } else {
+                            reporter.report(i);
+                        }
                     }
                 });
             })
