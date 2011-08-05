@@ -404,12 +404,12 @@ function importSuites(files) {
 
     function wrapSpawn(f) {
         f = cwdname(f);
-        return function(options, callback) {
+        return function (options, callback) {
             var args = [process.argv[1], '--json', '--supress-stdout', f],
                 p = spawn(process.argv[0], args),
                 result;
 
-            p.on('exit', function(code) {
+            p.on('exit', function (code) {
                 callback(
                     !result ?
                          {errored: 1, total: 1}
@@ -419,7 +419,7 @@ function importSuites(files) {
             });
 
             var buffer = [];
-            p.stdout.on('data', function(data) {
+            p.stdout.on('data', function (data) {
                 data = data.toString().split(/\n/g);
                 if (data.length == 1) {
                     buffer.push(data[0]);
@@ -427,7 +427,7 @@ function importSuites(files) {
                     data[0] = buffer.concat(data[0]).join('');
                     buffer = [data.pop()];
 
-                    data.forEach(function(data) {
+                    data.forEach(function (data) {
                         if (data) {
                             data = JSON.parse(data);
                             if (data && data[0] === 'finish') {

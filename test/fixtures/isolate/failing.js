@@ -4,10 +4,10 @@ var vows = require('../../../lib/vows'),
 var obvious;
 vows.describe('failing').addBatch({
   'Obvious test': obvious = {
-    topic: function() {
+    topic: function () {
       this.callback(null, false);
     },
-    'should work': function(result) {
+    'should work': function (result) {
       assert.ok(result);
     }
     // but it won't

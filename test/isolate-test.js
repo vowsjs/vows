@@ -4,13 +4,13 @@ var vows = require('../lib/vows'),
     exec = require('child_process').exec;
 
 function generateTopic(args, file) {
-  return function() {
+  return function () {
     var cmd = './bin/vows' + ' -i ' + (args || '') +
               ' ./test/fixtures/isolate/' + file,
         options = {cwd: path.resolve(__dirname + '/../')},
         callback = this.callback;
 
-    exec(cmd, options, function(err, stdout, stderr) {
+    exec(cmd, options, function (err, stdout, stderr) {
       callback(null, {
         err: err,
         stdout: stdout,
@@ -29,14 +29,14 @@ function assertExecNotOk(r) {
 }
 
 function parseResults(stdout) {
-  return stdout.split(/\n/g).map(function(s) {
+  return stdout.split(/\n/g).map(function (s) {
     if (!s) return;
     return JSON.parse(s);
-  }).filter(function(s) {return s});
+  }).filter(function (s) {return s});
 }
 
 function assertResultTypePresent(results, type) {
-  assert.ok(results.some(function(result) {
+  assert.ok(results.some(function (result) {
     return result[0] == type;
   }));
 }
@@ -47,7 +47,7 @@ function assertResultsFinish(results, expected) {
 
   finish = finish[1];
 
-  Object.keys(expected).forEach(function(key) {
+  Object.keys(expected).forEach(function (key) {
     assert.equal(finish[key], expected[key]);
   });
 }
@@ -62,7 +62,7 @@ vows.describe('vows/isolate').addBatch({
       'with json reporter': {
         topic: generateTopic('--json', 'passing.js'),
         'should be ok': assertExecOk,
-        'should have correct output': function(r) {
+        'should have correct output': function (r) {
           var results = parseResults(r.stdout)
 
           assertResultTypePresent(results, 'subject');
@@ -79,7 +79,7 @@ vows.describe('vows/isolate').addBatch({
       'with json reporter': {
         topic: generateTopic('--json', 'failing.js'),
         'should be not ok': assertExecNotOk,
-        'should have correct output though': function(r) {
+        'should have correct output though': function (r) {
           var results = parseResults(r.stdout);
 
           assertResultsFinish(results, {
@@ -93,11 +93,11 @@ vows.describe('vows/isolate').addBatch({
       'with json reporter': {
         topic: generateTopic('--json', 'stderr.js'),
         'should be ok': assertExecOk,
-        'should have stderr': function(r) {
+        'should have stderr': function (r) {
           assert.equal(r.stderr,
                        ['oh no!', 'oh no!', 'oh no!', 'oh no!', ''].join('\n'));
         },
-        'should have correct output': function(r) {
+        'should have correct output': function (r) {
           var results=  parseResults(r.stdout);
 
           assertResultsFinish(results, {
@@ -111,7 +111,7 @@ vows.describe('vows/isolate').addBatch({
       'with json reporter': {
         topic: generateTopic('--json', 'log.js'),
         'should be ok': assertExecOk,
-        'should have correct output': function(r) {
+        'should have correct output': function (r) {
           var results=  parseResults(r.stdout);
 
           assertResultsFinish(results, {
@@ -125,7 +125,7 @@ vows.describe('vows/isolate').addBatch({
       'with json reporter': {
         topic: generateTopic('--json', '*'),
         'should be not ok': assertExecNotOk,
-        'should have correct output': function(r) {
+        'should have correct output': function (r) {
           var results=  parseResults(r.stdout);
 
           assertResultsFinish(results, {
