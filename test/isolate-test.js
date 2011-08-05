@@ -54,13 +54,13 @@ function assertResultsFinish(results, expected) {
 
 vows.describe('vows/isolate').addBatch({
   'Running vows with -i flag for test/fixtures/isolate/': {
-    'passing-test.js': {
+    'passing.js': {
       'with default reporter': {
-        topic: generateTopic(null, 'passing-test.js'),
+        topic: generateTopic(null, 'passing.js'),
         'should be ok': assertExecOk
       },
       'with json reporter': {
-        topic: generateTopic('--json', 'passing-test.js'),
+        topic: generateTopic('--json', 'passing.js'),
         'should be ok': assertExecOk,
         'should have correct output': function(r) {
           var results = parseResults(r.stdout)
@@ -75,9 +75,9 @@ vows.describe('vows/isolate').addBatch({
         }
       }
     },
-    'failing-test.js': {
+    'failing.js': {
       'with json reporter': {
-        topic: generateTopic('--json', 'failing-test.js'),
+        topic: generateTopic('--json', 'failing.js'),
         'should be not ok': assertExecNotOk,
         'should have correct output though': function(r) {
           var results = parseResults(r.stdout);
@@ -89,9 +89,9 @@ vows.describe('vows/isolate').addBatch({
         }
       }
     },
-    'stderr-test.js': {
+    'stderr.js': {
       'with json reporter': {
-        topic: generateTopic('--json', 'stderr-test.js'),
+        topic: generateTopic('--json', 'stderr.js'),
         'should be ok': assertExecOk,
         'should have stderr': function(r) {
           assert.equal(r.stderr,
@@ -107,9 +107,9 @@ vows.describe('vows/isolate').addBatch({
         }
       }
     },
-    'log-test.js': {
+    'log.js': {
       'with json reporter': {
-        topic: generateTopic('--json', 'log-test.js'),
+        topic: generateTopic('--json', 'log.js'),
         'should be ok': assertExecOk,
         'should have correct output': function(r) {
           var results=  parseResults(r.stdout);
