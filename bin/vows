@@ -58,6 +58,7 @@ var help = [
     "  --xunit           Use xUnit reporter",
     "  --cover-plain     Print plain coverage map if detected",
     "  --cover-html      Write coverage map to \"coverage.html\"",
+    "  --cover-json      Write unified coverage map to \"coverage.json\"",
     //"  --no-color        Don't use terminal colors",
     "  --version         Show version",
     "  -h, --help        You're staring at it"
@@ -127,6 +128,10 @@ while (arg = argv.shift()) {
                 case 'cover-html':
                     options.coverage = true;
                     _coverage = require('../lib/vows/coverage/report-html');
+                    break;
+                case 'cover-json':
+                    options.coverage = true;
+                    _coverage = require('../lib/vows/coverage/report-json');
                     break;
                 case 'verbose':
                 case 'v':
@@ -239,8 +244,12 @@ if (! options.watch) {
                 util.print(str.replace(/^\n\n/, '\n'));
             }
         });
-        if (options.coverage === true && _$jscoverage !== undefined) {
-            _coverage.report(_$jscoverage);
+        try {
+            if (options.coverage === true && _$jscoverage !== undefined) {
+                _coverage.report(_$jscoverage);
+            }
+        } catch (err) {
+            // ignore the undefined jscoverage
         }
         if (process.stdout.write('')) { // Check if stdout is drained
             process.exit(status);
