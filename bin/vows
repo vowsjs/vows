@@ -272,7 +272,8 @@ if (! options.watch) {
 	                process.exit(status);
 	            });
 	        }
-	    });
+	    }
+	});
     };
     
 
