@@ -16,6 +16,10 @@ vows.describe('vows/assert').addBatch({
             assert.length("hello world", 11);
             assert.length([1, 2, 3], 3);
         },
+        "`isDefined`": function (assert) {
+            assert.isDefined(null);
+            assertError(assert.isDefined, undefined);
+        },
         "`include`": function (assert) {
             assert.include("hello world", "world");
             assert.include([0, 42, 0],    42);
@@ -78,6 +82,10 @@ vows.describe('vows/assert').addBatch({
             assert.isUndefined(undefined);
             assertError(assert.isUndefined, null);
         },
+        "`isDefined`": function (assert) {
+            assert.isDefined(null);
+            assertError(assert.isDefined, undefined);
+        },
         "`isNull`": function (assert) {
             assert.isNull(null);
             assertError(assert.isNull, 0);
@@ -101,6 +109,14 @@ vows.describe('vows/assert').addBatch({
             assert.isEmpty({});
             assert.isEmpty([]);
             assert.isEmpty("");
+        },
+        "`isNotEmpty`": function (assert) {
+            assert.isNotEmpty({goo:true});
+            assert.isNotEmpty([1]);
+            assert.isNotEmpty(" ");
+            assertError(assert.isNotEmpty, {});
+            assertError(assert.isNotEmpty, []);
+            assertError(assert.isNotEmpty, "");
         }
     }
 }).export(module);
