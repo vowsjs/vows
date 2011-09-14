@@ -192,9 +192,7 @@ if (args.length === 0 || options.watch) {
     }
     msg('bin', 'discovered', "./" + testFolder);
     if (args.length === 0) {
-        console.log(fileExt)
         args = paths(testFolder).filter(function (f) {
-            console.log(f)
             return new(RegExp)('-' + testFolder + '.(js|coffee)$').test(f);
         });
 
