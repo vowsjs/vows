@@ -194,7 +194,7 @@ if (args.length === 0 || options.watch) {
 
     if (args.length === 0) {
         args = paths(testFolder).filter(function (f) {
-            return new(RegExp)('-' + testFolder + '.(js|coffee)$').test(f);
+            return specFileExt.test(f);
         });
 
         if (options.watch) {
