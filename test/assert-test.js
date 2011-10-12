@@ -13,8 +13,8 @@ vows.describe('vows/assert').addBatch({
             assert.match("hello world", /^[a-z]+ [a-z]+$/);
         },
         "`length`": function (assert) {
-            assert.length("hello world", 11);
-            assert.length([1, 2, 3], 3);
+            assert.lengthOf("hello world", 11);
+            assert.lengthOf([1, 2, 3], 3);
         },
         "`isDefined`": function (assert) {
             assert.isDefined(null);
