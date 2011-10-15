@@ -10,7 +10,7 @@ function generateTopic(supress) {
             options = {cwd: path.resolve(__dirname + '/../')},
             callback = this.callback;
 
-        exec(cmd, options, function (err, stdout, _) {
+        exec(cmd, options, function (err, stdout) {
             callback(null, {err: err, stdout: stdout});
         });
     };
