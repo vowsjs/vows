@@ -3,114 +3,112 @@ var assert = require('assert');
 
 vows.describe('vows/assert').addBatch({
     "The Assertion module": {
-        topic: require('assert'),
-
-        "`equal`": function (assert) {
+        "`equal`": function () {
             assert.equal("hello world", "hello world");
             assert.equal(1, true);
         },
-        "`match`": function (assert) {
+        "`match`": function () {
             assert.match("hello world", /^[a-z]+ [a-z]+$/);
         },
-        "`length`": function (assert) {
-            assert.length("hello world", 11);
-            assert.length([1, 2, 3], 3);
+        "`length`": function () {
+            assert.lengthOf("hello world", 11);
+            assert.lengthOf([1, 2, 3], 3);
         },
-        "`isDefined`": function (assert) {
+        "`isDefined`": function () {
             assert.isDefined(null);
             assertError(assert.isDefined, undefined);
         },
-        "`include`": function (assert) {
+        "`include`": function () {
             assert.include("hello world", "world");
             assert.include([0, 42, 0],    42);
             assert.include({goo:true},    'goo');
         },
-        "`deepInclude`": function (assert) {
+        "`deepInclude`": function () {
             assert.deepInclude([{a:'b'},{c:'d'}], {a:'b'});
             assert.deepInclude("hello world", "world");
             assert.deepInclude({goo:true},    'goo');
         },
-        "`typeOf`": function (assert) {
+        "`typeOf`": function () {
             assert.typeOf('goo', 'string');
             assert.typeOf(42,    'number');
             assert.typeOf([],    'array');
             assert.typeOf({},    'object');
             assert.typeOf(false, 'boolean');
         },
-        "`instanceOf`": function (assert) {
+        "`instanceOf`": function () {
             assert.instanceOf([], Array);
             assert.instanceOf(function () {}, Function);
         },
-        "`isArray`": function (assert) {
+        "`isArray`": function () {
             assert.isArray([]);
             assertError(assert.isArray, {});
         },
-        "`isString`": function (assert) {
+        "`isString`": function () {
             assert.isString("");
         },
-        "`isObject`": function (assert) {
+        "`isObject`": function () {
             assert.isObject({});
             assertError(assert.isObject, []);
         },
-        "`isNumber`": function (assert) {
+        "`isNumber`": function () {
             assert.isNumber(0);
         },
-        "`isBoolean`": function (assert){
+        "`isBoolean`": function (){
             assert.isBoolean(true);
             assert.isBoolean(false);
             assertError(assert.isBoolean, 0);
         },
-        "`isNan`": function (assert) {
+        "`isNan`": function () {
             assert.isNaN(0/0);
         },
-        "`isTrue`": function (assert) {
+        "`isTrue`": function () {
             assert.isTrue(true);
             assertError(assert.isTrue, 1);
         },
-        "`isFalse`": function (assert) {
+        "`isFalse`": function () {
             assert.isFalse(false);
             assertError(assert.isFalse, 0);
         },
-        "`isZero`": function (assert) {
+        "`isZero`": function () {
             assert.isZero(0);
             assertError(assert.isZero, null);
         },
-        "`isNotZero`": function (assert) {
+        "`isNotZero`": function () {
             assert.isNotZero(1);
         },
-        "`isUndefined`": function (assert) {
+        "`isUndefined`": function () {
             assert.isUndefined(undefined);
             assertError(assert.isUndefined, null);
         },
-        "`isDefined`": function (assert) {
+        "`isDefined`": function () {
             assert.isDefined(null);
             assertError(assert.isDefined, undefined);
         },
-        "`isNull`": function (assert) {
+        "`isNull`": function () {
             assert.isNull(null);
             assertError(assert.isNull, 0);
             assertError(assert.isNull, undefined);
         },
-        "`isNotNull`": function (assert) {
+        "`isNotNull`": function () {
             assert.isNotNull(0);
         },
-        "`greater` and `lesser`": function (assert) {
+        "`greater` and `lesser`": function () {
             assert.greater(5, 4);
             assert.lesser(4, 5);
         },
-        "`inDelta`": function (assert) {
+        "`inDelta`": function () {
             assert.inDelta(42, 40, 5);
             assert.inDelta(42, 40, 2);
             assert.inDelta(42, 42, 0);
             assert.inDelta(3.1, 3.0, 0.2);
             assertError(assert.inDelta, [42, 40, 1]);
         },
-        "`isEmpty`": function (assert) {
+        "`isEmpty`": function () {
             assert.isEmpty({});
             assert.isEmpty([]);
             assert.isEmpty("");
         },
-        "`isNotEmpty`": function (assert) {
+        "`isNotEmpty`": function () {
             assert.isNotEmpty({goo:true});
             assert.isNotEmpty([1]);
             assert.isNotEmpty(" ");

@@ -168,8 +168,11 @@ while (arg = argv.shift()) {
 }
 
 if (options.supressStdout) {
-  _reporter.setStream && _reporter.setStream(process.stdout);
-  process.stdout = fs.createWriteStream('/dev/null');
+    _reporter.setStream && _reporter.setStream(process.stdout);
+    var devNullStream = fs.createWriteStream('/dev/null');
+    process.__defineGetter__('stdout', function () {
+        return devNullStream;
+    });
 }
 
 if (options.watch) {

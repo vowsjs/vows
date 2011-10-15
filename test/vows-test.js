@@ -112,7 +112,7 @@ vows.describe("Vows").addBatch({
                             return this.context.topics.slice(0);
                         },
                         "should pass the topics down": function (topics) {
-                            assert.length(topics, 2);
+                            assert.lengthOf(topics, 2);
                             assert.equal(topics[0], 101);
                             assert.equal(topics[1], 45);
                         }
