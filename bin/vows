@@ -39,7 +39,7 @@ var vows = require('../lib/vows');
 var cutils = require('../lib/vows/console');
 var stylize = require('../lib/vows/console').stylize;
 var _reporter = require('../lib/vows/reporters/dot-matrix'), reporter = {
-    name: _reporter.name,
+    name: _reporter.name
 };
 var _coverage;
 
@@ -50,6 +50,7 @@ var help = [
     "  -v, --verbose     Enable verbose output",
     "  -w, --watch       Watch mode",
     "  -s, --silent      Don't report",
+    "  -i, --isolate     Run each test in it's own vows process",
     "  -m  PATTERN       Only run tests matching the PATTERN string",
     "  -r  PATTERN       Only run tests matching the PATTERN regexp",
     "  --json            Use JSON reporter",
@@ -58,6 +59,8 @@ var help = [
     "  --xunit           Use xUnit reporter",
     "  --cover-plain     Print plain coverage map if detected",
     "  --cover-html      Write coverage map to \"coverage.html\"",
+    "  --cover-json      Write unified coverage map to \"coverage.json\"",
+    "  --cover-emma      Write unified coverage map to \"coverage.emma\"",
     //"  --no-color        Don't use terminal colors",
     "  --version         Show version",
     "  -h, --help        You're staring at it"
@@ -67,7 +70,8 @@ var options = {
     reporter: reporter,
     matcher: /.*/,
     watch: false,
-    coverage: false
+    coverage: false,
+    isolate: false
 };
 
 var files = [];
@@ -103,15 +107,13 @@ while (arg = argv.shift()) {
             options[arg] = true;
         } else {
             switch (arg) {
-		        case 'i':
-		        case 'I':
-		        case 'include':
-		            if (arg = argv.shift()) {
-		                require.paths.unshift(arg);
-		            } else {
-		                throw new Error('--include requires a path');
-		            }
-		            break;
+		case 'include':
+		    if (arg = argv.shift()) {
+		        require.paths.unshift(arg);
+		    } else {
+		        throw new Error('--include requires a path');
+		    }
+		    break;
                 case 'json':
                     _reporter = require('../lib/vows/reporters/json');
                     break;
@@ -136,6 +138,14 @@ while (arg = argv.shift()) {
                     options.coverage = true;
                     _coverage = require('../lib/vows/coverage/report-html');
                     break;
+                case 'cover-json':
+                    options.coverage = true;
+                    _coverage = require('../lib/vows/coverage/report-json');
+                    break;
+                case 'cover-emma':
+                    options.coverage = true;
+                    _coverage = require('../lib/vows/coverage/report-emma');
+                    break;
                 case 'verbose':
                 case 'v':
                     options.verbose = true;
@@ -143,6 +153,13 @@ while (arg = argv.shift()) {
                 case 'watch':
                 case 'w':
                     options.watch = true;
+                    break;
+                case 'supress-stdout':
+                    options.supressStdout = true;
+                    break;
+                case 'isolate':
+                case 'i':
+                    options.isolate = true;
                     break;
                 case 'no-color':
                     options.nocolor = true;
@@ -161,6 +178,11 @@ while (arg = argv.shift()) {
             }
         }
     }
+}
+
+if (options.supressStdout) {
+  _reporter.setStream && _reporter.setStream(process.stdout);
+  process.stdout = fs.createWriteStream('/dev/null');
 }
 
 if (options.watch) {
@@ -205,10 +227,14 @@ if (! options.watch) {
                 _reporter.report(data, filename);
                 break;
             case 'end':
-                (options.verbose || _reporter.name === 'json') && _reporter.report(data);
+                (options.verbose || _reporter.name === 'json') &&
+                _reporter.report(data);
                 break;
             case 'finish':
-                options.verbose ? _reporter.print('\n') : _reporter.print(' ');
+                options.verbose ?
+                    _reporter.print('\n')
+                    :
+                    _reporter.print(' ');
                 break;
         }
     };
@@ -216,23 +242,33 @@ if (! options.watch) {
     reporter.print = _reporter.print;
 
     files = args.map(function (a) {
-        return path.join(process.cwd(), a.replace(fileExt, ''));
+        return (!a.match(/^\//))
+            ? path.join(process.cwd(), a.replace(fileExt, ''))
+            : a.replace(fileExt, '');
     });
     
     var allTests = function() {
    	
-	    runSuites(importSuites(files), function (results) {
-	        var status = results.errored ? 2 : (results.broken ? 1 : 0);
+       runSuites(importSuites(files), function (results) {
+	   var status = results.errored ? 2 : (results.broken ? 1 : 0);
 	
-	        !options.verbose && _reporter.print('\n');
-	        msg('runner', 'finish');
-	        _reporter.report(['finish', results], {
-	            write: function (str) {
-	                util.print(str.replace(/^\n\n/, '\n'));
-	            }
-	        });
+	   !options.verbose && _reporter.print('\n');
+	   msg('runner', 'finish');
+	   _reporter.report(['finish', results], {
+	        write: function (str) {
+	            util.print(str.replace(/^\n\n/, '\n'));
+	        }
+	   });
+           try {
+               if (options.coverage === true && _$jscoverage !== undefined) {
+                   _coverage.report(_$jscoverage);
+                }
+           } catch (err) {
+                // ignore the undefined jscoverage
+           }
+           if (process.stdout.write('')) { // Check if stdout is drained
 	        if (options.coverage === true && _$jscoverage !== undefined) {
-	            _coverage.report(_$jscoverage);
+	                _coverage.report(_$jscoverage);
 	        }
 	        if (process.stdout.write('')) { // Check if stdout is drained
 	            process.exit(status);
@@ -241,18 +277,19 @@ if (! options.watch) {
 	                process.exit(status);
 	            });
 	        }
-	    });
+	    }
+	});
     };
     
 
-	if (options.coverage === true ) {
-	    childProcess.exec('rm -fr lib-cov && jscoverage lib lib-cov', function(err){
-	        if (err) throw err;
-	        require.paths.unshift('lib-cov');
-	        allTests();
-	    })
-    } else {
+    if (options.coverage === true ) {
+	childProcess.exec('rm -fr lib-cov && jscoverage lib lib-cov', function(err){
+            if (err) throw err;
+            require.paths.unshift('lib-cov');
 	    allTests();
+	})
+    } else {
+	allTests();
     }
 } else {
     //
@@ -402,10 +439,62 @@ function runSuites(suites, callback) {
 function importSuites(files) {
     msg(options.watcher ? 'watcher' : 'runner', 'loading', files);
 
-    return files.reduce(function (suites, f) {
+    var spawn = require('child_process').spawn;
+
+    function cwdname(f) {
+        return f.replace(process.cwd() + '/', '') + '.js';
+    }
+
+    function wrapSpawn(f) {
+        f = cwdname(f);
+        return function (options, callback) {
+            var args = [process.argv[1], '--json', '--supress-stdout', f],
+                p = spawn(process.argv[0], args),
+                result;
+
+            p.on('exit', function (code) {
+                callback(
+                    !result ?
+                         {errored: 1, total: 1}
+                         :
+                         result
+                );
+            });
+
+            var buffer = [];
+            p.stdout.on('data', function (data) {
+                data = data.toString().split(/\n/g);
+                if (data.length == 1) {
+                    buffer.push(data[0]);
+                } else {
+                    data[0] = buffer.concat(data[0]).join('');
+                    buffer = [data.pop()];
+
+                    data.forEach(function (data) {
+                        if (data) {
+                            data = JSON.parse(data);
+                            if (data && data[0] === 'finish') {
+                                result = data[1];
+                            } else {
+                                reporter.report(data);
+                            }
+                        }
+                    });
+                }
+            });
+
+            p.stderr.pipe(process.stderr);
+        }
+    }
+
+    return files.reduce(options.isolate ? function (suites, f) {
+        return suites.concat({
+            run: wrapSpawn(f)
+        });
+    } : function (suites, f) {
         var obj = require(f);
         return suites.concat(Object.keys(obj).map(function (s) {
-            obj[s]._filename = f.replace(process.cwd() + '/', '') + '.js';
+            obj[s]._filename = cwdname(f);
             return obj[s];
         }));
     }, [])
