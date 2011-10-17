@@ -1,14 +1,32 @@
 {
-  "name"          : "vows",
-  "description"   : "Asynchronous BDD & continuous integration for node.js",
-  "url"           : "http://vowsjs.org",
-  "keywords"      : ["testing", "spec", "test", "BDD"],
-  "author"        : "Alexis Sellier <self@cloudhead.net>",
-  "contributors"  : [],
-  "dependencies"  : {"eyes": ">=0.1.6"},
-  "main"          : "./lib/vows",
-  "bin"           : { "vows": "./bin/vows" },
-  "directories"   : { "test": "./test", "bin": "./bin" },
-  "version"       : "0.5.9",
-  "engines"       : {"node": ">=0.2.6"}
+  "name": "vows",
+  "description": "Asynchronous BDD & continuous integration for node.js",
+  "url": "http://vowsjs.org",
+  "keywords": [
+    "testing",
+    "spec",
+    "test",
+    "BDD"
+  ],
+  "author": "Alexis Sellier <self@cloudhead.net>",
+  "contributors": [],
+  "dependencies": {
+    "eyes": ">=0.1.6",
+  },
+  "devDependencies": {
+    "flags": ">=0.1.0",
+    "knox": ">=0.0.9"
+	},
+  "main": "./lib/vows",
+  "bin": {
+    "vows": "./bin/vows"
+  },
+  "directories": {
+    "test": "./test",
+    "bin": "./bin"
+  },
+  "version": "0.5.9",
+  "engines": {
+    "node": ">=0.2.6"
+  }
 }
