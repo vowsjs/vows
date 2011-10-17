@@ -3,6 +3,7 @@
 var path   = require('path'),
     fs     = require('fs'),
     util   = require('util'),
+    childProcess = require('child_process'),
     events = require('events');
 
 //
@@ -59,6 +60,7 @@ var help = [
     "  --cover-plain     Print plain coverage map if detected",
     "  --cover-html      Write coverage map to \"coverage.html\"",
     "  --cover-json      Write unified coverage map to \"coverage.json\"",
+    "  --cover-emma      Write unified coverage map to \"coverage.emma\"",
     //"  --no-color        Don't use terminal colors",
     "  --version         Show version",
     "  -h, --help        You're staring at it"
@@ -105,6 +107,13 @@ while (arg = argv.shift()) {
             options[arg] = true;
         } else {
             switch (arg) {
+		case 'include':
+		    if (arg = argv.shift()) {
+		        require.paths.unshift(arg);
+		    } else {
+		        throw new Error('--include requires a path');
+		    }
+		    break;
                 case 'json':
                     _reporter = require('../lib/vows/reporters/json');
                     break;
@@ -132,6 +141,10 @@ while (arg = argv.shift()) {
                 case 'cover-json':
                     options.coverage = true;
                     _coverage = require('../lib/vows/coverage/report-json');
+                    break;
+                case 'cover-emma':
+                    options.coverage = true;
+                    _coverage = require('../lib/vows/coverage/report-emma');
                     break;
                 case 'verbose':
                 case 'v':
@@ -233,32 +246,51 @@ if (! options.watch) {
             ? path.join(process.cwd(), a.replace(fileExt, ''))
             : a.replace(fileExt, '');
     });
+    
+    var allTests = function() {
+   	
+       runSuites(importSuites(files), function (results) {
+	   var status = results.errored ? 2 : (results.broken ? 1 : 0);
+	
+	   !options.verbose && _reporter.print('\n');
+	   msg('runner', 'finish');
+	   _reporter.report(['finish', results], {
+	        write: function (str) {
+	            util.print(str.replace(/^\n\n/, '\n'));
+	        }
+	   });
+           try {
+               if (options.coverage === true && _$jscoverage !== undefined) {
+                   _coverage.report(_$jscoverage);
+                }
+           } catch (err) {
+                // ignore the undefined jscoverage
+           }
+           if (process.stdout.write('')) { // Check if stdout is drained
+	        if (options.coverage === true && _$jscoverage !== undefined) {
+	                _coverage.report(_$jscoverage);
+	        }
+	        if (process.stdout.write('')) { // Check if stdout is drained
+	            process.exit(status);
+	        } else {
+	            process.stdout.on('drain', function () {
+	                process.exit(status);
+	            });
+	        }
+	    }
+	});
+    };
+    
 
-    runSuites(importSuites(files), function (results) {
-        var status = results.errored ? 2 : (results.broken ? 1 : 0);
-
-        !options.verbose && _reporter.print('\n');
-        msg('runner', 'finish');
-        _reporter.report(['finish', results], {
-            write: function (str) {
-                util.print(str.replace(/^\n\n/, '\n'));
-            }
-        });
-        try {
-            if (options.coverage === true && _$jscoverage !== undefined) {
-                _coverage.report(_$jscoverage);
-            }
-        } catch (err) {
-            // ignore the undefined jscoverage
-        }
-        if (process.stdout.write('')) { // Check if stdout is drained
-            process.exit(status);
-        } else {
-            process.stdout.on('drain', function () {
-                process.exit(status);
-            });
-        }
-    });
+    if (options.coverage === true ) {
+	childProcess.exec('rm -fr lib-cov && jscoverage lib lib-cov', function(err){
+            if (err) throw err;
+            require.paths.unshift('lib-cov');
+	    allTests();
+	})
+    } else {
+	allTests();
+    }
 } else {
     //
     // Watch mode
