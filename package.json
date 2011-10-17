@@ -11,7 +11,7 @@
   "author": "Alexis Sellier <self@cloudhead.net>",
   "contributors": [],
   "dependencies": {
-    "eyes": ">=0.1.6",
+    "eyes": ">=0.1.6"
   },
   "devDependencies": {
     "flags": ">=0.1.0",
