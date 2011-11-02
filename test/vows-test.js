@@ -388,7 +388,7 @@ vows.describe("Vows with asynchonous teardowns").addBatch({
 }).addBatch({
     "The next batch": {
         "is not run until the teardown is complete": function () {
-            assert.ok(tornDown)
+            assert.ok(tornDown);
         }
     }
 }).export(module);
