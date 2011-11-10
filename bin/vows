@@ -23,10 +23,10 @@ try {
         require.registerExtension('.coffee', function (content) { return coffee.compile(content) });
     }
     fileExt     = /\.(js|coffee)$/;
-    specFileExt = /[.-](test|spec)\.(js|coffee)$/;
+    specFileExt = /[.-_](test|spec)\.(js|coffee)$/;
 } catch (_) {
     fileExt     = /\.js$/;
-    specFileExt = /[.-](test|spec)\.js$/;
+    specFileExt = /[.-_](test|spec)\.js$/;
 }
 
 var inspect = require('eyes').inspector({
@@ -197,7 +197,7 @@ if (args.length === 0 || options.watch) {
 
     if (args.length === 0) {
         args = paths(testFolder).filter(function (f) {
-            return new(RegExp)('-' + testFolder + '.(js|coffee)$').test(f);
+            return new(RegExp)('(-|_)' + testFolder + '.(js|coffee)$').test(f);
         });
 
         if (options.watch) {
@@ -323,6 +323,35 @@ if (! options.watch) {
         function cleanup()       { eraseLine(), cursorShow(), clearInterval(timer), print('\n') }
 
         //
+        // Get a matching test for a given file
+        //
+        function getMatchingTest(file, join) {
+            join || (join = '-');
+            var testFile;
+            if (specFileExt.test(file)) {
+              testFile = path.join(testFolder, file);
+            }
+            else {
+              var root, extension;
+              _s = file.split('.'), root = _s[0], extension = _s[1];
+              testFile = path.join(testFolder, root + join + testFolder + "." + extension);
+            }
+
+            try {
+                fs.statSync(testFile);
+            } catch (e) {
+                if (join == '-') {
+                  return getMatchingTest(file, '_');
+                }
+                else {
+                  msg('watcher', 'no equivalence found, running all tests.');
+                  testFile = null;
+                }
+            }
+            return testFile;
+        }
+
+        //
         // Called when a file has been modified.
         // Run the matching tests and change the status.
         //
@@ -331,15 +360,7 @@ if (! options.watch) {
 
             msg('watcher', 'detected change in', file);
 
-            file = (specFileExt.test(file) ? path.join(testFolder, file)
-                                           : path.join(testFolder, file + '-' + testFolder));
-
-            try {
-                fs.statSync(file);
-            } catch (e) {
-                msg('watcher', 'no equivalence found, running all tests.');
-                file = null;
-            }
+            file = getMatchingTest(file);
 
             var files = (specFileExt.test(file) ? [file] : paths(testFolder)).map(function (p) {
                 return path.join(process.cwd(), p);
@@ -390,7 +411,7 @@ function runSuites(suites, callback) {
         time:    0
     };
     reporter.reset();
-
+    
     (function run(suites, callback) {
         var suite = suites.shift();
         if (suite) {
