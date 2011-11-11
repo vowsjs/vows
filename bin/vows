@@ -364,6 +364,8 @@ if (! options.watch) {
 
             var files = (specFileExt.test(file) ? [file] : paths(testFolder)).map(function (p) {
                 return path.join(process.cwd(), p);
+            }).filter(function (p) {
+                return specFileExt.test(p);
             }).map(function (p) {
                 var cache = require.main.moduleCache || require.cache;
                 if (cache[p]) { delete(cache[p]) }
