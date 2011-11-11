@@ -12,7 +12,8 @@
  */
 var EventEmitter = process.EventEmitter,
     util = require('util'),
-    vows = require('vows'),
+    path = require('path'),
+    vows = require(path.relative('../lib/vows')),
     assert = require('assert');
     
 vows.describe('EventEmitters as a return value from a topic').addBatch({
