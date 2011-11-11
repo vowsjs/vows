@@ -23,10 +23,10 @@ try {
         require.registerExtension('.coffee', function (content) { return coffee.compile(content) });
     }
     fileExt     = /\.(js|coffee)$/;
-    specFileExt = /[.-_](test|spec)\.(js|coffee)$/;
+    specFileExt = /[.(-|_)](test|spec)\.(js|coffee)$/;
 } catch (_) {
     fileExt     = /\.js$/;
-    specFileExt = /[.-_](test|spec)\.js$/;
+    specFileExt = /[.(-|_)](test|spec)\.js$/;
 }
 
 var inspect = require('eyes').inspector({
