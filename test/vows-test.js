@@ -407,9 +407,12 @@ vows.describe("Vows with sub events").addBatch({
                     assert.strictEqual(ret, 'request_data');
                 },
                 on: {
-                    "end": {
-                        "will catch end, even if it is in empty nested in 'request'": function (ret) {
-                            assert.strictEqual(ret, 'end_data')
+                    on: {
+                        "end": {
+                            "will require that 'end' is emitted after 'request'": function (ret) {
+                                assert.strictEqual(ret, 'end_data');
+                                // TODO need a test that fails to prove this works
+                            }
                         }
                     }
                 }
