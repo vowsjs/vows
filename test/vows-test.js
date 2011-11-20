@@ -372,3 +372,90 @@ vows.describe("Vows with teardowns").addBatch({
     }
 }).export(module);
 
+vows.describe("Vows with sub events").addBatch({
+    "A context with sub-events": {
+        topic: function () {
+            var topic = new(events.EventEmitter);
+            topic.emit('before', 'before');
+
+            process.nextTick(function () {
+                topic.emit('request', 'request_data');
+            });
+
+            process.nextTick(function () {
+                topic.emit('end', 'end_data');
+            });
+
+            process.nextTick(function () {
+                topic.emit('nested', 'empty_nest');
+            });
+
+            process.nextTick(function () {
+                topic.emit('success', 'legacey_data');
+            });
+
+            return topic;
+        },
+        on: {
+            "before": {
+                "will catch events emited before the topic returns" : function (ret) {
+                    assert.strictEqual(ret, 'before');
+                }
+            },
+            "request": {
+                "will catch request": function (ret) {
+                    assert.strictEqual(ret, 'request_data');
+                },
+                on: {
+                    "end": {
+                        "will catch end, even if it is in empty nested in 'request'": function (ret) {
+                            assert.strictEqual(ret, 'end_data')
+                        }
+                    }
+                }
+            },
+            on: {
+                on: {
+                    "nested": {
+                        "will catch nested, even if it is in empty nested 'on'": function (ret) {
+                            assert.strictEqual(ret, 'empty_nest')
+                        }
+                    }
+                }
+            }
+        },
+        "will catch the legacy success event": function (err, ret) {
+            assert.strictEqual(ret, 'legacey_data');
+        }
+    },
+    "Sub-events emitted by children of EventEmitter": {
+        topic: function() {
+            var MyEmitter = function () {
+                events.EventEmitter.call(this);
+            };
+            require('util').inherits(MyEmitter, events.EventEmitter);
+    
+            var topic = new(MyEmitter);
+            process.nextTick(function () {
+                topic.emit('success', 'Legacy Does not Catch');
+            });
+    
+            return topic;
+        },
+        "will return the emitter for traditional vows" : function (err, ret) {
+            assert.ok(ret instanceof events.EventEmitter);
+        },
+        // events is an alias for on
+        events: {
+            "success" : {
+                "will catch the event" : function (ret) {
+                    assert.strictEqual(ret, 'Legacy Does not Catch');
+                },
+                "will change events to on in the title" : function() {
+                    assert.strictEqual(this.context.title,
+                        'Sub-events emitted by children of EventEmitter on success');
+                }
+            }
+        }
+    }
+}).export(module);
