@@ -372,3 +372,24 @@ vows.describe("Vows with teardowns").addBatch({
     }
 }).export(module);
 
+var tornDown = false
+
+vows.describe("Vows with asynchonous teardowns").addBatch({
+    "Context with long-running teardown": {
+        "is run first": function () {},
+        teardown: function () {
+            var callback = this.callback;
+
+            setTimeout(function () {
+                tornDown = true;
+                callback();
+            }, 100);
+        }
+    }
+}).addBatch({
+    "The next batch": {
+        "is not run until the teardown is complete": function () {
+            assert.ok(tornDown)
+        }
+    }
+}).export(module);
