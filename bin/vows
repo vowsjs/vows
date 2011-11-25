@@ -194,7 +194,6 @@ if (args.length === 0 || options.watch) {
         abort("runner", "couldn't find test folder");
     }
     msg('bin', 'discovered', "./" + testFolder);
-
     if (args.length === 0) {
         args = paths(testFolder).filter(function (f) {
             return new(RegExp)('(-|_)' + testFolder + '.(js|coffee)$').test(f);
@@ -280,8 +279,7 @@ if (! options.watch) {
             lastRun,
             colors = ['32m', '33m', '31m'],
             timer = setInterval(tick, 100);
-
-        process.on('uncaughtException', cleanup);
+        process.on('uncaughtException', exception);
         process.on('exit', cleanup);
         process.on('SIGINT', function () {
             process.exit(0);
@@ -321,6 +319,7 @@ if (! options.watch) {
         function cursorHide()    { esc("?25l") }
         function cursorShow()    { esc("?25h") }
         function cleanup()       { eraseLine(), cursorShow(), clearInterval(timer), print('\n') }
+        function exception(err)    { print(err.stack || err.message || JSON.stringify(err)), running = 0}
 
         //
         // Get a matching test for a given file
