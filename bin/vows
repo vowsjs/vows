@@ -59,6 +59,7 @@ var help = [
     "  --cover-plain     Print plain coverage map if detected",
     "  --cover-html      Write coverage map to \"coverage.html\"",
     "  --cover-json      Write unified coverage map to \"coverage.json\"",
+    "  --cover-xml       Write coverage map to \"coverage.xml\" in Emma xml",
     "  --no-color        Don't use terminal colors",
     "  --version         Show version",
     "  -h, --help        You're staring at it"
@@ -133,6 +134,10 @@ while (arg = argv.shift()) {
                 case 'cover-json':
                     options.coverage = true;
                     _coverage = require('../lib/vows/coverage/report-json');
+                    break;
+                case 'cover-xml':
+                    options.coverage = true;
+                    _coverage = require('../lib/vows/coverage/report-xml');
                     break;
                 case 'verbose':
                 case 'v':
