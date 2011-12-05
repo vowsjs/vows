@@ -27,6 +27,25 @@ synopsis
         }
     });
 
+coverage reporting
+------------------
+Code coverage reporting is available if _instrumented_ code is detected.  Currently only _instrumentation_ via [node-jscoverage](https://github.com/visionmedia/node-jscoverage) is supported.  When _instrumented_ code is detected and coverage reporting is enabled using any of the `--cover-plain`, `--cover-html`, or `--cover-json` options a code coverage map is generated.
+
+### downloading and installing [node-jscoverage](https://github.com/visionmedia/node-jscoverage)
+[node-jscoverage](https://github.com/visionmedia/node-jscoverage) is a binary package that needs to be compiled from source:
+
+    $ git clone https://github.com/visionmedia/node-jscoverage.git
+    $ cd node-jscoverage/
+    $ ./configure
+    checking for a BSD-compatible install... /usr/bin/install -c
+    checking whether build environment is sane... yes
+    [...]
+    $ make && sudo make install
+
+### instrumenting with jscoverage
+
+    $ jscoverage myfile.js myfile-instrumented.js
+    
 installation
 ------------
 

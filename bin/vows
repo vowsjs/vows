@@ -59,7 +59,7 @@ var help = [
     "  --cover-plain     Print plain coverage map if detected",
     "  --cover-html      Write coverage map to \"coverage.html\"",
     "  --cover-json      Write unified coverage map to \"coverage.json\"",
-    //"  --no-color        Don't use terminal colors",
+    "  --no-color        Don't use terminal colors",
     "  --version         Show version",
     "  -h, --help        You're staring at it"
 ].join('\n');
@@ -69,7 +69,8 @@ var options = {
     matcher: /.*/,
     watch: false,
     coverage: false,
-    isolate: false
+    isolate: false,
+    nocolor: !process.stdout.isTTY
 };
 
 var files = [];
@@ -151,6 +152,9 @@ while (arg = argv.shift()) {
                 case 'no-color':
                     options.nocolor = true;
                     break;
+                case 'color':
+                    options.nocolor = false;
+                    break;
                 case 'no-error':
                     options.error = false;
                     break;
@@ -165,6 +169,11 @@ while (arg = argv.shift()) {
             }
         }
     }
+}
+
+if (options.nocolor) {
+    cutils.nocolor = true;
+    inspect = require('eyes').inspector({ stream: null, styles: false });
 }
 
 if (options.supressStdout) {
@@ -194,15 +203,13 @@ if (args.length === 0 || options.watch) {
         abort("runner", "couldn't find test folder");
     }
     msg('bin', 'discovered', "./" + testFolder);
-
     if (args.length === 0) {
         args = paths(testFolder).filter(function (f) {
-            return new(RegExp)('(-|_)' + testFolder + '.(js|coffee)$').test(f);
+            return specFileExt.test(f);
         });
 
         if (options.watch) {
-            args = args.concat(paths('lib'),
-                               paths('src'));
+            args = args.concat(paths('lib'), paths('src'));
         }
     }
 }
@@ -280,8 +287,7 @@ if (! options.watch) {
             lastRun,
             colors = ['32m', '33m', '31m'],
             timer = setInterval(tick, 100);
-
-        process.on('uncaughtException', cleanup);
+        process.on('uncaughtException', exception);
         process.on('exit', cleanup);
         process.on('SIGINT', function () {
             process.exit(0);
@@ -321,6 +327,7 @@ if (! options.watch) {
         function cursorHide()    { esc("?25l") }
         function cursorShow()    { esc("?25h") }
         function cleanup()       { eraseLine(), cursorShow(), clearInterval(timer), print('\n') }
+        function exception(err)    { print(err.stack || err.message || JSON.stringify(err)), running = 0}
 
         //
         // Get a matching test for a given file
