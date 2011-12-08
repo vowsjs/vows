@@ -515,7 +515,7 @@ function paths(dir) {
         stack.push(dir);
         fs.readdirSync(stack.join('/')).forEach(function (file) {
             
-            // Node throws an error running a stat on eMacs buffer files, 
+            // Node throws an error running a stat on Emacs buffer files, 
             // so we place the hidden file validation here, before this happens
             if (file[0] == '.' || file === 'vendor') {
                 return;
