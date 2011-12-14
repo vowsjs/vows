@@ -152,7 +152,7 @@ vows.describe("Vows").addBatch({
         topic: 0,
 
         "should work as expected": function (topic) {
-            assert.equal(topic, 0);
+            assert.strictEqual(topic, 0);
         }
     },
     "A topic returning a function": {
@@ -482,5 +482,176 @@ vows.describe("Vows with asynchonous teardowns").addBatch({
         "is not run until the teardown is complete": function () {
             assert.ok(tornDown);
         }
+    }
+}).export(module);
+
+vows.describe("Simple Syncronous Vows").addBatch({
+    "A context with syncronous vows": {
+        topic: function () {
+            this.callback(null, 5);
+        },
+        'sync': [
+         {
+              topic: function(topic) {
+                this.callback(null, topic +1);
+              },
+              "first": {
+                "Nexted one" : function (ret) {
+                    assert.strictEqual(ret, 6);
+                }
+              }
+            },
+         {
+              next: function(topic) {
+                this.callback(null, topic + 1);
+              },
+              "second": {
+                "nexted two": function (ret) {
+                    assert.strictEqual(ret, 7);
+                }
+            }
+         }
+        ],
+        "basic value": function (err, ret) {
+            assert.strictEqual(ret, 5);
+        }
+    }
+}).addBatch({
+    "A context with syncronous vows callback useing nextTick": {
+        topic: function () {
+            var cb = this.callback;
+            process.nextTick(function() {
+                cb(null, 5);
+            });
+        },
+        'sync': [{
+            topic: function(topic) {
+              var cb = this.callback;
+              process.nextTick(function() {
+                  cb(null, topic +1);
+              });
+            },
+            "first": {
+              "Nexted one" : function (ret) {
+                  assert.strictEqual(ret, 6);
+              }
+            }
+          },
+         {
+              next: function(topic) {
+                var cb = this.callback;
+                process.nextTick(function() {
+                    cb(null, topic +1);
+                });
+              },
+              "second": {
+                "nexted two": function (ret) {
+                    assert.strictEqual(ret, 7);
+                }
+            }
+         }
+        ],
+        "basic value": function (err, ret) {
+            assert.strictEqual(ret, 5);
+        }
+    }
+}).addBatch({
+    "A context with syncronous vows useing promise": {
+        topic: function () {
+            var p = new events.EventEmitter();
+            var num = 5;
+            setTimeout(function() {
+                p.emit('success', num);
+            }, 100);
+            return p;
+        },
+        'sync': [{
+            topic: function(topic) {
+                var p = new events.EventEmitter();
+                topic += 1;
+                setTimeout(function() {
+                    p.emit('success', topic);
+                }, 100);
+                return p;
+            },
+            "first": {
+              "Nexted one" : function (ret) {
+                  assert.strictEqual(ret, 6);
+              }
+            }
+          },
+         {
+              next: function(topic) {
+                  var p = new events.EventEmitter();
+                  topic += 1;
+                  setTimeout(function() {
+                      p.emit('success', topic);
+                  }, 100);
+                  return p;
+              },
+              "second": {
+                "nexted two": function (ret) {
+                    assert.strictEqual(ret, 7);
+                }
+            }
+         }
+        ],
+        "basic value": function (err, ret) {
+            assert.strictEqual(ret, 5);
+        }
+    }
+}).export(module);
+
+vows.describe("Complex Syncronous Vows for EventEmitters").addBatch({
+    "CrazyEmitter acts like a Stream": {
+        topic: function () {
+            var CrazyEmitter = function() {
+                events.EventEmitter.call(this);
+            };
+            require('util').inherits(CrazyEmitter, events.EventEmitter);
+
+            promise = new CrazyEmitter();
+            promise.num = 5;
+
+            setTimeout(function() {
+                promise.num += 1;
+                promise.emit('connect', promise.num);
+                process.nextTick(function() {
+                    promise.num += 1;
+                    promise.emit('data', promise.num)
+                    setTimeout(function() {
+                        promise.num += 1;
+                        promise.emit('end', promise.num)
+                    },10)
+                });
+            }, 100);
+            return promise;
+        },
+        "basic value": function (ret) {
+            assert.strictEqual(ret.num, 5);
+        },
+        on: [
+            {
+                "connect": {
+                    "is set to 5": function(ret) {
+                        
+                    }
+                }
+            },
+            {
+                "data": {
+                    "is set to one mmore then connect": function(ret) {
+                        
+                    }
+                }
+            },
+            {
+                "end": {
+                    "finishies after data": function(ret) {
+                        
+                    }
+                }
+            }
+        ]
     }
 }).export(module);
