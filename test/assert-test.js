@@ -10,7 +10,7 @@ vows.describe('vows/assert').addBatch({
         "`match`": function () {
             assert.match("hello world", /^[a-z]+ [a-z]+$/);
         },
-        "`length`": function () {
+        "`lengthOf`": function () {
             assert.lengthOf("hello world", 11);
             assert.lengthOf([1, 2, 3], 3);
         },
