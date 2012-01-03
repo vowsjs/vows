@@ -171,6 +171,14 @@ vows.describe("Vows").addBatch({
             },
         }
     },
+    "A topic with a function that errors": {
+        topic: function() {
+            throw("Something wrong here");
+        },
+        "should error out": function(topic) {
+            assert.equal(topic, "Something wrong here");
+        }
+    },
     "A topic emitting an error": {
         topic: function () {
             var promise = new(events.EventEmitter);
@@ -484,3 +492,31 @@ vows.describe("Vows with asynchonous teardowns").addBatch({
         }
     }
 }).export(module);
+
+vows.describe('Async topic is passed to vows with topic-less subcontext').addBatch({
+    'Async 42': {
+        topic: function () {
+            var callback = this.callback;
+            process.nextTick(function () {
+                callback(null, 42);
+            });
+        },
+        'equals 42': function (topic) {
+            assert.equal(topic, 42);
+        },
+        'has the property that': {
+            'it is equal to 42': function (topic) {
+                // <-- This vow fails, topic is undefined!?
+                assert.equal(topic, 42);
+            }
+        },
+        'plus 1': {
+            topic: function (parentTopic) {
+                return parentTopic + 1;
+            },
+            'equals 43': function (topic) {
+                assert.equal(topic, 43);
+            }
+        }
+    }
+})['export'](module);
