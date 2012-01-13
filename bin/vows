@@ -514,12 +514,13 @@ function paths(dir) {
     (function traverse(dir, stack) {
         stack.push(dir);
         fs.readdirSync(stack.join('/')).forEach(function (file) {
+            if (file[0] == '.' || file === 'vendor')
+                return;
+
             var path = stack.concat([file]).join('/'),
                 stat = fs.statSync(path);
 
-            if (file[0] == '.' || file === 'vendor') {
-                return;
-            } else if (stat.isFile() && fileExt.test(file)) {
+            if (stat.isFile() && fileExt.test(file)) {
                 paths.push(path);
             } else if (stat.isDirectory()) {
                 traverse(file, stack);
