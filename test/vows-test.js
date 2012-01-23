@@ -286,6 +286,25 @@ vows.describe("Vows").addBatch({
                     assert.deepEqual(val, [1, 2, 3]);
                 }
             }
+        },
+        "when the main topic is successful": {
+          topic: function () {
+            function async(callback) {
+              process.nextTick(function () {
+                callback();
+              });
+            }
+            async(this.callback);
+          },
+          "and a subtopic throws an error": {
+            topic: function() {
+              throw new Error("Callback Error");
+            },
+            "should pass the error to the tests": function(err,result) {
+              assert.isNotNull(err);
+              assert.equal(err.message, "Callback Error");
+            }
+          }
         }
     }
 }).addBatch({
