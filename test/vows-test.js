@@ -828,3 +828,41 @@ vows.describe("Complex Syncronous Vows for EventEmitters").addBatch({
         ]
     }
 }).export(module);
+
+vows.describe("Vows with events that fire mutiple times").addBatch({
+  "A context": {
+    topic: function() {
+      this.context.event = 'end';
+
+      var topic = new(events.EventEmitter);
+
+      process.nextTick(function () {
+        topic.emit('ping', 'ping_data');
+        topic.emit('ping', 'ping_data');
+        topic.emit('ping', 'ping_data');
+        topic.emit('ping', 'ping_data');
+        topic.emit('ping', 'ping_data');
+        topic.emit('ping', 'ping_data');
+      });
+
+      process.nextTick(function() {
+        topic.emit('end', 'end_data');
+      });
+
+      return topic;
+    },
+    on: {
+      "ping": {
+        "will fire with ping_data": function(data) {
+          assert.strictEqual(data, 'ping_data');
+        }
+      },
+      "end": {
+        "will fire will end_data": function(data) {
+          assert.strictEqual(data, 'end_data');
+        }
+
+      }
+    }
+  }
+}).export(module);
