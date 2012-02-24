@@ -455,7 +455,7 @@ function importSuites(files) {
         f = cwdname(f);
         return function (options, callback) {
             var args = [process.argv[1], '--json', '--supress-stdout', f],
-                p = spawn(process.argv[0], args),
+                p = spawn(process.execPath, args),
                 result;
 
             p.on('exit', function (code) {
