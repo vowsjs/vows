@@ -59,6 +59,7 @@ var help = [
     "  --cover-plain     Print plain coverage map if detected",
     "  --cover-html      Write coverage map to \"coverage.html\"",
     "  --cover-json      Write unified coverage map to \"coverage.json\"",
+    "  --cover-xml       Write coverage map to \"coverage.xml\" in Emma xml",
     "  --no-color        Don't use terminal colors",
     "  --version         Show version",
     "  -h, --help        You're staring at it"
@@ -133,6 +134,10 @@ while (arg = argv.shift()) {
                 case 'cover-json':
                     options.coverage = true;
                     _coverage = require('../lib/vows/coverage/report-json');
+                    break;
+                case 'cover-xml':
+                    options.coverage = true;
+                    _coverage = require('../lib/vows/coverage/report-xml');
                     break;
                 case 'verbose':
                 case 'v':
@@ -450,7 +455,7 @@ function importSuites(files) {
         f = cwdname(f);
         return function (options, callback) {
             var args = [process.argv[1], '--json', '--supress-stdout', f],
-                p = spawn(process.argv[0], args),
+                p = spawn(process.execPath, args),
                 result;
 
             p.on('exit', function (code) {
@@ -514,12 +519,19 @@ function paths(dir) {
     (function traverse(dir, stack) {
         stack.push(dir);
         fs.readdirSync(stack.join('/')).forEach(function (file) {
+            //
+            // Skip dotfiles and `vendor` directory before `fs.stat()`ing them.
+            // Not doing so causes race conditions with Emacs buffer files
+            // (`.#filename.js`).
+            //
+            if (file[0] == '.' || file === 'vendor') {
+                return;
+            }
+
             var path = stack.concat([file]).join('/'),
                 stat = fs.statSync(path);
 
-            if (file[0] == '.' || file === 'vendor') {
-                return;
-            } else if (stat.isFile() && fileExt.test(file)) {
+            if (stat.isFile() && fileExt.test(file)) {
                 paths.push(path);
             } else if (stat.isDirectory()) {
                 traverse(file, stack);
