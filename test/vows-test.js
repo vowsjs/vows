@@ -1,5 +1,5 @@
 var path   = require('path'),
-    events = require('events'),
+    events = require('EventEmitter2'),
     assert = require('assert'),
     fs     = require('fs'),
     vows   = require('../lib/vows');
@@ -13,7 +13,7 @@ var api = vows.prepare({
 
 var promiser = function (val) {
     return function () {
-        var promise = new(events.EventEmitter);
+        var promise = new(events.EventEmitter2);
         process.nextTick(function () { promise.emit('success', val) });
         return promise;
     }
@@ -181,7 +181,7 @@ vows.describe("Vows").addBatch({
     },
     "A topic emitting an error": {
         topic: function () {
-            var promise = new(events.EventEmitter);
+            var promise = new(events.EventEmitter2);
             process.nextTick(function () {
                 promise.emit("error", 404);
             });
@@ -194,7 +194,7 @@ vows.describe("Vows").addBatch({
     },
     "A topic not emitting an error": {
         topic: function () {
-            var promise = new(events.EventEmitter);
+            var promise = new(events.EventEmitter2);
             process.nextTick(function () {
                 promise.emit("success", true);
             });
@@ -311,7 +311,7 @@ vows.describe("Vows").addBatch({
 }).addBatch({
     "A 2nd batch": {
         topic: function () {
-            var p = new(events.EventEmitter);
+            var p = new(events.EventEmitter2);
             setTimeout(function () {
                 p.emit("success");
             }, 100);
@@ -383,7 +383,7 @@ vows.describe("Vows with teardowns").addBatch({
 vows.describe("Vows with sub events").addBatch({
     "A context with sub-events": {
         topic: function () {
-            var topic = new(events.EventEmitter);
+            var topic = new(events.EventEmitter2);
             topic.emit('before', 'before');
 
             process.nextTick(function () {
@@ -442,9 +442,9 @@ vows.describe("Vows with sub events").addBatch({
     "Sub-events emitted by children of EventEmitter": {
         topic: function() {
             var MyEmitter = function () {
-                events.EventEmitter.call(this);
+                events.EventEmitter2.call(this);
             };
-            require('util').inherits(MyEmitter, events.EventEmitter);
+            require('util').inherits(MyEmitter, events.EventEmitter2);
     
             var topic = new(MyEmitter);
             process.nextTick(function () {
@@ -454,7 +454,7 @@ vows.describe("Vows with sub events").addBatch({
             return topic;
         },
         "will return the emitter for traditional vows" : function (err, ret) {
-            assert.ok(ret instanceof events.EventEmitter);
+            assert.ok(ret instanceof events.EventEmitter2);
         },
         // events is an alias for on
         events: {
