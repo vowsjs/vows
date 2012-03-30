@@ -299,13 +299,157 @@ vows.describe("Vows").addBatch({
                 assert.equal(res.foo, true);
             }
         },
-        "'B', with nothing set": {
+        "'B', with `this.bar = true`": {
+            topic: function () {
+                this.bar = true;
+                return 42;
+            },
+            "should pass the result": function (res) {
+                assert.equal(res, 42);
+            },
+            "should have `this.bar` set to true": function () {
+                assert.equal(this.bar, true);
+            },
+            'with a sub context': {
+              topic: function(){
+                this.barSubContext = { sub: true }
+                return 42;
+              },
+              "should have `this.bar` set to true": function (res) {
+                  assert.equal(this.bar, true);
+              },
+              "should have `this.barSubContext`": function (res) {
+                  assert.deepEqual(this.barSubContext, { sub: true });
+              },
+              'with gaps': {
+                '.': {
+                  '.': {
+                    '.': {
+                      topic: 12,
+                      '.': {
+                        '.': {
+                          topic: function(){
+                            this.barSubContext.subsub = true;
+                            return 42;
+                          },
+                          "should have `this.bar` set to true": function (res) {
+                              assert.equal(this.bar, true);
+                          },
+                          'should have `this.barSubContext`': function(){
+                            assert.deepEqual(this.barSubContext, { sub: true, subsub: true });
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        },
+        "'C', with nothing set": {
             topic: function () {
                 return this;
             },
+            "shouldn't have access to `this.foo`": function (res) {
+                assert.isUndefined(res.foo);
+                assert.isUndefined(this.foo);
+            },
+            "shouldn't have access to `this.bar`": function (res) {
+                assert.isUndefined(res.bar);
+                assert.isUndefined(this.bar);
+            },
+            "shouldn't have access to `this.barSubContext`": function (res) {
+                assert.isUndefined(res.barSubContext);
+                assert.isUndefined(this.barSubContext);
+            }
+        }
+    },
+    "Sibling context asynchronous": {
+        "'A', with `this.foo = true`": {
+            topic: function () {
+                this.foo = true;
+                var self = this;
+                process.nextTick(function(){
+                  self.callback(null, self);
+                })
+            },
+            "should have `this.foo` set to true": function (res) {
+                assert.equal(res.foo, true);
+            }
+        },
+        "'B', with `this.bar = true`": {
+            topic: function () {
+                this.bar = true;
+                var self = this;
+                process.nextTick(function(){
+                  self.callback(null, 42);
+                })
+            },
+            "should pass the result": function (res) {
+                assert.equal(res, 42);
+            },
+            "should have `this.bar` set to true": function (res) {
+                assert.equal(this.bar, true);
+            },
+            'with a sub context': {
+              topic: function(){
+                this.barSubContext = { sub: true };
+                var self = this;
+                process.nextTick(function(){
+                  self.callback(null, 42);
+                })
+              },
+              "should have `this.foo` set to true": function (res) {
+                  assert.equal(this.bar, true);
+              },
+              "should have `this.fooSubContext`": function (res) {
+                  assert.deepEqual(this.barSubContext, { sub: true });
+              },
+              'with gaps': {
+                '.': {
+                  '.': {
+                    '.': {
+                      topic: 12,
+                      '.': {
+                        '.': {
+                          topic: function(){
+                            this.barSubContext.subsub = true;
+                            var self = this;
+                            process.nextTick(function(){
+                              self.callback(null, 42);
+                            })
+                          },
+                          "should have `this.bar` set to true": function (res) {
+                              assert.equal(this.bar, true);
+                          },
+                          'should have `this.barSubContext': function(){
+                            assert.deepEqual(this.barSubContext, { sub: true, subsub: true });
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        },
+        "'C', with nothing set": {
+            topic: function () {
+                var self = this;
+                process.nextTick(function(){
+                  self.callback(null, self);
+                })
+            },
             "shouldn't have access to `this.foo`": function (e, res) {
                 assert.isUndefined(res.foo);
+            },
+            "shouldn't have access to `this.bar`": function (e, res) {
+                assert.isUndefined(res.bar);
+            },
+            "shouldn't have access to `this.barSubContext`": function (e, res) {
+                assert.isUndefined(res.barSubContext);
             }
+
         }
     }
 }).addBatch({
