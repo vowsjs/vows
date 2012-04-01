@@ -54,6 +54,7 @@ var help = [
     "  -r  PATTERN       Only run tests matching the PATTERN regexp",
     "  --json            Use JSON reporter",
     "  --spec            Use Spec reporter",
+    "  --tap             Use TAP reporter",
     "  --dot-matrix      Use Dot-Matrix reporter",
     "  --xunit           Use xUnit reporter",
     "  --cover-plain     Print plain coverage map if detected",
@@ -112,6 +113,9 @@ while (arg = argv.shift()) {
                     break;
                 case 'spec':
                     _reporter = require('../lib/vows/reporters/spec');
+                    break;
+                case 'tap':
+                    _reporter = require('../lib/vows/reporters/tap');
                     break;
                 case 'dot-matrix':
                     _reporter = require('../lib/vows/reporters/dot-matrix');
