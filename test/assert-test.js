@@ -130,7 +130,21 @@ vows.describe('vows/assert').addBatch({
             assert.notIncludes([1, 2, 3], 4);
             assert.notIncludes({"red": 1, "blue": 2}, "green");
         }
-    }
+    },
+
+    'An AssertionError': {
+        topic: function generateAssertionError() {
+            try {
+                assert.isFalse(true);
+            } catch (e) {
+                return e.toString();
+            }
+        },
+        'should have full path in stack trace': function(topic) {
+            var regexp = new RegExp("// " + __filename + ":\\d+");
+            assert.isTrue(regexp.test(topic));
+        }
+    },
 }).export(module);
 
 function assertError(assertion, args, fail) {
