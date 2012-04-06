@@ -14,10 +14,10 @@ var fileExt, specFileExt;
 try {
     var coffee = require('coffee-script');
     fileExt     = /\.(js|coffee)$/;
-    specFileExt = /[.(-|_)](test|spec)\.(js|coffee)$/;
+    specFileExt = /[.(-|_)]((t|T)est|(s|S)pec)\.(js|coffee)$/;
 } catch (_) {
     fileExt     = /\.js$/;
-    specFileExt = /[.(-|_)](test|spec)\.js$/;
+    specFileExt = /[.(-|_)]((t|T)est|(s|S)pec)\.js$/;
 }
 
 var inspect = require('eyes').inspector({
