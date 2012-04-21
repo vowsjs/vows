@@ -547,6 +547,7 @@ vows.describe("Vows with events that fire mutiple times").addBatch({
     on: {
       "ping": {
         "will fire with ping_data": function(data) {
+          this.expect(7);
           assert.strictEqual(data, 'ping_data');
         }
       },
@@ -554,7 +555,6 @@ vows.describe("Vows with events that fire mutiple times").addBatch({
         "will fire will end_data": function(data) {
           assert.strictEqual(data, 'end_data');
         }
-        
       }
     }
   }
