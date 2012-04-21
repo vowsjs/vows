@@ -13,6 +13,7 @@ vows.describe('vows/assert').addBatch({
         "`lengthOf`": function () {
             assert.lengthOf("hello world", 11);
             assert.lengthOf([1, 2, 3], 3);
+            assert.lengthOf({goo: true, gies: false}, 2);
         },
         "`isDefined`": function () {
             assert.isDefined(null);
