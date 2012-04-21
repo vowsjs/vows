@@ -520,3 +520,44 @@ vows.describe('Async topic is passed to vows with topic-less subcontext').addBat
         }
     }
 })['export'](module);
+
+vows.describe('Pending tests with // prefix').addBatch({
+    'Given an honorable topic': {
+        topic: function () {
+            var callback = this.callback;
+            process.nextTick(function () {
+                callback(null, 42);
+            });
+        },
+        'Then honorable vows are executed': function (topic) {
+            assert.equal(topic, 42);
+        },
+        '// and pending vows are not executed': function (topic) {
+            throw new Error('Should not be executed.');
+        },
+        '// and given a pending context': {
+            'then every sub context are pending': function (topic) {
+                throw new Error('Should not be executed.');
+            }
+        },
+        'given an honorable sub context': {
+            'then honorable vows are executed': function (topic) {
+                assert.equal(topic, 42);
+            },
+            '// and pending vows are not executed': function (topic) {
+                throw new Error('Should not be executed.');
+            }
+        },
+        '// given a pending sub context with an inner topic': {
+            topic: function (parenttopic) {
+                process.nextTick(function(){
+                  throw new Error('Should not be executed.');
+                })
+                return parenttopic + 1;
+            },
+            'then both sub-topics and sub-vows are not executed': function (topic) {
+                throw new Error('Should not be executed.');
+            }
+        }
+    }
+})['export'](module);
