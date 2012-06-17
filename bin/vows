@@ -7,21 +7,12 @@ var path   = require('path'),
 
 //
 // Attempt to load Coffee-Script. If it's not available, continue on our
-// merry way, if it is available, set it up so we can include `*.coffee`
-// scripts and start searching for them.
+// merry way, if it is available, start searching for `*.coffee` scripts too.
 //
 var fileExt, specFileExt;
 
 try {
     var coffee = require('coffee-script');
-    if (require.extensions) {
-        require.extensions['.coffee'] = function (module, filename) {
-            var content = coffee.compile(fs.readFileSync(filename, 'utf8'));
-            return module._compile(content, filename);
-        };
-    } else {
-        require.registerExtension('.coffee', function (content) { return coffee.compile(content) });
-    }
     fileExt     = /\.(js|coffee)$/;
     specFileExt = /[.(-|_)](test|spec)\.(js|coffee)$/;
 } catch (_) {
