@@ -248,7 +248,7 @@ if (! options.watch) {
         var source = files.slice(0);
         files.length = 0;
         while (source.length) {
-            files.push(source.splice(Math.ceil(Math.random() * source.length) - 1, 1)[0]);
+            files.push(source.splice(Math.floor(Math.random() * source.length), 1)[0]);
         }
     }
 
