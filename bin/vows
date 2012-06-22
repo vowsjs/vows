@@ -33,6 +33,8 @@ var _reporter = require('../lib/vows/reporters/dot-matrix'), reporter = {
 };
 var _coverage;
 
+var nodeMinorVersion = parseInt(process.version.split('.')[1], 10);
+
 var help = [
     "usage: vows [FILE, ...] [options]",
     "",
@@ -461,7 +463,17 @@ function importSuites(files) {
                 p = spawn(process.execPath, args),
                 result;
 
-            p.on('exit', function (code) {
+            //
+            // AvianFlu, you broke the API! OH NOEZ.
+            // Anyway.
+            // Since node 0.7.something, semantics of child process events
+            // changed - `exit` event is emitted when child process exits
+            // and `close` event is emitted when child's streams stdio streams
+            // are closed. `exit` event is emitted before `close` event, and
+            // since we use child's stdio streams, we shouldn't rely on `exit`
+            // event.
+            //
+            p.on(nodeMinorVersion >= 7 ? 'close' : 'exit', function (code) {
                 callback(
                     !result ?
                          {errored: 1, total: 1}
