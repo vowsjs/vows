@@ -8,7 +8,7 @@ vows.describe('vows/assert').addBatch({
             assert.equal(1, true);
         },
         "`epsilon`": function() {
-            assert.epsilon(1e5, 0.1+0.2, 0.3);
+            assert.epsilon(1e-5, 0.1+0.2, 0.3);
         },
         "`match`": function () {
             assert.match("hello world", /^[a-z]+ [a-z]+$/);
