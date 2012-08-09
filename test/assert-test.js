@@ -26,6 +26,9 @@ vows.describe('vows/assert').addBatch({
             assert.include("hello world", "world");
             assert.include([0, 42, 0],    42);
             assert.include({goo:true},    'goo');
+            function a(){};
+            a.goo = true;
+            assert.include(a, "goo");
         },
         "`deepInclude`": function () {
             assert.deepInclude([{a:'b'},{c:'d'}], {a:'b'});
