@@ -10,6 +10,6 @@
   "bin"           : { "vows": "./bin/vows" },
   "directories"   : { "test": "./test", "bin": "./bin" },
   "version"       : "0.6.3",
-  "scripts"       : {"test": "./bin/vows --spec"},
+  "scripts"       : {"test": "node bin/vows --spec"},
   "engines"       : {"node": ">=0.2.6"}
 }
