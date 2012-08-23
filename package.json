@@ -9,6 +9,6 @@
   "main"          : "./lib/vows",
   "bin"           : {"vows": "./bin/vows"},
   "directories"   : {"test": "./test", "bin": "./bin"},
-  "version"       : "0.6.3",
+  "version"       : "0.6.4",
   "scripts"       : {"test": "node ./bin/vows --spec"}
 }
