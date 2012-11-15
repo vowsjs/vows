@@ -184,7 +184,14 @@ if (options.nocolor) {
 
 if (options.supressStdout) {
     _reporter.setStream && _reporter.setStream(process.stdout);
-    var devNullStream = fs.createWriteStream('/dev/null');
+    var devNullStream = null;
+
+    if(process.platform === 'win32'){
+        devNullStream = fs.createWriteStream('./NULL');
+    } else {
+        devNullStream = fs.createWriteStream('/dev/null');
+    }
+
     process.__defineGetter__('stdout', function () {
         return devNullStream;
     });
@@ -350,23 +357,23 @@ if (! options.watch) {
             join || (join = '-');
             var testFile;
             if (specFileExt.test(file)) {
-              testFile = path.join(testFolder, file);
+                testFile = path.join(testFolder, file);
             }
             else {
-              var root, extension;
-              _s = file.split('.'), root = _s[0], extension = _s[1];
-              testFile = path.join(testFolder, root + join + testFolder + "." + extension);
+                var root, extension;
+                _s = file.split('.'), root = _s[0], extension = _s[1];
+                testFile = path.join(testFolder, root + join + testFolder + "." + extension);
             }
 
             try {
                 fs.statSync(testFile);
             } catch (e) {
                 if (join == '-') {
-                  return getMatchingTest(file, '_');
+                    return getMatchingTest(file, '_');
                 }
                 else {
-                  msg('watcher', 'no equivalence found, running all tests.');
-                  testFile = null;
+                    msg('watcher', 'no equivalence found, running all tests.');
+                    testFile = null;
                 }
             }
             return testFile;
@@ -386,14 +393,14 @@ if (! options.watch) {
             var files = (specFileExt.test(file) ? [file] : paths(testFolder)).map(function (p) {
                 return path.join(process.cwd(), p);
             }).filter(function (p) {
-                return specFileExt.test(p);
-            }).map(function (p) {
-                var cache = require.main.moduleCache || require.cache;
-                if (cache[p]) { delete(cache[p]) }
-                return p;
-            }).map(function (p) {
-                return p.replace(fileExt, '');
-            });
+                    return specFileExt.test(p);
+                }).map(function (p) {
+                    var cache = require.main.moduleCache || require.cache;
+                    if (cache[p]) { delete(cache[p]) }
+                    return p;
+                }).map(function (p) {
+                    return p.replace(fileExt, '');
+                });
 
             running ++;
 
@@ -434,7 +441,7 @@ function runSuites(suites, callback) {
         time:    0
     };
     reporter.reset();
-    
+
     (function run(suites, callback) {
         var suite = suites.shift();
         if (suite) {
@@ -480,9 +487,9 @@ function importSuites(files) {
             p.on(nodeMinorVersion >= 7 ? 'close' : 'exit', function (code) {
                 callback(
                     !result ?
-                         {errored: 1, total: 1}
-                         :
-                         result
+                    {errored: 1, total: 1}
+                        :
+                        result
                 );
             });
 
@@ -517,7 +524,11 @@ function importSuites(files) {
             run: wrapSpawn(f)
         });
     } : function (suites, f) {
+        f = path.relative(__dirname,f);
+        f = f.replace(/\\/g,'/');
+        f = f.replace('../C:','C:');
         var obj = require(f);
+        f = f.replace('../','');
         return suites.concat(Object.keys(obj).map(function (s) {
             obj[s]._filename = cwdname(f);
             return obj[s];
@@ -537,6 +548,7 @@ function paths(dir) {
 
     (function traverse(dir, stack) {
         stack.push(dir);
+        var dirPath = stack.join('/');
         fs.readdirSync(stack.join('/')).forEach(function (file) {
             //
             // Skip dotfiles and `vendor` directory before `fs.stat()`ing them.
@@ -565,10 +577,10 @@ function paths(dir) {
 function msg(cmd, subject, str, p) {
     if (options.verbose) {
         util[p ? 'print' : 'puts']( stylize('vows ', 'green')
-              + stylize(cmd, 'bold')
-              + ' ' + subject + ' '
-              + (str ? (typeof(str) === 'string' ? str : inspect(str)) : '')
-              );
+            + stylize(cmd, 'bold')
+            + ' ' + subject + ' '
+            + (str ? (typeof(str) === 'string' ? str : inspect(str)) : '')
+        );
     }
 }
 
