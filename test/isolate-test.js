@@ -1,15 +1,16 @@
 var vows = require('../lib/vows'),
     assert = require('assert'),
     path = require('path'),
+    os = require('os'),
     exec = require('child_process').exec;
 
 function generateTopic(args, file) {
   return function () {
-    var cmd = './bin/vows' + ' -i ' + (args || '') +
+    var cmd = '"' + process.execPath + '"' +  ' ./bin/vows' + ' -i ' + (args || '') +
               ' ./test/fixtures/isolate/' + file,
         options = {cwd: path.resolve(__dirname + '/../')},
         callback = this.callback;
-
+    console.log(cmd);
     exec(cmd, options, function (err, stdout, stderr) {
       callback(null, {
         err: err,
@@ -95,7 +96,7 @@ vows.describe('vows/isolate').addBatch({
         'should be ok': assertExecOk,
         'should have stderr': function (r) {
           assert.equal(r.stderr,
-                       ['oh no!', 'oh no!', 'oh no!', 'oh no!', ''].join('\n'));
+                       ['oh no!', 'oh no!', 'oh no!', 'oh no!', ''].join(os.EOL));
         },
         'should have correct output': function (r) {
           var results=  parseResults(r.stdout);
