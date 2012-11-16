@@ -525,12 +525,19 @@ function importSuites(files) {
 
                     data.forEach(function (data) {
                         if (data && data !== 'undefined') {
+                          try {
+
                             data = JSON.parse(data);
+
+                            // on win32 we may get back console.log strings which break JSON.parse
                             if (data && data[0] === 'finish') {
                                 result = data[1];
                             } else {
                                 reporter.report(data);
                             }
+                          } catch(e) {
+
+                          }
                         }
                     });
                 }
