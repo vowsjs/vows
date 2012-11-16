@@ -32,9 +32,15 @@ function assertExecNotOk(r) {
 function parseResults(stdout) {
   var results = stdout.split('\n');
 
+
   // win32 returns cmd. need to filter out
   if(process.platform === 'win32') {
-    results.shift();
+
+    try {
+      JSON.parse(results[0])
+    } catch(e){
+      results.shift();
+    }
   }
 
   return results.map(function (s) {
@@ -103,7 +109,7 @@ vows.describe('vows/isolate').addBatch({
         'should be ok': assertExecOk,
         'should have stderr': function (r) {
           assert.equal(r.stderr,
-                       ['oh no!', 'oh no!', 'oh no!', 'oh no!', ''].join(os.EOL));
+                       ['oh no!', 'oh no!', 'oh no!', 'oh no!', ''].join('\n'));
         },
         'should have correct output': function (r) {
             var results=  parseResults(r.stdout);
