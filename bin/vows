@@ -255,17 +255,26 @@ if (! options.watch) {
     reporter.reset = function () { _reporter.reset && _reporter.reset() };
     reporter.print = _reporter.print;
 
+    // add full path if necessary
+    files = args.map(function (a) {
+        return (!a.match(/^[\/|c|C]/))
+            ? path.join(process.cwd(), a)
+            : a;
+    });
+
     // preprocess the list of files for any wildcards. win32 does not handle wildcards before calling vows
     // any paths not containing wildcards are simple returned by wildcard()
-    args.forEach(function(a) {
-         wildcardFiles = wildcardFiles.concat(wildcard(path.join(process.cwd(), a)));
+    files.forEach(function(a) {
+        if(a.indexOf('*') !== -1) {
+          wildcardFiles = wildcardFiles.concat(wildcard(a));
+        } else {
+          wildcardFiles.push(a);
+        }
      });
 
     // now set up the file list for vows including all the wildcard files
     files = wildcardFiles.map(function (a) {
-        return (!a.match(/^[\/|c|C]/))
-            ? path.join(process.cwd(), a.replace(fileExt, ''))
-            : a.replace(fileExt, '');
+        return a.replace(fileExt, '');
     });
 
 
@@ -276,6 +285,7 @@ if (! options.watch) {
             files.push(source.splice(Math.floor(Math.random() * source.length), 1)[0]);
         }
     }
+
 
     runSuites(importSuites(files), function (results) {
         var status = results.errored ? 2 : (results.broken ? 1 : 0);
@@ -549,15 +559,12 @@ function importSuites(files) {
 
     return files.reduce(options.isolate ? function (suites, f) {
 
-        return suites.concat({
-            run: wrapSpawn(f)
+      return suites.concat({
+          run: wrapSpawn(f)
         });
     } : function (suites, f) {
-        f = path.relative(__dirname, f);
-        f = f.replace(/\\/g,'/');
-        f = f.replace('../C:','C:');
+        //f = path.join(process.cwd(), path.relative(process.cwd(),f));
         var obj = require(f);
-        f = f.replace('../','');
         return suites.concat(Object.keys(obj).map(function (s) {
             obj[s]._filename = cwdname(f);
             return obj[s];
