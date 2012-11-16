@@ -537,7 +537,6 @@ function importSuites(files) {
             run: wrapSpawn(f)
         });
     } : function (suites, f) {
-        console.log(f);
         f = path.relative(__dirname, f);
         f = f.replace(/\\/g,'/');
         f = f.replace('../C:','C:');
