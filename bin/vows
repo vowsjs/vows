@@ -191,7 +191,7 @@ if (options.supressStdout) {
     var devNullStream = null;
 
     if(process.platform === 'win32'){
-        devNullStream = fs.createWriteStream('./NULL');
+        devNullStream = fs.createWriteStream('nul');
     } else {
         devNullStream = fs.createWriteStream('/dev/null');
     }
