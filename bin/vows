@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
+
 var path   = require('path'),
     fs     = require('fs'),
     util   = require('util'),
+    wildcard   = require('../lib/utils/wildcard').wildcard,
     events = require('events');
 
 //
@@ -70,10 +72,12 @@ var options = {
 };
 
 var files = [];
+var wildcardFiles = [];
 
 // Get rid of process runner
 // ('node' in most cases)
 var arg, args = [], argv = process.argv.slice(2);
+
 
 // Current directory index,
 // and path of test folder.
@@ -251,11 +255,19 @@ if (! options.watch) {
     reporter.reset = function () { _reporter.reset && _reporter.reset() };
     reporter.print = _reporter.print;
 
-    files = args.map(function (a) {
+    // preprocess the list of files for any wildcards. win32 does not handle wildcards before calling vows
+    // any paths not containing wildcards are simple returned by wildcard()
+    args.forEach(function(a) {
+         wildcardFiles = wildcardFiles.concat(wildcard(path.join(process.cwd(), a)));
+     });
+
+    // now set up the file list for vows including all the wildcard files
+    files = wildcardFiles.map(function (a) {
         return (!a.match(/^\//))
             ? path.join(process.cwd(), a.replace(fileExt, ''))
             : a.replace(fileExt, '');
     });
+
 
     if (options.shuffle) {
         var source = files.slice(0);
@@ -503,7 +515,7 @@ function importSuites(files) {
                     buffer = [data.pop()];
 
                     data.forEach(function (data) {
-                        if (data) {
+                        if (data && data !== 'undefined') {
                             data = JSON.parse(data);
                             if (data && data[0] === 'finish') {
                                 result = data[1];
@@ -520,11 +532,13 @@ function importSuites(files) {
     }
 
     return files.reduce(options.isolate ? function (suites, f) {
+
         return suites.concat({
             run: wrapSpawn(f)
         });
     } : function (suites, f) {
-        f = path.relative(__dirname,f);
+        console.log(f);
+        f = path.relative(__dirname, f);
         f = f.replace(/\\/g,'/');
         f = f.replace('../C:','C:');
         var obj = require(f);

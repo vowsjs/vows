@@ -10,7 +10,6 @@ function generateTopic(args, file) {
               ' ./test/fixtures/isolate/' + file,
         options = {cwd: path.resolve(__dirname + '/../')},
         callback = this.callback;
-    console.log(cmd);
     exec(cmd, options, function (err, stdout, stderr) {
       callback(null, {
         err: err,
