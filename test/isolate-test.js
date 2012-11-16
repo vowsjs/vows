@@ -19,7 +19,7 @@ function generateTopic(args, file) {
       });
     });
   }
-};
+}
 
 function assertExecOk(r) {
   assert.isNull(r.err);
@@ -32,13 +32,11 @@ function assertExecNotOk(r) {
 function parseResults(stdout) {
   var results = stdout.split('\n');
 
-
-  // win32 returns cmd. need to filter out
+  // win32 may console.log data which need to filter out invalid JSON at start of results
+  //TODO: do we need to filter out any console.log data as we are expecting only valid json
+  // any console.log used for dedugging may break parseResults
   if(process.platform === 'win32') {
-
-    try {
-      JSON.parse(results[0])
-    } catch(e){
+    while(results.length > 0 && results[0].charAt(0) !== '{') {
       results.shift();
     }
   }
