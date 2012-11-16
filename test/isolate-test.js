@@ -10,6 +10,7 @@ function generateTopic(args, file) {
               ' ./test/fixtures/isolate/' + file,
         options = {cwd: path.resolve(__dirname + '/../')},
         callback = this.callback;
+
     exec(cmd, options, function (err, stdout, stderr) {
       callback(null, {
         err: err,
@@ -29,7 +30,14 @@ function assertExecNotOk(r) {
 }
 
 function parseResults(stdout) {
-  return stdout.split(/\n/g).map(function (s) {
+  var results = stdout.split('\n');
+
+  // win32 returns cmd. need to filter out
+  if(process.platform === 'win32') {
+    results.shift();
+  }
+
+  return results.map(function (s) {
     if (!s) return;
     return JSON.parse(s);
   }).filter(function (s) {return s});
@@ -63,7 +71,7 @@ vows.describe('vows/isolate').addBatch({
         topic: generateTopic('--json', 'passing.js'),
         'should be ok': assertExecOk,
         'should have correct output': function (r) {
-          var results = parseResults(r.stdout)
+            var results = parseResults(r.stdout)
 
           assertResultTypePresent(results, 'subject');
           assertResultTypePresent(results, 'end');
@@ -98,7 +106,7 @@ vows.describe('vows/isolate').addBatch({
                        ['oh no!', 'oh no!', 'oh no!', 'oh no!', ''].join(os.EOL));
         },
         'should have correct output': function (r) {
-          var results=  parseResults(r.stdout);
+            var results=  parseResults(r.stdout);
 
           assertResultsFinish(results, {
             total: 4,
@@ -126,7 +134,7 @@ vows.describe('vows/isolate').addBatch({
         topic: generateTopic('--json', '*'),
         'should be not ok': assertExecNotOk,
         'should have correct output': function (r) {
-          var results=  parseResults(r.stdout);
+            var results=  parseResults(r.stdout);
 
           assertResultsFinish(results, {
             total: 16,
