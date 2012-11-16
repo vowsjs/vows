@@ -263,7 +263,7 @@ if (! options.watch) {
 
     // now set up the file list for vows including all the wildcard files
     files = wildcardFiles.map(function (a) {
-        return (!a.match(/^\//))
+        return (!a.match(/^[\/|c|C]/))
             ? path.join(process.cwd(), a.replace(fileExt, ''))
             : a.replace(fileExt, '');
     });
@@ -481,8 +481,9 @@ function importSuites(files) {
 
     function wrapSpawn(f) {
         f = cwdname(f);
+
         return function (options, callback) {
-            var args = [process.argv[1], '--json', '--supress-stdout', f],
+            var args = [process.argv[1], '--json', f],
                 p = spawn(process.execPath, args),
                 result;
 
@@ -496,6 +497,7 @@ function importSuites(files) {
             // since we use child's stdio streams, we shouldn't rely on `exit`
             // event.
             //
+
             p.on(nodeMinorVersion >= 7 ? 'close' : 'exit', function (code) {
                 callback(
                     !result ?
@@ -504,6 +506,7 @@ function importSuites(files) {
                         result
                 );
             });
+
 
             var buffer = [];
             p.stdout.on('data', function (data) {
