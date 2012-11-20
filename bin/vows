@@ -257,7 +257,7 @@ if (! options.watch) {
 
     // add full path if necessary
     files = args.map(function (a) {
-        return (!a.match(/^[\/|c|C]/))
+        return (!a.match(/^\/|c:|C:/))
             ? path.join(process.cwd(), a)
             : a;
     });
