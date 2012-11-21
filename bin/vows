@@ -5,6 +5,7 @@ var path   = require('path'),
     fs     = require('fs'),
     util   = require('util'),
     wildcard   = require('../lib/utils/wildcard').wildcard,
+    NullStream   = require('../lib/utils/nullstream').NullStream,
     events = require('events');
 
 //
@@ -191,7 +192,7 @@ if (options.supressStdout) {
     var devNullStream = null;
 
     if(process.platform === 'win32'){
-        devNullStream = fs.createWriteStream('.nul');
+        devNullStream = new NullStream();
     } else {
         devNullStream = fs.createWriteStream('/dev/null');
     }
