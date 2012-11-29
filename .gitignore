@@ -1,3 +1,4 @@
 node_modules
 .idea
-nul
+.nul
+test/npm-debug.log

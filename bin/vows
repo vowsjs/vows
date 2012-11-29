@@ -5,6 +5,7 @@ var path   = require('path'),
     fs     = require('fs'),
     util   = require('util'),
     wildcard   = require('../lib/utils/wildcard').wildcard,
+    NopStream   = require('../lib/utils/nopstream').NopStream,
     events = require('events');
 
 //
@@ -191,7 +192,7 @@ if (options.supressStdout) {
     var devNullStream = null;
 
     if(process.platform === 'win32'){
-        devNullStream = fs.createWriteStream('nul');
+        devNullStream = new NopStream ();
     } else {
         devNullStream = fs.createWriteStream('/dev/null');
     }
@@ -257,9 +258,13 @@ if (! options.watch) {
 
     // add full path if necessary
     files = args.map(function (a) {
-        return (!a.match(/^[\/|c|C]/))
-            ? path.join(process.cwd(), a)
-            : a;
+        if(process.platform === 'win32') {
+            // check if path starts with a valid windows drive name
+            return (!a.match(/^[a-z]:/i))? path.join(process.cwd(), a) : a;
+        } else {
+             // check if path starts at root
+            return (!a.match(/^\//))? path.join(process.cwd(), a) : a;
+        }
     });
 
     // preprocess the list of files for any wildcards. win32 does not handle wildcards before calling vows
