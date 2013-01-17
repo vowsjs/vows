@@ -106,6 +106,9 @@ while (arg = argv.shift()) {
             options[arg] = true;
         } else {
             switch (arg) {
+                case 'jsonfile':
+                    _reporter = require('../lib/vows/reporters/json-file');
+                    break;
                 case 'json':
                     _reporter = require('../lib/vows/reporters/json');
                     break;
