@@ -56,6 +56,13 @@ documentation
 
 Head over to <http://vowsjs.org>
 
+run tests
+-------------
+
+```
+  npm test
+```
+
 authors
 -------
 
