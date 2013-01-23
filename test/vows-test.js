@@ -168,16 +168,38 @@ vows.describe("Vows").addBatch({
             "should work as expected": function (topic) {
                 assert.isFunction(topic);
                 assert.equal(topic(), 42);
-            },
+            }
         }
     },
     "A topic with a function that errors": {
         topic: function() {
             throw("Something wrong here");
         },
-        "should error out": function(topic) {
-            assert.equal(topic, "Something wrong here");
+        "should return an error to a vow with two parameters": function(e, data) {
+            assert.equal(e, "Something wrong here");
         }
+        // TODO: make a test that runs a vows suite and check the error count
+        //,
+//        "and record the error in the test results otherwise" : function(data) {
+//            assert.ok(!data);
+//        }
+        //✗ and record the error in the test results otherwise
+        //  » An unexpected error was caught: "Something wrong here"
+    },
+    "A topic with a built-in error": {
+        topic: function() {
+            bad.bad;
+        },
+        "should return an error to a vow with two parameters": function(e, data) {
+            assert(e instanceof Error, "Return value " + e + " wasn't an Error.");
+        }
+        // TODO: make a test that runs a vows suite and check the error count
+        //,
+//        "and record the error in the test results otherwise" : function(data) {
+//            assert.ok(!data);
+//        }
+        //✗ and record the error in the test results otherwise
+        //    » An unexpected error was caught: ReferenceError: bad is not defined
     },
     "A topic emitting an error": {
         topic: function () {
