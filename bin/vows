@@ -4,7 +4,7 @@
 var path   = require('path'),
     fs     = require('fs'),
     util   = require('util'),
-    wildcard   = require('../lib/utils/wildcard').wildcard,
+    glob   = require('glob'),
     NopStream   = require('../lib/utils/nopstream').NopStream,
     events = require('events');
 
@@ -270,12 +270,8 @@ if (! options.watch) {
     // preprocess the list of files for any wildcards. win32 does not handle wildcards before calling vows
     // any paths not containing wildcards are simple returned by wildcard()
     files.forEach(function(a) {
-        if(a.indexOf('*') !== -1) {
-          wildcardFiles = wildcardFiles.concat(wildcard(a));
-        } else {
-          wildcardFiles.push(a);
-        }
-     });
+        wildcardFiles = wildcardFiles.concat(glob.sync(a));
+    });
 
     // now set up the file list for vows including all the wildcard files
     files = wildcardFiles.map(function (a) {
