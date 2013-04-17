@@ -102,6 +102,21 @@ vows.describe('Error Handling').addBatch({
                 assert.equal(results.honored, 0);
             }
         }
+    },
+    "A topic with an error in it" : {
+        topic : function(){
+            throw('awesome');
+        },
+        "should error" : function(error, result){
+            assert.equal(error, 'awesome');
+        },
+        "containing a subtopic" : {
+            topic : function(){
+                return 52;
+            },
+            "should reach a vow in the subtopic" : function(){
+            }
+        }
     }
 }).export(module);
 
