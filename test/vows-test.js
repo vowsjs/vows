@@ -1,8 +1,8 @@
 var path   = require('path'),
-    events = require('events'),
-    assert = require('assert'),
-    fs     = require('fs'),
-    vows   = require('../lib/vows');
+events = require('events'),
+assert = require('assert'),
+fs     = require('fs'),
+vows   = require('../lib/vows');
 
 var api = vows.prepare({
     get: function (id, callback) {
@@ -321,7 +321,8 @@ vows.describe("Vows").addBatch({
     }
 }).addBatch({
     "A 3rd batch": {
-        topic: true, "should run last": function () {}
+        topic: true,
+        "should run last": function () {}
     }
 }).addBatch({}).export(module);
 
@@ -359,9 +360,9 @@ vows.describe("Vows with teardowns").addBatch({
             assert.isTrue(topic.flag);
         },
         'subcontext': {
-          'nested': function (_, topic) {
-            assert.isTrue(topic.flag);
-          }
+            'nested': function (_, topic) {
+                assert.isTrue(topic.flag);
+            }
         },
         teardown: function (topic) {
             topic.flag = false;
@@ -445,12 +446,12 @@ vows.describe("Vows with sub events").addBatch({
                 events.EventEmitter.call(this);
             };
             require('util').inherits(MyEmitter, events.EventEmitter);
-    
+            
             var topic = new(MyEmitter);
             process.nextTick(function () {
                 topic.emit('success', 'Legacy Does not Catch');
             });
-    
+            
             return topic;
         },
         "will return the emitter for traditional vows" : function (err, ret) {
@@ -464,7 +465,7 @@ vows.describe("Vows with sub events").addBatch({
                 },
                 "will change events to on in the title" : function() {
                     assert.strictEqual(this.context.title,
-                        'Sub-events emitted by children of EventEmitter on success');
+                                       'Sub-events emitted by children of EventEmitter on success');
                 }
             }
         }
