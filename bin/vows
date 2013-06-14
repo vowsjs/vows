@@ -295,7 +295,7 @@ if (! options.watch) {
         msg('runner', 'finish');
         _reporter.report(['finish', results], {
             write: function (str) {
-                util.print(str.replace(/^\n\n/, '\n'));
+                process.stdout.write(str.replace(/^\n\n/, '\n'));
             }
         });
         try {
@@ -364,7 +364,7 @@ if (! options.watch) {
         //
         // Utility functions
         //
-        function print(str)      { util.print(str) }
+        function print(str)      { process.stdout.write(str) }
         function esc(str)        { print("\x1b[" + str) }
         function eraseLine()     { esc("0K") }
         function cursorRestore() { esc("0G") }
@@ -613,7 +613,8 @@ function paths(dir) {
 
 function msg(cmd, subject, str, p) {
     if (options.verbose) {
-        util[p ? 'print' : 'puts']( stylize('vows ', 'green')
+        var func = p ? process.stdout.write.bind(process.stdout) : console.log;
+        func( stylize('vows ', 'green')
             + stylize(cmd, 'bold')
             + ' ' + subject + ' '
             + (str ? (typeof(str) === 'string' ? str : inspect(str)) : '')
