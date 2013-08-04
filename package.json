@@ -7,6 +7,7 @@
   "contributors"  : [{ "name": "Charlie Robbins", "email": "charlie.robbins@gmail.com" }],
   "dependencies"  : {"eyes": ">=0.1.6", "diff": "~1.0.3", "glob": "3.1.x"},
   "main"          : "./lib/vows",
+  "repository"    : {"type": "git", "url": "https://github.com/cloudhead/vows.git"},
   "bin"           : {"vows": "./bin/vows"},
   "directories"   : {"test": "./test", "bin": "./bin"},
   "version"       : "0.7.0",
