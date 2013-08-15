@@ -467,7 +467,8 @@ function runSuites(suites, callback) {
 
     (function run(suites, callback) {
         var suite = suites.shift();
-        if (suite && suite.type && suite.type === 'vows') {
+        if( (options.isolate && suite) || 
+            (suite && suite.type && suite.type === 'vows')) {
             msg('runner', "running", suite.subject + ' ', options.watch ? false : true);
             suite.run(options, function (result) {
                 Object.keys(result).forEach(function (k) {
