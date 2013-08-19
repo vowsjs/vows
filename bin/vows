@@ -4,7 +4,7 @@
 var path   = require('path'),
     fs     = require('fs'),
     util   = require('util'),
-    wildcard   = require('../lib/utils/wildcard').wildcard,
+    glob   = require('glob'),
     NopStream   = require('../lib/utils/nopstream').NopStream,
     events = require('events');
 
@@ -270,12 +270,8 @@ if (! options.watch) {
     // preprocess the list of files for any wildcards. win32 does not handle wildcards before calling vows
     // any paths not containing wildcards are simple returned by wildcard()
     files.forEach(function(a) {
-        if(a.indexOf('*') !== -1) {
-          wildcardFiles = wildcardFiles.concat(wildcard(a));
-        } else {
-          wildcardFiles.push(a);
-        }
-     });
+        wildcardFiles = wildcardFiles.concat(glob.sync(a));
+    });
 
     // now set up the file list for vows including all the wildcard files
     files = wildcardFiles.map(function (a) {
@@ -299,7 +295,7 @@ if (! options.watch) {
         msg('runner', 'finish');
         _reporter.report(['finish', results], {
             write: function (str) {
-                util.print(str.replace(/^\n\n/, '\n'));
+                process.stdout.write(str.replace(/^\n\n/, '\n'));
             }
         });
         try {
@@ -368,7 +364,7 @@ if (! options.watch) {
         //
         // Utility functions
         //
-        function print(str)      { util.print(str) }
+        function print(str)      { process.stdout.write(str) }
         function esc(str)        { print("\x1b[" + str) }
         function eraseLine()     { esc("0K") }
         function cursorRestore() { esc("0G") }
@@ -617,7 +613,8 @@ function paths(dir) {
 
 function msg(cmd, subject, str, p) {
     if (options.verbose) {
-        util[p ? 'print' : 'puts']( stylize('vows ', 'green')
+        var func = p ? process.stdout.write.bind(process.stdout) : console.log;
+        func( stylize('vows ', 'green')
             + stylize(cmd, 'bold')
             + ' ' + subject + ' '
             + (str ? (typeof(str) === 'string' ? str : inspect(str)) : '')
