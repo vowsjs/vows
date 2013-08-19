@@ -4,4 +4,5 @@ node_modules
 .hgignore
 .hgsubstate
 .hg
+.hgsub
 test/npm-debug.log
