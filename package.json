@@ -11,5 +11,6 @@
   "bin"           : {"vows": "./bin/vows"},
   "directories"   : {"test": "./test", "bin": "./bin"},
   "version"       : "0.7.0",
+  "repository"    : {"type": "git", "url": "https://github.com/cloudhead/vows.git"},
   "scripts"       : {"test": "node ./bin/vows --spec"}
 }
