@@ -168,15 +168,7 @@ vows.describe("Vows").addBatch({
             "should work as expected": function (topic) {
                 assert.isFunction(topic);
                 assert.equal(topic(), 42);
-            },
-        }
-    },
-    "A topic with a function that errors": {
-        topic: function() {
-            throw("Something wrong here");
-        },
-        "should error out": function(topic) {
-            assert.equal(topic, "Something wrong here");
+            }
         }
     },
     "A topic emitting an error": {

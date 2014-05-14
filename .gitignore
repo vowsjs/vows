@@ -1,4 +1,8 @@
 node_modules
 .idea
 .nul
+.hgignore
+.hgsubstate
+.hg
+.hgsub
 test/npm-debug.log
