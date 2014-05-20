@@ -17,11 +17,11 @@ Vows.prototype.addBatch = function (batch) {
 Vows.prototype.export = function (module) {
   this._module = module;
 
-  this._module.exports.Seal = this;
+  this._module.exports.Vows = this;
 };
 
 module.exports = exports = {
   describe: function (description) {
-    return new Seal(description);
+    return new Vows(description);
   }
 };
