@@ -8,13 +8,13 @@ function Vows (description) {
 }
 
 
-Seal.prototype.addBatch = function (batch) {
+Vows.prototype.addBatch = function (batch) {
   this._batches.push(batch);
 
   return this;
 };
 
-Seal.prototype.export = function (module) {
+Vows.prototype.export = function (module) {
   this._module = module;
 
   this._module.exports.Seal = this;
