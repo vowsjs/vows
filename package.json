@@ -1,15 +1,47 @@
 {
-  "name"          : "vows",
-  "description"   : "Asynchronous BDD & continuous integration for node.js",
-  "url"           : "http://vowsjs.org",
-  "keywords"      : ["testing", "spec", "test", "BDD"],
-  "author"        : "Alexis Sellier <self@cloudhead.net>",
-  "contributors"  : [{ "name": "Charlie Robbins", "email": "charlie.robbins@gmail.com" }, { "name": "Jerry Sievert", "email": "code@legitimatesounding.com" }],
-  "dependencies"  : {"eyes": ">=0.1.6", "diff": "~1.0.3", "glob": "3.1.x"},
-  "main"          : "./lib/vows",
-  "repository"    : {"type": "git", "url": "https://github.com/cloudhead/vows.git"},
-  "bin"           : {"vows": "./bin/vows"},
-  "directories"   : {"test": "./test", "bin": "./bin"},
-  "version"       : "0.9.0",
-  "scripts"       : {"test": "vows --spec"}
+  "name": "vows",
+  "description": "Asynchronous BDD & continuous integration for node.js",
+  "url": "http://vowsjs.org",
+  "keywords": [
+    "testing",
+    "spec",
+    "test",
+    "BDD"
+  ],
+  "author": "Alexis Sellier <self@cloudhead.net>",
+  "contributors": [
+    {
+      "name": "Charlie Robbins",
+      "email": "charlie.robbins@gmail.com"
+    },
+    {
+      "name": "Jerry Sievert",
+      "email": "code@legitimatesounding.com"
+    }
+  ],
+  "dependencies": {
+    "eyes": ">=0.1.6",
+    "diff": "~1.0.3",
+    "glob": "3.1.x"
+  },
+  "devDependencies": {
+    "jshint": "~2.5.1"
+  },
+  "main": "./lib/vows",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cloudhead/vows.git"
+  },
+  "bin": {
+    "vows": "./bin/vows"
+  },
+  "directories": {
+    "test": "./test",
+    "bin": "./bin"
+  },
+  "version": "0.9.0",
+  "scripts": {
+    "test": "vows --spec",
+    "lint": "jshint index.js lib/*.js"
+  }
 }
