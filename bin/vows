@@ -45,7 +45,7 @@ var help = [
     "  -v, --verbose     Enable verbose output",
     "  -w, --watch       Watch mode",
     "  -s, --silent      Don't report",
-    "  -i, --isolate     Run each test in it's own vows process",
+    "  -i, --isolate     Run each test in its own vows process",
     "  -m  PATTERN       Only run tests matching the PATTERN string",
     "  -r  PATTERN       Only run tests matching the PATTERN regexp",
     "  --json            Use JSON reporter",
