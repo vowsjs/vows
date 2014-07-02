@@ -4,7 +4,7 @@ var vows = require('../lib/vows'),
 var getFirstWord = function (str, callback) {
     callback(str.split(' ')[0]);
 };
-vows.describe('Example use-case').addBatch({
+vows.describe('Using this.callbackWithoutError inside a topic').addBatch({
     'Calling getFirstWord with "hello world!"': {
         topic: function () {
             return getFirstWord('hello world!', this.callbackWithoutError);
