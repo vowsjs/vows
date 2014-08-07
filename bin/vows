@@ -305,13 +305,11 @@ if (! options.watch) {
         } catch (err) {
             // ignore the undefined jscoverage
         }
-        if (process.stdout.write('')) { // Check if stdout is drained
-            process.exit(status);
-        } else {
-            process.stdout.on('drain', function () {
+        process.on('exit', function (code) {
+            if (code === 0) {
                 process.exit(status);
-            });
-        }
+            }
+        });
     });
 } else {
     //
