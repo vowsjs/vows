@@ -16,6 +16,7 @@ var fileExt, specFileExt;
 
 try {
     var coffee = require('coffee-script');
+    if(coffee.register) coffee.register();
     fileExt     = /\.(js|coffee)$/;
     specFileExt = /[.(-|_)]((t|T)est|(s|S)pec)\.(js|coffee)$/;
 } catch (_) {
