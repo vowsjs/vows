@@ -36,7 +36,7 @@ Code coverage reporting is available if _instrumented_ code is detected.  Curren
 ### downloading and installing [node-jscoverage](https://github.com/visionmedia/node-jscoverage)
 [node-jscoverage](https://github.com/visionmedia/node-jscoverage) is a binary package that needs to be compiled from source:
 
-```js
+```sh
 $ git clone https://github.com/visionmedia/node-jscoverage.git
 $ cd node-jscoverage/
 $ ./configure
@@ -48,14 +48,14 @@ $ make && sudo make install
 
 ### instrumenting with jscoverage
 
-```js
+```sh
 $ jscoverage myfile.js myfile-instrumented.js
 ```
 
 installation
 ------------
 
-```js
+```sh
 $ npm install vows
 ```
 
