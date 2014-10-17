@@ -14,18 +14,20 @@ _Vows_ is an experiment in making this possible, while adding a minimum of overh
 synopsis
 --------
 
-    var vows = require('vows'),
-        assert = require('assert');
+```js
+var vows = require('vows'),
+    assert = require('assert');
 
-    vows.describe('Deep Thought').addBatch({
-        'An instance of DeepThought': {
-            topic: new DeepThought,
+vows.describe('Deep Thought').addBatch({
+    'An instance of DeepThought': {
+        topic: new DeepThought,
 
-            'should know the answer to the ultimate question of life': function (deepThought) {
-                assert.equal (deepThought.question('what is the answer to the universe?'), 42);
-            }
+        'should know the answer to the ultimate question of life': function (deepThought) {
+            assert.equal (deepThought.question('what is the answer to the universe?'), 42);
         }
-    });
+    }
+});
+```
 
 coverage reporting
 ------------------
@@ -34,22 +36,28 @@ Code coverage reporting is available if _instrumented_ code is detected.  Curren
 ### downloading and installing [node-jscoverage](https://github.com/visionmedia/node-jscoverage)
 [node-jscoverage](https://github.com/visionmedia/node-jscoverage) is a binary package that needs to be compiled from source:
 
-    $ git clone https://github.com/visionmedia/node-jscoverage.git
-    $ cd node-jscoverage/
-    $ ./configure
-    checking for a BSD-compatible install... /usr/bin/install -c
-    checking whether build environment is sane... yes
-    [...]
-    $ make && sudo make install
+```js
+$ git clone https://github.com/visionmedia/node-jscoverage.git
+$ cd node-jscoverage/
+$ ./configure
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+[...]
+$ make && sudo make install
+```
 
 ### instrumenting with jscoverage
 
-    $ jscoverage myfile.js myfile-instrumented.js
-    
+```js
+$ jscoverage myfile.js myfile-instrumented.js
+```
+
 installation
 ------------
 
-    $ npm install vows
+```js
+$ npm install vows
+```
 
 documentation
 -------------
@@ -59,8 +67,8 @@ Head over to <http://vowsjs.org>
 run tests
 -------------
 
-```
-  npm test
+```sh
+$ npm test
 ```
 
 authors
