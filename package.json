@@ -1,5 +1,6 @@
 {
   "name": "vows",
+  "version": "0.8.0",
   "description": "Asynchronous BDD & continuous integration for node.js",
   "url": "http://vowsjs.org",
   "keywords": [
@@ -29,7 +30,6 @@
   "directories": {
     "test": "test"
   },
-  "version": "0.7.0",
   "scripts": {
     "test": "node ./bin/vows --spec"
   },
