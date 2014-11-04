@@ -119,6 +119,10 @@ vows.describe('vows/assert').addBatch({
             assertError(assert.isNotEmpty, {});
             assertError(assert.isNotEmpty, []);
             assertError(assert.isNotEmpty, "");
+        },
+        "`notIncludes`": function () {
+            assert.notIncludes([1, 2, 3], 4);
+            assert.notIncludes({"red": 1, "blue": 2}, "green");
         }
     }
 }).export(module);
@@ -134,4 +138,3 @@ function assertError(assertion, args, fail) {
                                "expected an AssertionError for {actual}",
                                "assertError", assertError);
 }
-
