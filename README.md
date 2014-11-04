@@ -1,5 +1,4 @@
-Vows
-====
+# vows [![Build Status](https://api.travis-ci.org/flatiron/vows.svg)](http://travis-ci.org/flatiron/vows)
 
 > Asynchronous BDD & continuous integration for node.js
 
