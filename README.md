@@ -73,7 +73,7 @@ $ npm test
 authors
 -------
 
-Alexis Sellier <<alexis@cloudhead.io>>, Charlie Robbins,
+[Alexis Sellier](https://github.com/cloudhead), [Charlie Robbins](https://github.com/indexzero), [Jerry Sievert](https://github.com/jerrysievert)
 
 *...and many others*
 

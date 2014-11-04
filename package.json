@@ -10,7 +10,8 @@
   ],
   "author": "Alexis Sellier <self@cloudhead.net>",
   "contributors": [
-    "Charlie Robbins <charlie.robbins@gmail.com>"
+    "Charlie Robbins <charlie.robbins@gmail.com>",
+    "Jerry Sievert <jerry@legitimatesounding.com>"
   ],
   "dependencies": {
     "eyes": ">=0.1.6",
