@@ -567,10 +567,12 @@ function importSuites(files) {
     } : function (suites, f) {
         //f = path.join(process.cwd(), path.relative(process.cwd(),f));
         var obj = require(f);
-        return suites.concat(Object.keys(obj).map(function (s) {
-            obj[s]._filename = cwdname(f);
-            return obj[s];
-        }));
+        return suites.concat(
+            Object.keys(obj).filter(function(s) { return s !== '_$jscoverage'; }).map(function (s) {
+                obj[s]._filename = cwdname(f);
+                return obj[s];
+            })
+        );
     }, [])
 }
 
