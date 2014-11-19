@@ -568,7 +568,20 @@ function importSuites(files) {
         //f = path.join(process.cwd(), path.relative(process.cwd(),f));
         var obj = require(f);
         return suites.concat(Object.keys(obj).map(function (s) {
-            obj[s]._filename = cwdname(f);
+            try {
+                obj[s]._filename = cwdname(f);
+            } catch (e) {
+                if (e instanceof TypeError && typeof(obj[s]) === 'undefined') {
+                    abort("runner",
+                          "Caught a TypeError while trying to import " +
+                          "suites: a suite is undefined." +
+                          "Check your exports; are you doing something like " +
+                          "exports.suite = vows.describe('foo')." +
+                          "addBatch({}).run()? If so, remove '.run()'");
+                } else {
+                    throw e;
+                }
+            }
             return obj[s];
         }));
     }, [])
