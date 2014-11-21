@@ -137,7 +137,7 @@ vows.describe('vows/assert').addBatch({
             try {
                 assert.isFalse(true);
             } catch (e) {
-                return e.toString();
+                return e.toStringEx();
             }
         },
         'should have full path in stack trace': function(topic) {
