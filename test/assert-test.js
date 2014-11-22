@@ -151,6 +151,52 @@ vows.describe('vows/assert').addBatch({
         "`notIncludes`": function () {
             assert.notIncludes([1, 2, 3], 4);
             assert.notIncludes({"red": 1, "blue": 2}, "green");
+        },
+        "`isEnumerable`": function () {
+            assertNoArguments(assert.isEnumerable);
+            assertError(assert.isEnumerable, [null, 'key']);
+            assertError(assert.isEnumerable, [{}, null]);
+            assertError(assert.isEnumerable, [{}, 'key']);
+            assert.isEnumerable({key:'value'}, 'key');
+            assert.throws(function () {
+                var o = {};
+                // defining it without a getter will fail
+                Object.defineProperty(o, 'key', {
+                    enumerable : false
+                });
+                assert.isEnumerable(o, 'key');
+            }, Error);
+            assert.throws(function () {
+                var o = {};
+                Object.defineProperty(o, 'key', {
+                    enumerable : false,
+                    get : function () { return 'value'; }
+                });
+                assert.isEnumerable(o, 'key');
+            }, assert.AssertionError);
+        },
+        "`isNotEnumerable`": function () {
+            assertNoArguments(assert.isNotEnumerable);
+            assertError(assert.isNotEnumerable, [null, 'key']);
+            assertError(assert.isNotEnumerable, [{}, null]);
+            assertError(assert.isEnumerable, [{}, 'key']);
+            assert.throws(function () {
+                var o = {};
+                // defining it without a getter will fail
+                Object.defineProperty(o, 'key', {
+                    enumerable : false
+                });
+                assert.isNotEnumerable(o, 'key');
+            }, Error);
+            assert.throws(function () {
+                assert.isNotEnumerable({key : 'value'}, 'key');
+            }, assert.AssertionError);
+            var o = {};
+            Object.defineProperty(o, 'key', {
+                enumerable : false,
+                get : function () { return 'value'; }
+            });
+            assert.isNotEnumerable(o, 'key');
         }
     },
 
