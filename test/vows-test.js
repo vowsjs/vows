@@ -11,22 +11,22 @@ var api = vows.prepare({
     version: function () { return '1.0' }
 }, ['get']);
 
-var promiser = function (val) {
+var emitNextTick = function (val) {
     return function () {
-        var promise = new(events.EventEmitter);
-        process.nextTick(function () { promise.emit('success', val) });
-        return promise;
+        var emitter = new(events.EventEmitter);
+        process.nextTick(function () { emitter.emit('success', val) });
+        return emitter;
     }
 };
 
 vows.describe("Vows").addBatch({
     "A context": {
-        topic: promiser("hello world"),
+        topic: emitNextTick("hello world"),
 
         "with a nested context": {
             topic: function (parent) {
                 this.state = 42;
-                return promiser(parent)();
+                return emitNextTick(parent)();
             },
             "has access to the environment": function () {
                 assert.equal(this.state, 42);
@@ -47,16 +47,16 @@ vows.describe("Vows").addBatch({
         }
     },
     "A nested context": {
-        topic: promiser(1),
+        topic: emitNextTick(1),
 
         ".": {
-            topic: function (a) { return promiser(2)() },
+            topic: function (a) { return emitNextTick(2)() },
 
             ".": {
-                topic: function (b, a) { return promiser(3)() },
+                topic: function (b, a) { return emitNextTick(3)() },
 
                 ".": {
-                    topic: function (c, b, a) { return promiser([4, c, b, a])() },
+                    topic: function (c, b, a) { return emitNextTick([4, c, b, a])() },
 
                     "should have access to the parent topics": function (topics) {
                         assert.equal(topics.join(), [4, 3, 2, 1].join());
@@ -64,7 +64,7 @@ vows.describe("Vows").addBatch({
                 },
 
                 "from": {
-                    topic: function (c, b, a) { return promiser([4, c, b, a])() },
+                    topic: function (c, b, a) { return emitNextTick([4, c, b, a])() },
 
                     "the parent topics": function(topics) {
                         assert.equal(topics.join(), [4, 3, 2, 1].join());
@@ -121,9 +121,9 @@ vows.describe("Vows").addBatch({
             }
         }
     },
-    "A non-promise return value": {
+    "A non-EventEmitter return value": {
         topic: function () { return 1 },
-        "should be converted to a promise": function (val) {
+        "should be converted to a vow": function (val) {
             assert.equal(val, 1);
         }
     },
@@ -173,11 +173,11 @@ vows.describe("Vows").addBatch({
     },
     "A topic emitting an error": {
         topic: function () {
-            var promise = new(events.EventEmitter);
+            var emitter = new(events.EventEmitter);
             process.nextTick(function () {
-                promise.emit("error", 404);
+                emitter.emit("error", 404);
             });
-            return promise;
+            return emitter;
         },
         "shouldn't raise an exception if the test expects it": function (e, res) {
             assert.equal(e, 404);
@@ -186,11 +186,11 @@ vows.describe("Vows").addBatch({
     },
     "A topic not emitting an error": {
         topic: function () {
-            var promise = new(events.EventEmitter);
+            var emitter = new(events.EventEmitter);
             process.nextTick(function () {
-                promise.emit("success", true);
+                emitter.emit("success", true);
             });
-            return promise;
+            return emitter;
         },
         "should pass `null` as first argument, if the test is expecting an error": function (e, res) {
             assert.strictEqual(e, null);
@@ -581,12 +581,12 @@ vows.describe("Vows with sub events").addBatch({
                 events.EventEmitter.call(this);
             };
             require('util').inherits(MyEmitter, events.EventEmitter);
-    
+
             var topic = new(MyEmitter);
             process.nextTick(function () {
                 topic.emit('success', 'Legacy Does not Catch');
             });
-    
+
             return topic;
         },
         "will return the emitter for traditional vows" : function (err, ret) {
