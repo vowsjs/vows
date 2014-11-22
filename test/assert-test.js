@@ -179,7 +179,7 @@ vows.describe('vows/assert').addBatch({
             assertNoArguments(assert.isNotEnumerable);
             assertError(assert.isNotEnumerable, [null, 'key']);
             assertError(assert.isNotEnumerable, [{}, null]);
-            assertError(assert.isEnumerable, [{}, 'key']);
+            assertError(assert.isNotEnumerable, [{}, 'key']);
             assert.throws(function () {
                 var o = {};
                 // defining it without a getter will fail
