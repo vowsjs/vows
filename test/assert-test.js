@@ -174,6 +174,11 @@ vows.describe('vows/assert').addBatch({
                 });
                 assert.isEnumerable(o, 'key');
             }, assert.AssertionError);
+            assert.doesNotThrow(function () {
+                function Test() {};
+                Test.prop = 1;
+                assert.isEnumerable(Test, 'prop');
+            });
         },
         "`isNotEnumerable`": function () {
             assertNoArguments(assert.isNotEnumerable);
@@ -197,6 +202,14 @@ vows.describe('vows/assert').addBatch({
                 get : function () { return 'value'; }
             });
             assert.isNotEnumerable(o, 'key');
+            assert.doesNotThrow(function () {
+                function Test() {};
+                Object.defineProperty(Test, 'prop', {
+                    enumerable : false,
+                    get : function () { return 'value'; }
+                });
+                assert.isNotEnumerable(Test, 'prop');
+            });
         }
     },
 
