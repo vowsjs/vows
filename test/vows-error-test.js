@@ -4,7 +4,7 @@ var path   = require('path'),
     fs     = require('fs'),
     vows   = require('../lib/vows'),
     silent = require('../lib/vows/reporters/silent');
-    
+
 function doSomethingAsync(callback) {
   	var err = null;
   	var testValue = 'a';

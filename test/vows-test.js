@@ -152,7 +152,7 @@ vows.describe("Vows").addBatch({
         topic: 0,
 
         "should work as expected": function (topic) {
-            assert.equal(topic, 0);
+            assert.strictEqual(topic, 0);
         }
     },
     "A topic returning a function": {
@@ -652,6 +652,259 @@ vows.describe('Async topic is passed to vows with topic-less subcontext').addBat
             },
             'equals 43': function (topic) {
                 assert.equal(topic, 43);
+            }
+        }
+    }
+})['export'](module);
+
+vows.describe("Simple Syncronous Vows").addBatch({
+    "A context with syncronous vows": {
+        topic: function () {
+            this.callback(null, 5);
+        },
+        'sync': [
+         {
+              topic: function(topic) {
+                this.callback(null, topic +1);
+              },
+              "first": {
+                "Nexted one" : function (ret) {
+                    assert.strictEqual(ret, 6);
+                }
+              }
+            },
+         {
+              next: function(topic) {
+                this.callback(null, topic + 1);
+              },
+              "second": {
+                "nexted two": function (ret) {
+                    assert.strictEqual(ret, 7);
+                }
+            }
+         }
+        ],
+        "basic value": function (err, ret) {
+            assert.strictEqual(ret, 5);
+        }
+    }
+}).addBatch({
+    "A context with syncronous vows callback useing nextTick": {
+        topic: function () {
+            var cb = this.callback;
+            process.nextTick(function() {
+                cb(null, 5);
+            });
+        },
+        'sync': [{
+            topic: function(topic) {
+              var cb = this.callback;
+              process.nextTick(function() {
+                  cb(null, topic +1);
+              });
+            },
+            "first": {
+              "Nexted one" : function (ret) {
+                  assert.strictEqual(ret, 6);
+              }
+            }
+          },
+         {
+              next: function(topic) {
+                var cb = this.callback;
+                process.nextTick(function() {
+                    cb(null, topic +1);
+                });
+              },
+              "second": {
+                "nexted two": function (ret) {
+                    assert.strictEqual(ret, 7);
+                }
+            }
+         }
+        ],
+        "basic value": function (err, ret) {
+            assert.strictEqual(ret, 5);
+        }
+    }
+}).addBatch({
+    "A context with syncronous vows using emitter": {
+        topic: function () {
+            var emitter = new events.EventEmitter();
+            var num = 5;
+            setTimeout(function() {
+                emitter.emit('success', num);
+            }, 100);
+            return emitter;
+        },
+        'sync': [
+            {
+                topic: function(topic) {
+                    var emitter = new events.EventEmitter();
+                    topic += 1;
+                    setTimeout(function() {
+                        emitter.emit('success', topic);
+                    }, 100);
+                    return emitter;
+                },
+                "first": {
+                  "Nexted one" : function (ret) {
+                      assert.strictEqual(ret, 6);
+                  }
+                }
+            },
+            {
+              next: function(topic) {
+                  var emitter = new events.EventEmitter();
+                  topic += 1;
+                  setTimeout(function() {
+                      emitter.emit('success', topic);
+                  }, 100);
+                  return emitter;
+              },
+              "second": {
+                "nexted two": function (ret) {
+                    assert.strictEqual(ret, 7);
+                }
+            }
+         }
+        ],
+        "basic value": function (err, ret) {
+            assert.strictEqual(ret, 5);
+        }
+    }
+}).export(module);
+
+vows.describe("Complex Syncronous Vows for EventEmitters").addBatch({
+    "CrazyEmitter acts like a Stream": {
+        topic: function () {
+            var CrazyEmitter = function() {
+                events.EventEmitter.call(this);
+            };
+            require('util').inherits(CrazyEmitter, events.EventEmitter);
+
+            emitter = new CrazyEmitter();
+            emitter.num = 5;
+
+            setTimeout(function() {
+                emitter.num += 1;
+                emitter.emit('connect', emitter.num);
+                process.nextTick(function() {
+                    emitter.num += 1;
+                    emitter.emit('data', emitter.num)
+                    setTimeout(function() {
+                        emitter.num += 1;
+                        emitter.emit('end', emitter.num)
+                    },10)
+                });
+            }, 100);
+            return emitter;
+        },
+        "basic value": function (ret) {
+            assert.strictEqual(ret.num, 5);
+        },
+        on: [
+            {
+                "connect": {
+                    "is set to 5": function(ret) {
+
+                    }
+                }
+            },
+            {
+                "data": {
+                    "is set to one mmore then connect": function(ret) {
+
+                    }
+                }
+            },
+            {
+                "end": {
+                    "finishies after data": function(ret) {
+
+                    }
+                }
+            }
+        ]
+    }
+}).export(module);
+
+vows.describe("Vows with events that fire mutiple times").addBatch({
+  "A context": {
+    topic: function() {
+      this.context.event = 'end';
+
+      var topic = new(events.EventEmitter);
+
+      process.nextTick(function () {
+        topic.emit('ping', 'ping_data');
+        topic.emit('ping', 'ping_data');
+        topic.emit('ping', 'ping_data');
+        topic.emit('ping', 'ping_data');
+        topic.emit('ping', 'ping_data');
+        topic.emit('ping', 'ping_data');
+      });
+
+      process.nextTick(function() {
+        topic.emit('end', 'end_data');
+      });
+
+      return topic;
+    },
+    on: {
+      "ping": {
+        "will fire with ping_data": function(data) {
+          // TODO: Check to see when this is invalid.
+          this.expect(6);
+          assert.strictEqual(data, 'ping_data');
+        }
+      },
+      "end": {
+        "will fire will end_data": function(data) {
+          assert.strictEqual(data, 'end_data');
+        }
+      }
+    }
+  }
+}).export(module);
+
+
+vows.describe('Pending tests with // prefix').addBatch({
+    'Given an honorable topic': {
+        topic: function () {
+            var callback = this.callback;
+            process.nextTick(function () {
+                callback(null, 42);
+            });
+        },
+        'Then honorable vows are executed': function (topic) {
+            assert.equal(topic, 42);
+        },
+        '// and pending vows are not executed': function (topic) {
+            throw new Error('Should not be executed.');
+        },
+        '// and given a pending context': {
+            'then every sub context are pending': function (topic) {
+                throw new Error('Should not be executed.');
+            }
+        },
+        'given an honorable sub context': {
+            'then honorable vows are executed': function (topic) {
+                assert.equal(topic, 42);
+            },
+            '// and pending vows are not executed': function (topic) {
+                throw new Error('Should not be executed.');
+            }
+        },
+        '// given a pending sub context with an inner topic': {
+            topic: function (parenttopic) {
+                process.nextTick(function(){
+                  throw new Error('Should not be executed.');
+                })
+                return parenttopic + 1;
+            },
+            'then both sub-topics and sub-vows are not executed': function (topic) {
+                throw new Error('Should not be executed.');
             }
         }
     }
