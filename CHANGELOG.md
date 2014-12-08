@@ -1,4 +1,17 @@
 
+v0.9.0-rc1 / Wed, 3 Dec 2014
+============================
+  * [#329](https://github.com/vowsjs/vows/pull/329) - fixes issue #326 - adds isEnumerable and isNotEnumerable macros - added required test cases (`silkentrance`)
+  * [fc36f20](https://github.com/vowsjs/vows/commit/fc36f20) [doc] Update CHANGELOG.md (`indexzero`)
+  * [#193](https://github.com/vowsjs/vows/pull/193) [api] Allow for multiple exports in required test files. Fixes #284 by manual merge of changes from @NemoPersona. (`indexzero`)
+  * [#259](https://github.com/vowsjs/vows/pull/259) Add json-file reporter (`Eric LEVEAU`)
+  * [#212](https://github.com/vowsjs/vows/pull/212) [api] Expose a summary of errored vows on "finish" in spec reporter. Manual merge of #252 by @cliffano. (`indexzero`)
+  * [#222](https://github.com/vowsjs/vows/commit/pull/222) Adding Before and After suite (`Pablo Cantero`)
+  * [#212](https://github.com/vowsjs/vows/commit/pull/212) Expect a vow to be called n times (`Romain`)
+  * [#211](https://github.com/vowsjs/vows/commit/pull/211) Create pending tests by prefixing your tests name or context by '// ' (`Romain`)
+  * [#193](https://github.com/vowsjs/vows/commit/pull/193) [fix] Handle vows for events that execute multiple times (fixes #191) (`bacchusrx`)
+  * [#162](https://github.com/vowsjs/vows/commit/162) Synchronous Vows (`seebees`, `indexzero`)
+
 v0.8.1 / Fri, 21 Nov 2014
 =========================
   * [81333f3](https://github.com/flatiron/vows/commit/81333f3) [dist] Version bump. 0.8.1 (`indexzero`)

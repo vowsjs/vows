@@ -166,7 +166,7 @@ vows.describe('vows/assert').addBatch({
                     enumerable : false
                 });
                 assert.isEnumerable(o, 'key');
-            }, Error);
+            });
             assert.throws(function () {
                 var o = {};
                 Object.defineProperty(o, 'key', {
