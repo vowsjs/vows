@@ -154,13 +154,14 @@ vows.describe('vows/assert').addBatch({
         },
         "`isEnumerable`": function () {
             assertNoArguments(assert.isEnumerable);
+            assert.isEnumerable({key:'value'}, 'key');
             assertError(assert.isEnumerable, [null, 'key']);
             assertError(assert.isEnumerable, [{}, null]);
             assertError(assert.isEnumerable, [{}, 'key']);
-            assert.isEnumerable({key:'value'}, 'key');
-            assert.throws(function () {
+            assertError(function () {
                 var o = {};
-                // defining it without a getter will fail
+                // defining it without a getter or value
+                // will return undefined on get
                 Object.defineProperty(o, 'key', {
                     enumerable : false
                 });
@@ -185,17 +186,18 @@ vows.describe('vows/assert').addBatch({
             assertError(assert.isNotEnumerable, [null, 'key']);
             assertError(assert.isNotEnumerable, [{}, null]);
             assertError(assert.isNotEnumerable, [{}, 'key']);
-            assert.throws(function () {
+            assertError(function () {
                 var o = {};
-                // defining it without a getter will fail
+                // defining it without a getter or value
+                // will return undefined on get
                 Object.defineProperty(o, 'key', {
-                    enumerable : false
+                    enumerable : true
                 });
                 assert.isNotEnumerable(o, 'key');
-            }, Error);
-            assert.throws(function () {
+            });
+            assertError(function () {
                 assert.isNotEnumerable({key : 'value'}, 'key');
-            }, assert.AssertionError);
+            });
             var o = {};
             Object.defineProperty(o, 'key', {
                 enumerable : false,
