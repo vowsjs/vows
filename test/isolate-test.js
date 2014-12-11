@@ -87,6 +87,27 @@ vows.describe('vows/isolate').addBatch({
         }
       }
     },
+    'passing.coffee': {
+      'with default reporter': {
+        topic: generateTopic(null, 'passing.coffee'),
+        'should be ok': assertExecOk
+      },
+      'with json reporter': {
+        topic: generateTopic('--json', 'passing.coffee'),
+        'should be ok': assertExecOk,
+        'should have correct output': function (r) {
+            var results = parseResults(r.stdout)
+
+          assertResultTypePresent(results, 'subject');
+          assertResultTypePresent(results, 'end');
+
+          assertResultsFinish(results, {
+            total: 4,
+            honored: 4
+          });
+        }
+      }
+    },
     'failing.js': {
       'with json reporter': {
         topic: generateTopic('--json', 'failing.js'),
@@ -141,9 +162,9 @@ vows.describe('vows/isolate').addBatch({
             var results=  parseResults(r.stdout);
 
           assertResultsFinish(results, {
-            total: 16,
+            total: 20,
             broken: 4,
-            honored: 12
+            honored: 16
           });
         }
       }
