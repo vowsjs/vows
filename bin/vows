@@ -279,7 +279,7 @@ if (! options.watch) {
 
     // now set up the file list for vows including all the wildcard files
     files = wildcardFiles.map(function (a) {
-        return a.replace(fileExt, '');
+        return a;
     });
 
 
@@ -423,8 +423,6 @@ if (! options.watch) {
                     var cache = require.main.moduleCache || require.cache;
                     if (cache[p]) { delete(cache[p]) }
                     return p;
-                }).map(function (p) {
-                    return p.replace(fileExt, '');
                 });
 
             running ++;
@@ -490,7 +488,7 @@ function importSuites(files) {
     var spawn = require('child_process').spawn;
 
     function cwdname(f) {
-        return f.replace(process.cwd() + '/', '') + '.js';
+        return f.replace(process.cwd() + '/', '');
     }
 
     function wrapSpawn(f) {
