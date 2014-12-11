@@ -277,11 +277,6 @@ if (! options.watch) {
         wildcardFiles = wildcardFiles.concat(glob.sync(a));
     });
 
-    // now set up the file list for vows including all the wildcard files
-    files = wildcardFiles.map(function (a) {
-        return a;
-    });
-
 
     if (options.shuffle) {
         var source = files.slice(0);
