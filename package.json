@@ -12,8 +12,7 @@
   "author": "Alexis Sellier <self@cloudhead.net>",
   "contributors": [
     "Charlie Robbins <charlie.robbins@gmail.com>",
-    "Jerry Sievert <jerry@legitimatesounding.com>",
-    "Carsten Klein <trancesilken@gmail.com>"
+    "Jerry Sievert <jerry@legitimatesounding.com>"
   ],
   "dependencies": {
     "eyes": "~0.1.6",
