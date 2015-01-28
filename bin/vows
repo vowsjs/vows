@@ -6,23 +6,10 @@ var path   = require('path'),
     util   = require('util'),
     glob   = require('glob'),
     NopStream   = require('../lib/utils/nopstream').NopStream,
-    events = require('events');
+    events = require('events'),
+    rechoir = require('rechoir');
 
-//
-// Attempt to load Coffee-Script. If it's not available, continue on our
-// merry way, if it is available, start searching for `*.coffee` scripts too.
-//
-var fileExt, specFileExt;
-
-try {
-    var coffee = require('coffee-script');
-    if(coffee.register) coffee.register();
-    fileExt     = /\.(js|coffee)$/;
-    specFileExt = /[.(-|_)]((t|T)est|(s|S)pec)\.(js|coffee)$/;
-} catch (_) {
-    fileExt     = /\.js$/;
-    specFileExt = /[.(-|_)]((t|T)est|(s|S)pec)\.js$/;
-}
+var specFileExt = /[.(-|_)]((t|T)est|(s|S)pec)\..+$/;
 
 var inspect = require('eyes').inspector({
     stream: null,
@@ -561,7 +548,7 @@ function importSuites(files) {
         });
     } : function (suites, f) {
         //f = path.join(process.cwd(), path.relative(process.cwd(),f));
-        var obj = require(f);
+        var obj = rechoir.load(f);
         return suites.concat(
             Object.keys(obj)
                 .filter(function(s) { return s !== '_$jscoverage'; })
@@ -612,7 +599,7 @@ function paths(dir) {
             var path = stack.concat([file]).join('/'),
                 stat = fs.statSync(path);
 
-            if (stat.isFile() && fileExt.test(file)) {
+            if (stat.isFile()) {
                 paths.push(path);
             } else if (stat.isDirectory()) {
                 traverse(file, stack);
