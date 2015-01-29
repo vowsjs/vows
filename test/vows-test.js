@@ -83,10 +83,11 @@ vows.describe("Vows").addBatch({
             },
             'after a successful `fs.open`': {
                 topic: function (fd, stat) {
-                    fs.read(fd, stat.size, 0, "utf8", this.callback);
+                    var buffer = new Buffer(stat.size);
+                    fs.read(fd, buffer, 0, stat.size, 0, this.callback);
                 },
-                'after a successful `fs.read`': function (data) {
-                    assert.match (data, /after a successful `fs.read`/);
+                'after a successful `fs.read`': function (len, buffer) {
+                    assert.match (buffer.toString('utf-8'), /after a successful `fs.read`/);
                 }
             }
         }
@@ -220,16 +221,16 @@ vows.describe("Vows").addBatch({
             topic: function () {
                 function async(callback) {
                     process.nextTick(function () {
-                        callback("ERROR");
+                        callback(new Error(), "ERROR");
                     });
                 }
                 async(this.callback);
             },
             "should have a non-null error value": function (e, res) {
-                assert.equal(e, "ERROR");
+                assert.equal(res, "ERROR");
             },
             "should work like an event-emitter": function (e, res) {
-                assert.equal(res, undefined);
+                assert.equal(res, "ERROR");
             }
         },
         "using this.callback synchronously": {
@@ -264,8 +265,7 @@ vows.describe("Vows").addBatch({
             topic: function () {
                 this.callback(null, 1, 2, 3);
             },
-            "should pass them to the vow": function (e, a, b, c) {
-                assert.strictEqual(e, null);
+            "should pass them to the vow": function (a, b, c) {
                 assert.strictEqual(a, 1);
                 assert.strictEqual(b, 2);
                 assert.strictEqual(c, 3);
@@ -495,7 +495,7 @@ vows.describe("Vows with teardowns").addBatch({
             assert.isTrue(topic.flag);
         },
         'subcontext': {
-          'nested': function (_, topic) {
+          'nested': function (topic) {
             assert.isTrue(topic.flag);
           }
         },
@@ -571,7 +571,7 @@ vows.describe("Vows with sub events").addBatch({
                 }
             }
         },
-        "will catch the legacy success event": function (err, ret) {
+        "will catch the legacy success event": function (ret) {
             assert.strictEqual(ret, 'legacey_data');
         }
     },
@@ -589,7 +589,7 @@ vows.describe("Vows with sub events").addBatch({
 
             return topic;
         },
-        "will return the emitter for traditional vows" : function (err, ret) {
+        "will return the emitter for traditional vows" : function (ret) {
             assert.ok(ret instanceof events.EventEmitter);
         },
         // events is an alias for on
@@ -684,7 +684,7 @@ vows.describe("Simple Syncronous Vows").addBatch({
             }
          }
         ],
-        "basic value": function (err, ret) {
+        "basic value": function (ret) {
             assert.strictEqual(ret, 5);
         }
     }
@@ -723,7 +723,7 @@ vows.describe("Simple Syncronous Vows").addBatch({
             }
          }
         ],
-        "basic value": function (err, ret) {
+        "basic value": function (ret) {
             assert.strictEqual(ret, 5);
         }
     }
@@ -769,7 +769,7 @@ vows.describe("Simple Syncronous Vows").addBatch({
             }
          }
         ],
-        "basic value": function (err, ret) {
+        "basic value": function (ret) {
             assert.strictEqual(ret, 5);
         }
     }

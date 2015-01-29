@@ -54,10 +54,10 @@ vows.describe('vows/error').addBatch({
 vows.describe('Error Handling').addBatch({
     "A topic with a function that errors": {
         topic: function() {
-            throw("Something wrong here");
+            throw new Error("Something wrong here");
         },
         "should return an error to a vow with two parameters": function(e, data) {
-            assert.equal(e, "Something wrong here");
+            assert.equal(e.toString(), "Error: Something wrong here");
         }
     },
     "A topic with a built-in error": {
@@ -74,7 +74,7 @@ vows.describe('Error Handling').addBatch({
                 vows.describe().addBatch({
                     "A topic with a function that errors": {
                         topic: function() {
-                            throw("Something wrong here");
+                            throw new Error("Something wrong here");
                         },
                         "should record the error in the test results" : function(data) {
                             assert.ok(!data);
@@ -92,13 +92,13 @@ vows.describe('Error Handling').addBatch({
                     }
                 }).run({reporter : silent}, this.callback);
             },
-            "should have an errored count of two" : function(results, unused) {
+            "should have an errored count of two" : function(results) {
                 assert.equal(results.errored, 2);
             },
-            "should have a total count of two" : function(results, unused) {
+            "should have a total count of two" : function(results) {
                 assert.equal(results.total, 2);
             },
-            "should have an honored count of zero" : function(results, unused){
+            "should have an honored count of zero" : function(results){
                 assert.equal(results.honored, 0);
             }
         }
@@ -107,7 +107,7 @@ vows.describe('Error Handling').addBatch({
         topic : function(){
             throw('awesome');
         },
-        "should error" : function(error, result){
+        "should error" : function(error){
             assert.equal(error, 'awesome');
         },
         "containing a subtopic" : {
