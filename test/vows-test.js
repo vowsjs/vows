@@ -264,8 +264,8 @@ vows.describe("Vows").addBatch({
             topic: function () {
                 this.callback(null, 1, 2, 3);
             },
-            "should pass them to the vow": function (e, a, b, c) {
-                assert.strictEqual(e, null);
+            "should pass them to the vow": function (a, b, c) {
+// bogus test case                assert.strictEqual(e, null);
                 assert.strictEqual(a, 1);
                 assert.strictEqual(b, 2);
                 assert.strictEqual(c, 3);
@@ -806,22 +806,22 @@ vows.describe("Complex Syncronous Vows for EventEmitters").addBatch({
         on: [
             {
                 "connect": {
-                    "is set to 5": function(ret) {
-
+                    "emits 6": function(ret) {
+                        assert.strictEqual(ret, 6);
                     }
                 }
             },
             {
                 "data": {
-                    "is set to one mmore then connect": function(ret) {
-
+                    "emits 7": function(ret) {
+                        assert.strictEqual(ret, 7)
                     }
                 }
             },
             {
                 "end": {
-                    "finishies after data": function(ret) {
-
+                    "emits 8": function(ret) {
+                        assert.strictEqual(ret, 8)
                     }
                 }
             }
