@@ -2,7 +2,10 @@ var path   = require('path'),
     events = require('events'),
     assert = require('assert'),
     fs     = require('fs'),
-    vows   = require('../lib/vows');
+    vows   = require('../lib/vows'),
+    pify   = require('pify');
+
+Promise = Promise || require('promise')
 
 var api = vows.prepare({
     get: function (id, callback) {
@@ -84,6 +87,24 @@ vows.describe("Vows").addBatch({
             'after a successful `fs.open`': {
                 topic: function (fd, stat) {
                     fs.read(fd, stat.size, 0, "utf8", this.callback);
+                },
+                'after a successful `fs.read`': function (data) {
+                    assert.match (data, /after a successful `fs.read`/);
+                }
+            }
+        }
+    },
+    "Nested contexts with promise-style async": {
+        topic: function () {
+            return pify(fs.stat)(__dirname + '/vows-test.js');
+        },
+        'after a successful `fs.stat`': {
+            topic: function (stat) {
+                return pify(fs.open)(__dirname + '/vows-test.js', "r", stat.mode);
+            },
+            'after a successful `fs.open`': {
+                topic: function (fd, stat) {
+                    return pify(fs.read)(fd, stat.size, 0, "utf8");
                 },
                 'after a successful `fs.read`': function (data) {
                     assert.match (data, /after a successful `fs.read`/);
@@ -277,6 +298,39 @@ vows.describe("Vows").addBatch({
                 "should receive them too": function (val) {
                     assert.deepEqual(val, [1, 2, 3]);
                 }
+            }
+        }
+    },
+    "A topic with promise-style async": {
+        "when successful": {
+            topic: function () {
+                return new Promise(function (fulfill) {
+                  process.nextTick(function () {
+                    fulfill("OK");
+                  });
+                });
+            },
+            "should work like an event-emitter": function (res) {
+                assert.equal(res, "OK");
+            },
+            "should assign `null` to the error argument": function (e, res) {
+                assert.strictEqual(e, null);
+                assert.equal(res, "OK");
+            }
+        },
+        "when unsuccessful": {
+            topic: function () {
+              return new Promise(function (fulfill, reject) {
+                process.nextTick(function () {
+                  reject("ERROR");
+                });
+              });
+            },
+            "should have a non-null error value": function (e, res) {
+                assert.equal(e, "ERROR");
+            },
+            "should work like an event-emitter": function (e, res) {
+                assert.equal(res, undefined);
             }
         }
     }
