@@ -18,116 +18,118 @@ assert = require 'assert'
 
 _ = require 'lodash'
 
+me = module.exports
+
 # Copy everything from assert module to this module
 
-_.assign module.exports, assert
-
-asrt = module.exports
+_.assign me, assert
 
 # Extend this module with some extra utilities
 
-module.exports.epsilon = (eps, actual, expected, message) ->
-  asrt.isNumber eps
-  asrt.isNumber actual
-  asrt.isNumber expected
-  asrt.lesser Math.abs(actual - expected), eps
+me.epsilon = (eps, actual, expected, message) ->
+  me.isNumber eps
+  me.isNumber actual
+  me.isNumber expected
+  me.lesser Math.abs(actual - expected), eps
 
-module.exports.match = (actual, expected, message) ->
+me.match = (actual, expected, message) ->
   assert _.isRegExp(expected), "#{expected} must be a regular expression"
   assert expected.test(actual),
     message or "#{actual} does not match #{expected}"
 
-module.exports.matches = module.exports.match
+me.matches = me.match
 
-module.exports.isTrue = (actual, message) ->
+me.isTrue = (actual, message) ->
   assert actual == true, message or "Argument must be true"
 
-module.exports.isFalse = (actual, message) ->
+me.isFalse = (actual, message) ->
   assert actual == false, message or "Argument must be false"
 
-module.exports.isZero = (actual, message) ->
+me.isZero = (actual, message) ->
   assert.equal actual, 0, message or "Argument must be zero"
 
-module.exports.isNotZero = (actual, message) ->
+me.isNotZero = (actual, message) ->
   assert.notEqual actual, 0, message or "Argument must not be zero"
 
-module.exports.greater = (actual, expected, message) ->
+me.greater = (actual, expected, message) ->
   assert actual > expected,
     message or "#{actual} is not greater than #{expected}"
 
-module.exports.lesser = (actual, expected, message) ->
+me.lesser = (actual, expected, message) ->
   assert actual < expected,
     message or "#{actual} is not less than #{expected}"
 
-module.exports.inDelta = (actual, expected, delta, message) ->
+me.inDelta = (actual, expected, delta, message) ->
   assert Math.abs(actual - expected) <= delta,
     message or "#{actual} is not greater than #{expected}"
 
-module.exports.include = (actual, expected, message) ->
+me.include = (actual, expected, message) ->
   assert _.hasIn(actual, expected),
     message or "#{actual} does not contain #{expected}"
 
-module.exports.includes = module.exports.include
+me.includes = me.include
 
-module.exports.notInclude = (actual, expected, message) ->
+me.notInclude = (actual, expected, message) ->
   assert !_.hasIn(actual, expected),
     message or "#{actual} contains #{expected}"
 
-module.exports.notIncludes = module.exports.notInclude
+me.notIncludes = me.notInclude
 
-module.exports.deepInclude = module.exports.include
+# FIXME: figure out include/deepInclude
 
-module.exports.deepIncludes = module.exports.deepInclude
+me.deepInclude = me.include
 
-module.exports.isEmpty = (actual, message) ->
+me.deepIncludes = me.deepInclude
+
+me.isEmpty = (actual, message) ->
   assert _.isEmpty(actual), message or "#{actual} is not empty"
 
-module.exports.isNotEmpty = (actual, message) ->
+me.isNotEmpty = (actual, message) ->
   assert !_.isEmpty(actual),  message or "#{actual} is empty"
 
-module.exports.lengthOf = (actual, expected, message) ->
+me.lengthOf = (actual, expected, message) ->
   assert actual?
-  asrt.include actual, "length"
+  me.include actual, "length"
   assert.equal actual.length, expected,
     "Length is #{actual.length} not #{expected}"
 
-module.exports.isArray = (actual, message) ->
+me.isArray = (actual, message) ->
   assert _.isArray(actual), message or "Argument is not an array"
 
-module.exports.isObject = (actual, message) ->
+me.isObject = (actual, message) ->
   assert _.isObject(actual), message or "Argument must be an object"
 
-module.exports.isNumber = (actual, message) ->
+me.isNumber = (actual, message) ->
   assert _.isNumber(actual), message or "Argument must be a number"
 
-module.exports.isBoolean = (actual, message) ->
+me.isBoolean = (actual, message) ->
   assert _.isBoolean(actual), message or "Argument must be a boolean"
 
-module.exports.isNaN = (actual, message) ->
+me.isNaN = (actual, message) ->
   assert _.isNaN(actual), message or "Argument must be NaN"
 
-module.exports.isNull = (actual, message) ->
+me.isNull = (actual, message) ->
   assert _.isNull(actual), message or "Argument must be null"
 
-module.exports.isNotNull = (actual, message) ->
+me.isNotNull = (actual, message) ->
   assert !_.isNull(actual), message or "Argument must not be null"
 
-module.exports.isUndefined = (actual, message) ->
+me.isUndefined = (actual, message) ->
   assert _.isUndefined(actual), message or "Argument must be undefined"
 
-module.exports.isDefined = (actual, message) ->
+me.isDefined = (actual, message) ->
   assert !_.isUndefined(actual), message or "Argument must be defined"
 
-module.exports.isString = (actual, message) ->
+me.isString = (actual, message) ->
   assert _.isString(actual), message or "Argument must be a string"
 
-module.exports.isFunction = (actual, message) ->
+me.isFunction = (actual, message) ->
   assert _.isFunction(actual), message or "Argument must be a function"
 
-module.exports.typeOf = (actual, expected, message) ->
+me.typeOf = (actual, expected, message) ->
   assert typeof(actual) == expected,
    message or "Argument is not of type #{expected}"
 
-module.exports.instanceOf = (actual, expected, message) ->
+me.instanceOf = (actual, expected, message) ->
   assert actual instanceof expected,
     message or "Argument is not an instance of #{expected}"
