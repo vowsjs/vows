@@ -24,7 +24,7 @@ const _ = require('lodash');
 const vows = require('../lib/index');
 const assert = vows.assert;
 
-vows.describe('First test')
+vows.describe('run() test')
   .addBatch({
     'When we open a file': {
       topic() {

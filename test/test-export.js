@@ -26,7 +26,7 @@ const vows = require('../lib/index');
 const assert = vows.assert;
 
 vows
-  .describe('First test')
+  .describe('export(module) test')
   .addBatch({
     'When we open a file': {
       topic() {
