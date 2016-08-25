@@ -285,7 +285,7 @@ an argument. This will change the `exports` property of the `module` to be the
 function that runs the suite.
 
 The `perjury` command-line tool can be used to run all your test modules that
-use export.
+use `export()`.
 
 ```shell
 ./node_modules/.bin/perjury test/*.js
@@ -318,6 +318,19 @@ vows.describe('Input/output tests')
   })
   .export(module);
 ```
+
+CoffeeScript
+------------
+
+[CoffeeScript](http://coffeescript.org/) is a nice pre-processor for JavaScript.
+If you write your test scripts in CoffeeScript, it's totally OK to run them with
+the `perjury` command-line tool, as-is.
+
+```shell
+./node_modules/.bin/perjury test/*.js test/*.coffee
+```
+
+`perjury` uses the CoffeeScript package to load the test modules automatically.
 
 Debugging
 ---------
