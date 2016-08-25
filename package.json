@@ -4,7 +4,7 @@
   "license": "Apache-2.0",
   "description": "false vows",
   "dependencies": {
-    "async": "^1.5.2",
+    "async": "^2.0.1",
     "debug": "^2.2.0",
     "lodash": "^4.11.1",
     "yargs": "^5.0.0"
