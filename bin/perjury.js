@@ -20,6 +20,10 @@
 
 const path = require('path');
 
+// This registers a hook so that coffeescript modules can be loaded
+
+require('coffee-script/register');
+
 const argv = require('yargs')
   .help('h')
   .argv;
