@@ -4,15 +4,17 @@
   "license": "Apache-2.0",
   "description": "false vows",
   "dependencies": {
-    "lodash": "^4.11.1",
     "async": "^1.5.2",
-    "debug": "^2.2.0"
+    "debug": "^2.2.0",
+    "lodash": "^4.11.1",
+    "yargs": "^5.0.0"
+  },
+  "bin": "./bin/perjury.js",
+  "scripts": {
+    "lint": "node_modules/.bin/jshint bin/*.js lib/*.js test/*.js",
+    "test": "node test/test-run.js && node bin/perjury.js test/test-export.js"
   },
   "devDependencies": {
-    "coffee-script": "^1.10.0",
-    "glob": "^7.0.3"
-  },
-  "scripts": {
-    "prepublish": "cake build"
+    "jshint": "^2.9.3"
   }
 }
