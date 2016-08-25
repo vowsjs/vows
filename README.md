@@ -319,6 +319,32 @@ vows.describe('Input/output tests')
   .export(module);
 ```
 
+Debugging
+---------
+
+[Test-driven development](https://en.wikipedia.org/wiki/Test-driven_development)
+means roughly that write your tests *first*, then write the implementations,
+then keep running the tests till they work.
+
+Unfortunately, vows.js can be really hard to use for TDD, because it doesn't
+give you a lot of information about where errors are happening. Sometimes it's
+your test code; at other times it's the code you're trying to test. The
+structures that vows.js and `perjury` use can be tricky to get right.
+
+`perjury` doesn't necessarily do a fantastic job at this, but it's a little
+better, and it's definitely a goal. `perjury` uses the
+[debug](https://www.npmjs.com/package/debug) library to spoot out debug info to
+stderr at run time. This can be very useful for looking at how the `perjury`
+module is running, and figuring out where errors are happening.
+
+To use it, define the `DEBUG` environment variable when running your tests:
+
+```shell
+DEBUG=perjury:* ./node_modules/.bin/perjury mytest.js
+```
+
+Watch this space for more help in doing TDD with perjury.
+
 assert
 ------
 
