@@ -31,11 +31,18 @@ const argv = require('yargs')
 let cwd = process.cwd();
 
 let runTests = (testFileNames) => {
-  testFileNames.forEach((testFileName) => {
-    let testPath = path.join(cwd, testFileName);
-    let runner = require(testPath);
-    runner();
-  });
+  let runNext = (err) => {
+    if (err) {
+      console.error(err);
+    }
+    if (testFileNames.length > 0) {
+      let testFileName = testFileNames.shift();
+      let testPath = path.join(cwd, testFileName);
+      let runner = require(testPath);
+      runner(runNext);
+    }
+  };
+  runNext(null);
 };
 
 runTests(argv._);

@@ -13,7 +13,7 @@
   "bin": "./bin/perjury.js",
   "scripts": {
     "lint": "node_modules/.bin/jshint bin/*.js lib/*.js test/*.js",
-    "test": "node test/test-run.js && node bin/perjury.js test/test-export.js && node bin/perjury.js test/test-export.coffee"
+    "test": "node test/standalone.js && node bin/perjury.js test/test-*.*"
   },
   "devDependencies": {
     "jshint": "^2.9.3"
