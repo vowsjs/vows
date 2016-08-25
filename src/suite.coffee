@@ -1,6 +1,6 @@
 # suite.coffee -- a suite of batches of tests for perjury
 #
-# Copyright 2016 fuzzy.io <evan@fuzzy.io>
+# Copyright 2016 fuzzy.ai <evan@fuzzy.ai>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

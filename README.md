@@ -10,7 +10,7 @@ your tests are mysteriously failing, you have some idea why.
 License
 -------
 
-Copyright 2016 fuzzy.io <legal@fuzzy.io>
+Copyright 2016 fuzzy.ai <legal@fuzzy.ai>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
