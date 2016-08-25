@@ -16,6 +16,8 @@
 
 /* jshint esversion: 6 */
 
+"use strict";
+
 const path = require('path');
 
 const argv = require('yargs')
