@@ -1,4 +1,4 @@
-// test.coffee -- A test script that uses perjury
+// test.js -- A test script that uses perjury
 //
 // Copyright 2016 fuzzy.ai <evan@fuzzy.ai>
 //
