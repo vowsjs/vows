@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // perjury.js -- command-line driver for perjury test scripts
 //
 // Copyright 2016 fuzzy.ai <evan@fuzzy.ai>
