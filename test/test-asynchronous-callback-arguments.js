@@ -26,7 +26,7 @@ const vows = require('../lib/index');
 const assert = vows.assert;
 
 vows
-  .describe('Multiple addBatch() calls')
+  .describe('Asynchronous topic callback arguments')
   .addBatch({
     'When we use the async callback with a single argument': {
       topic() {
