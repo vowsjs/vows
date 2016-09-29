@@ -116,7 +116,7 @@ v0.6.4 / Thu, 23 Aug 2012
   * [3c0dc3b](https://github.com/flatiron/vows/commit/3c0dc3b) Add IEEE float epsilon check (`Trevor Norris`)
   * [bfb8998](https://github.com/flatiron/vows/commit/bfb8998) Add Mocha credit. (`Reid Burke`)
   * [cbd6123](https://github.com/flatiron/vows/commit/cbd6123) Add Mocha-style multi-line string diffs. (`Reid Burke`)
-  * [aa51288](https://github.com/flatiron/vows/commit/aa51288) Add <title> to the HTML coverage report. (`Reid Burke`)
+  * [aa51288](https://github.com/flatiron/vows/commit/aa51288) Add \<title\> to the HTML coverage report. (`Reid Burke`)
   * [f7afb1b](https://github.com/flatiron/vows/commit/f7afb1b) Better style for directory names in coverage menu. (`Reid Burke`)
   * [526f036](https://github.com/flatiron/vows/commit/526f036) Use Mocha's style for HTML coverage report. (`Reid Burke`)
   * [93dbc61](https://github.com/flatiron/vows/commit/93dbc61) Summarize coverage data for HTML report. (`Reid Burke`)
