@@ -80,7 +80,14 @@ vows
       },
       'and we run the suite': {
         topic(suite) {
-          suite.run(this.callback);
+          let callback = this.callback,
+            oldWrite = process.stdout.write,
+            redir = fs.createWriteStream("/dev/null", {defaultEncoding: "utf8"});
+          process.stdout.write = redir.write.bind(redir);
+          suite.run((err, broken, successes, failures) => {
+            process.stdout.write = oldWrite;
+            callback(err, broken, successes, failures);
+          });
         },
         'it works': (err, broken, successes, failures) => {
           assert.ifError(err);
