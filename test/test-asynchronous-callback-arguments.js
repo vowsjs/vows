@@ -67,27 +67,6 @@ vows
     }
   })
   .addBatch({
-    'When we use the async callback with an error argument': {
-      topic() {
-        this.callback(new Error("Oh no Mr. Bill"));
-        return undefined;
-      },
-      'it works': (err) => {
-        assert.isObject(err);
-        assert.instanceOf(err, Error);
-        assert.equal(err.message, "Oh no Mr. Bill");
-      },
-      'sub-batch is not called': {
-        topic() {
-          throw new Error("sub-batch shouldn't be called if parent errored");
-        },
-        'it is not called': (err) => {
-          assert.ifError(err);
-        }
-      }
-    }
-  })
-  .addBatch({
     'When we use the async callback without explicitly returning undefined': {
       topic() {
         this.callback(null, 23);

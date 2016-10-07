@@ -28,21 +28,64 @@ const assert = vows.assert;
 vows
   .describe('throwing an error in a topic')
   .addBatch({
-    'When we throw an error in a topic': {
+    'When we create a suite that throws an error': {
       topic() {
-        throw new Error("Test error");
+        vows
+          .describe('internal sub suite')
+          .addBatch({
+            'When we throw an error in a topic': {
+              topic() {
+                throw new Error("Test error");
+              },
+              'it is passed on to tests': (err) => {
+                assert.isObject(err);
+                assert.instanceOf(err, Error);
+                assert.equal(err.message, "Test error");
+              },
+              'sub batches are not run': {
+                topic() {
+                  throw new Error("This batch should not be run");
+                },
+                "sub-batch tests are not run": (err) => {
+                  assert.ifError(err);
+                }
+              }
+            }})
+          .addBatch({
+            'When we use the async callback with an error argument': {
+              topic() {
+                this.callback(new Error("Oh no Mr. Bill"));
+                return undefined;
+              },
+              'it works': (err) => {
+                assert.isObject(err);
+                assert.instanceOf(err, Error);
+                assert.equal(err.message, "Oh no Mr. Bill");
+              },
+              'sub-batch is not called': {
+                topic() {
+                  throw new Error("sub-batch shouldn't be called if parent errored");
+                },
+                'it is not called': (err) => {
+                  assert.ifError(err);
+                }
+              }
+            }
+          });
       },
-      'it is passed on to tests': (err) => {
-        assert.isObject(err);
-        assert.instanceOf(err, Error);
-        assert.equal(err.message, "Test error");
+      'it works': (err, suite) {
+        assert.ifError(err);
+        assert.isObject(suite);
       },
-      'sub batches are not run': {
-        topic() {
-          throw new Error("This batch should not be run");
+      'and we run the suite': {
+        topic(suite) {
+          suite.run(this.callback);
         },
-        "sub-batch tests are not run": (err) => {
+        'it works': (err, broken, successes, failures) => {
           assert.ifError(err);
+          assert.isNumber(broken);
+          assert.isNumber(successes);
+          assert.isNumber(failures);
         }
       }
     }
