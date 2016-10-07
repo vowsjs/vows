@@ -22,6 +22,9 @@
 
 const path = require('path');
 
+const _ = require('lodash');
+const debug = require('debug')('perjury:command-line');
+
 // This registers a hook so that coffeescript modules can be loaded
 
 require('coffee-script/register');
@@ -32,21 +35,59 @@ const argv = require('yargs')
 
 let cwd = process.cwd();
 
-let runTests = (testFileNames) => {
-  let runNext = (filenames) => {
+let runTests = (testFileNames, callback) => {
+  let broken = 0,
+    successes = 0,
+    failures = 0;
+
+  let runNext = (filenames, callback) => {
     if (filenames.length > 0) {
       let testFileName = filenames[0];
       let testPath = path.join(cwd, testFileName);
       let runner = require(testPath);
-      runner((err) => {
+      runner((err, suiteBroken, suiteSuccesses, suiteFailures) => {
         if (err) {
           console.error(err);
         }
-        runNext(filenames.slice(1));
+        debug(`Finished suite ${testFileName}: ${suiteBroken}, ${suiteSuccesses}, ${suiteFailures}`);
+        if (_.isNumber(suiteBroken)) {
+          broken += suiteBroken;
+
+        }
+        if (_.isNumber(suiteSuccesses)) {
+          successes += suiteSuccesses;
+        }
+        if (_.isNumber(suiteFailures)) {
+          failures += suiteFailures;
+        }
+        runNext(filenames.slice(1), callback);
       });
+    } else {
+      callback(null);
     }
   };
-  runNext(testFileNames);
+
+  runNext(testFileNames, (err) => {
+    if (err) {
+      console.error(err);
+    }
+    debug(`Finished suites: ${broken}, ${successes}, ${failures}`);
+    callback(null, broken, successes, failures);
+  });
 };
 
-runTests(argv._);
+runTests(argv._, (err, broken, successes, failures) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log("SUMMARY");
+    console.log(`\tBroken:\t${broken}`);
+    console.log(`\tSuccesses:\t${successes}`);
+    console.log(`\tFailures:\t${failures}`);
+    if (broken > 0 || failures > 0) {
+      process.exit(1);
+    } else {
+      process.exit(0);
+    }
+  }
+});
