@@ -1,3 +1,21 @@
+# Vows Revitalization Project 2017  
+I don't have much experience with a legacy project like this, so I'm going to use this space for now to lay out a decision making and goal setting process for this library.  
+
+Even if I don't make the best decisions, at least my thought process will be available to anyone still looking at this repo.  
+
+On the chopping block:  
+1. What makes Vows a unique testing library?   
+2. How does it compare to the competition? (Mocha/Chai, Tape, Eva)   
+3. Evaluate the purpose of the existing code and dependencies  
+4. Determine a code style/guideline   
+
+Goals:  
+1. Maintain legacy functionality to support users of older versions.  
+> If I make changes to the core API, I must implement some graceful degradation.  
+
+
+------
+
 # vows [![Build Status](https://api.travis-ci.org/vowsjs/vows.svg)](http://travis-ci.org/vowsjs/vows)
 
 > Asynchronous BDD & continuous integration for node.js
@@ -76,4 +94,3 @@ authors
 [Alexis Sellier](https://github.com/cloudhead), [Charlie Robbins](https://github.com/indexzero), [Jerry Sievert](https://github.com/jerrysievert)
 
 *...and many others*
-

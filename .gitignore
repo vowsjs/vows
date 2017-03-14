@@ -6,3 +6,5 @@ node_modules
 .hg
 .hgsub
 test/npm-debug.log
+C:*
+*.log
