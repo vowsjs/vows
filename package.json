@@ -16,7 +16,7 @@
   "bin": "./bin/perjury.js",
   "scripts": {
     "lint": "node_modules/.bin/jshint bin/*.js lib/*.js test/*.js",
-    "test": "node test/standalone.js && node bin/perjury.js test/test-*.*"
+    "test": "node test/standalone.js && node bin/perjury.js test/test-*.* && (check-node-version --node '< 7.10.1' --quiet || node bin/perjury.js test/atest-*.js)"
   },
   "directories": {
     "lib": "./lib"
@@ -26,10 +26,11 @@
     "async": "^2.0.1",
     "coffee-script": "^1.10.0",
     "debug": "^3.1.0",
-    "lodash": "^4.11.1",
+    "lodash": "^4.17.4",
     "yargs": "^10.0.3"
   },
   "devDependencies": {
+    "check-node-version": "^2.1.0",
     "jshint": "^2.9.3",
     "util-promisify": "^2.1.0"
   }
