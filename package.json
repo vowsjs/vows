@@ -36,5 +36,8 @@
     "jshint": "^2.9.3",
     "nyc": "^11.2.1",
     "util-promisify": "^2.1.0"
+  },
+  "engines": {
+    "node": ">=4 <=8",
   }
 }
