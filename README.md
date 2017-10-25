@@ -443,7 +443,7 @@ few small ways.
     so you can do things like deleting created files in your sub-batch
     teardowns, and deleting their directory in your main batch teardown,
     and things will just work right.
--   vows and perjury 1.x treat a Promise returned from the topic just like any
+-   vows and perjury 0.x treat a Promise returned from the topic just like any
     other results. So test functions will receive the Promise as a results
     argument. perjury 2.x will resolve the Promise and pass the results to the
     test instead. So, if your tests expect to receive a Promise passed
