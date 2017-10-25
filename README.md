@@ -315,12 +315,41 @@ let batch = {
 };
 ```
 
-
 Note that the teardown will be called regardless of whether errors happened or
 not, so it's a good idea to check the arguments to make sure they're valid.
 
 Teardowns are called as soon as the batch finishes; this is different from how
 vows.js works, but it is better.
+
+If you're using a version of node that can handle [async/await syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function),
+(>= 7.10.1), you can use async functions in your topics and teardowns, which can
+make your aysnchronous test code about as lovely and compact as can be.
+
+```javascript
+
+const fs = require('fs');
+const util = require('util');
+
+// util.promisify is available in node > 8.0.0
+
+const open = util.promisify(fs.open);
+const close = util.promisify(fs.close);
+
+let batch = {
+  "When we get the answer":  {
+    topic: async function () {
+      return await open("/tmp/testfile", "w");
+    },
+    "it equals 42": (err, fd) => {
+      assert.ifError(err);
+      assert.isNumber(fd);
+    },
+    teardown: async function (fd) {
+      return await close(fd);
+    }
+  }
+};
+```
 
 ### Suite
 
