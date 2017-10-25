@@ -425,6 +425,30 @@ DEBUG=perjury:* ./node_modules/.bin/perjury mytest.js
 
 Watch this space for more help in doing TDD with perjury.
 
+Compatibility
+-------------
+
+This version is incompatible with vows and previous versions of perjury in a
+few small ways.
+
+-   vows will check the [arity](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/length) of
+    test methods and call the method different ways based on that arity. With
+    perjury, tests will always take an error argument and then zero or
+    more result arguments. This should help preserve your sanity and make you
+    write more robust tests.
+-   vows will automatically pollute the namespace of the `assert` module.
+    perjury makes you use a property instead.
+-   vows handles all teardowns at the same time, without waiting for sub-batch
+    teardowns to finish. perjury handles teardowns when the batch is finished,
+    so you can do things like deleting created files in your sub-batch
+    teardowns, and deleting their directory in your main batch teardown,
+    and things will just work right.
+-   vows and perjury 1.x treat a Promise returned from the topic just like any
+    other results. So test functions will receive the Promise as a results
+    argument. perjury 2.x will resolve the Promise and pass the results to the
+    test instead. So, if your tests expect to receive a Promise passed
+    synchronously, you should change that.
+
 assert
 ------
 
