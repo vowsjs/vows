@@ -10,7 +10,9 @@ your tests are mysteriously failing, you have some idea why.
 License
 -------
 
-Copyright 2016 fuzzy.ai <legal@fuzzy.ai>
+Copyright 2016, 2017 fuzzy.ai <mailto:legal@fuzzy.ai>
+
+Copyright 2017 AJ Jordan <mailto:alex@strugee.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -70,6 +72,7 @@ vows
   .run();
 
 ```
+
 Introduction
 ------------
 
@@ -159,6 +162,32 @@ let batch = {
 };
 ```
 
+Alternately, a topic can return a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+Perjury will resolve the returned Promise and call tests with the same `(err, results)`
+format as with other types of call.
+
+```javascript
+let batch = {
+  "When we get the answer":  {
+    topic() {
+      return new Promise((resolve, reject) => {
+        fs.open("/tmp/testfile", "w", (err, fd) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(fd);
+          }
+        })
+      });
+    },
+    "it equals 42": (err, fd) => {
+      assert.ifError(err);
+      assert.isNumber(fd);
+    }
+  }
+};
+```
+
 Note that all test functions receive at least an `err` argument, and then one or
 more arguments. Synchronous batches can only have one test argument; asynchronous
 batches can have a lot.
@@ -219,10 +248,10 @@ sub-batches will not be run.
 The `teardown` method is called after all the tests and sub-batches have been run.
 So, the order is something like this:
 
-- topic
-- tests
-- sub-batches (if there are no errors)
-- teardown
+   - topic
+   - tests
+   - sub-batches (if there are no errors)
+   - teardown
 
 The `teardown` gets the non-error results of the `topic` as arguments. It's useful
 for cleaning up things that the `topic` made a mess of.
@@ -246,8 +275,46 @@ batch = {
 
 ```
 
-`teardown` functions can also be synchronous or asynchronous. However, the
-results are ignored.
+`teardown` functions can also be synchronous or asynchronous, or they can return
+a Promise. However, the results are ignored.
+
+```javascript
+let batch = {
+  "When we get the answer":  {
+    topic() {
+      return new Promise((resolve, reject) => {
+        fs.open("/tmp/testfile", "w", (err, fd) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(fd);
+          }
+        })
+      });
+    },
+    "it equals 42": (err, fd) => {
+      assert.ifError(err);
+      assert.isNumber(fd);
+    },
+    teardown(fd) {
+      return new Promise((resolve, reject) => {
+        if (typeof(fd) != 'number') {
+          reject(new Error("File descriptor is not a number"));
+        } else {
+          fs.close(fd, (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          })
+        }
+      });
+    }
+  }
+};
+```
+
 
 Note that the teardown will be called regardless of whether errors happened or
 not, so it's a good idea to check the arguments to make sure they're valid.
