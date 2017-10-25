@@ -474,7 +474,7 @@ few small ways.
     and things will just work right.
 -   vows and perjury 0.x treat a Promise returned from the topic just like any
     other results. So test functions will receive the Promise as a results
-    argument. perjury 2.x will resolve the Promise and pass the results to the
+    argument. perjury 1.x will resolve the Promise and pass the results to the
     test instead. So, if your tests expect to receive a Promise passed
     synchronously, you should change that.
 
