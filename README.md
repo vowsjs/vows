@@ -261,7 +261,7 @@ Batches are organized into suites. You create a suite with the `describe` method
 of `vows`.
 
 ```javascript
-const vows = require('vows');
+const vows = require('perjury');
 
 let suite = vows.describe('A new suite');
 ```
@@ -298,7 +298,7 @@ and then use `export(module)` or more rarely `run()` to run the suite.
 
 ```javascript
 const fs = require('fs');
-const vows = require('vows');
+const vows = require('perjury');
 let assert = vows.assert;
 
 vows.describe('Input/output tests')
