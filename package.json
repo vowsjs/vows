@@ -16,7 +16,8 @@
   "bin": "./bin/perjury.js",
   "scripts": {
     "lint": "node_modules/.bin/jshint bin/*.js lib/*.js test/*.js",
-    "test": "node test/standalone.js && node bin/perjury.js test/test-*.* && (check-node-version --node '< 7.10.1' --quiet || node bin/perjury.js test/atest-*.js)"
+    "test": "node test/standalone.js && node bin/perjury.js test/test-*.* && (check-node-version --node '< 7.10.1' --quiet || node bin/perjury.js test/atest-*.js)",
+    "test-coverage": "nyc -r lcov npm test"
   },
   "directories": {
     "lib": "./lib"
@@ -31,7 +32,9 @@
   },
   "devDependencies": {
     "check-node-version": "^2.1.0",
+    "coveralls": "^3.0.0",
     "jshint": "^2.9.3",
+    "nyc": "^11.2.1",
     "util-promisify": "^2.1.0"
   }
 }

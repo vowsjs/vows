@@ -3,6 +3,8 @@ node_js:
 - '8'
 - '6'
 - '4'
+script: npm run test-coverage
+after_script: ./node_modules/.bin/coveralls < coverage/lcov.info
 deploy:
   provider: npm
   email: evan@fuzzy.ai
