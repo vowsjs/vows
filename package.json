@@ -30,6 +30,7 @@
     "yargs": "^10.0.3"
   },
   "devDependencies": {
-    "jshint": "^2.9.3"
+    "jshint": "^2.9.3",
+    "util-promisify": "^2.1.0"
   }
 }
