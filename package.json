@@ -38,6 +38,6 @@
     "util-promisify": "^2.1.0"
   },
   "engines": {
-    "node": ">=4 <=8",
+    "node": ">=4 <=8"
   }
 }
