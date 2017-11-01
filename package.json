@@ -1,6 +1,6 @@
 {
   "name": "perjury",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "license": "Apache-2.0",
   "description": "testing framework with similar structure to vows.js",
   "keywords": [
