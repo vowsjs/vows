@@ -2,6 +2,12 @@
 
 Perjury adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.0.10 - 2017-11-02
+
+### Fixed
+
+* Resolve Node 4 crashes due to ES6 rest parameter use
+
 ## 1.0.9 - 2017-11-01
 
 ### Changed
