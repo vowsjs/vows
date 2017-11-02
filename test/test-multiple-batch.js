@@ -16,31 +16,31 @@
 
 /* jshint esversion: 6 */
 
-"use strict";
+'use strict'
 
-const fs = require('fs');
+const fs = require('fs')
 
-const _ = require('lodash');
-const debug = require('debug')('perjury:test-multiple-batch');
+const _ = require('lodash')
+const debug = require('debug')('perjury:test-multiple-batch')
 
-const vows = require('../lib/index');
-const assert = vows.assert;
+const vows = require('../lib/index')
+const assert = vows.assert
 
 // benedict
-let numberBatch = (num) => {
-  let batch = {};
+const numberBatch = (num) => {
+  const batch = {}
   batch[`When we return ${num}`] = {
-    topic() {
-      return num;
+    topic () {
+      return num
     },
     'it works': (err, value) => {
-      assert.ifError(err);
-      assert.isNumber(value);
-      assert.equal(value, num);
+      assert.ifError(err)
+      assert.isNumber(value)
+      assert.equal(value, num)
     }
-  };
-  return batch;
-};
+  }
+  return batch
+}
 
 vows
   .describe('Multiple addBatch() calls')
@@ -50,4 +50,4 @@ vows
   .addBatch(numberBatch(16))
   .addBatch(numberBatch(23))
   .addBatch(numberBatch(42))
-  .export(module);
+  .export(module)

@@ -17,65 +17,65 @@
 
 /* jshint esversion: 6 */
 
-"use strict";
+'use strict'
 
-const _ = require('lodash');
-const debug = require('debug')('perjury:test-asynchronous-callback-arguments');
+const _ = require('lodash')
+const debug = require('debug')('perjury:test-asynchronous-callback-arguments')
 
-const vows = require('../lib/index');
-const assert = vows.assert;
+const vows = require('../lib/index')
+const assert = vows.assert
 
 vows
   .describe('Asynchronous topic callback arguments')
   .addBatch({
     'When we use the async callback with a single argument': {
-      topic() {
-        this.callback(null, 42);
-        return undefined;
+      topic () {
+        this.callback(null, 42)
+        return undefined
       },
       'it works': (err, value) => {
-        assert.ifError(err);
-        assert.isNumber(value);
-        assert.equal(value, 42);
+        assert.ifError(err)
+        assert.isNumber(value)
+        assert.equal(value, 42)
       }
     }
   })
   .addBatch({
     'When we use the async callback with multiple arguments': {
-      topic() {
-        this.callback(null, 4, 8);
-        return undefined;
+      topic () {
+        this.callback(null, 4, 8)
+        return undefined
       },
       'it works': (err, value1, value2) => {
-        assert.ifError(err);
-        assert.isNumber(value1);
-        assert.equal(value1, 4);
-        assert.isNumber(value2);
-        assert.equal(value2, 8);
+        assert.ifError(err)
+        assert.isNumber(value1)
+        assert.equal(value1, 4)
+        assert.isNumber(value2)
+        assert.equal(value2, 8)
       }
     }
   })
   .addBatch({
     'When we use the async callback with no arguments': {
-      topic() {
-        this.callback();
-        return undefined;
+      topic () {
+        this.callback()
+        return undefined
       },
       'it works': (err) => {
-        assert.ifError(err);
+        assert.ifError(err)
       }
     }
   })
   .addBatch({
     'When we use the async callback without explicitly returning undefined': {
-      topic() {
-        this.callback(null, 23);
+      topic () {
+        this.callback(null, 23)
       },
       'it works': (err, value) => {
-        assert.ifError(err);
-        assert.isNumber(value);
-        assert.equal(value, 23);
+        assert.ifError(err)
+        assert.isNumber(value)
+        assert.equal(value, 23)
       }
     }
   })
-  .export(module);
+  .export(module)

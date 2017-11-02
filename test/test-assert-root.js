@@ -16,41 +16,41 @@
 
 /* jshint esversion: 6 */
 
-"use strict";
+'use strict'
 
-const vows = require('../lib/index');
-const assert = vows.assert;
+const vows = require('../lib/index')
+const assert = vows.assert
 
 vows
   .describe('bare assert()')
   .addBatch({
     'When we assert(true)': {
-      topic() {
+      topic () {
         try {
-          assert(true);
-          this.callback(null);
+          assert(true)
+          this.callback(null)
         } catch (err) {
-          this.callback(err);
+          this.callback(err)
         }
       },
       'it succeeds': (err) => {
-        assert.ifError(err);
+        assert.ifError(err)
       }
     }
   })
   .addBatch({
     'When we assert(false)': {
-      topic() {
+      topic () {
         try {
-          assert(false);
-          this.callback(new Error('Unexpected success'));
+          assert(false)
+          this.callback(new Error('Unexpected success'))
         } catch (err) {
-          this.callback(null);
+          this.callback(null)
         }
       },
       'it fails': (err) => {
-        assert.ifError(err);
+        assert.ifError(err)
       }
     }
   })
-  .export(module);
+  .export(module)

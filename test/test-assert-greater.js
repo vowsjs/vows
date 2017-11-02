@@ -16,61 +16,61 @@
 
 /* jshint esversion: 6 */
 
-"use strict";
+'use strict'
 
-const fs = require('fs');
+const fs = require('fs')
 
-const _ = require('lodash');
-const debug = require('debug')('perjury:test-assert-greater');
+const _ = require('lodash')
+const debug = require('debug')('perjury:test-assert-greater')
 
-const vows = require('../lib/index');
-const assert = vows.assert;
+const vows = require('../lib/index')
+const assert = vows.assert
 
-const js = JSON.stringify;
+const js = JSON.stringify
 
-var shouldSucceed = (actual, expected) => {
-  var batch = {
-    topic() {
+const shouldSucceed = (actual, expected) => {
+  const batch = {
+    topic () {
       try {
-          assert.greater(actual, expected);
-          this.callback(null);
+        assert.greater(actual, expected)
+        this.callback(null)
       } catch (err) {
-          this.callback(err);
+        this.callback(err)
       }
     },
     'it works': (err) => {
-        assert.ifError(err);
+      assert.ifError(err)
     }
-  };
-  return batch;
-};
+  }
+  return batch
+}
 
-var shouldFail = (actual, expected) => {
-  var batch = {
-    topic() {
+const shouldFail = (actual, expected) => {
+  const batch = {
+    topic () {
       try {
-          assert.greater(actual, expected);
-          this.callback(new Error("Unexpected success"));
+        assert.greater(actual, expected)
+        this.callback(new Error('Unexpected success'))
       } catch (err) {
-          this.callback(null);
+        this.callback(null)
       }
     },
-    "it works": (err) => {
-        assert.ifError(err);
+    'it works': (err) => {
+      assert.ifError(err)
     }
-  };
-  return batch;
-};
+  }
+  return batch
+}
 
 vows
   .describe('assert.greater()')
   .addBatch({
     'When actual > extended': shouldSucceed(2, 1)
-   })
-   .addBatch({
+  })
+  .addBatch({
     'When actual < extended': shouldFail(1, 2)
-   })
-   .addBatch({
+  })
+  .addBatch({
     'When actual == extended': shouldFail(1, 1)
-   })
-  .export(module);
+  })
+  .export(module)

@@ -18,66 +18,66 @@
 
 /* jshint esversion: 6 */
 
-"use strict";
+'use strict'
 
-const path = require('path');
+const path = require('path')
 
-const _ = require('lodash');
-const async = require('async');
-const debug = require('debug')('perjury:command-line');
+const _ = require('lodash')
+const async = require('async')
+const debug = require('debug')('perjury:command-line')
 
 // This registers a hook so that coffeescript modules can be loaded
 
-require('coffee-script/register');
+require('coffee-script/register')
 
 const argv = require('yargs')
   .help('h')
-  .argv;
+  .argv
 
-let cwd = process.cwd();
+const cwd = process.cwd()
 
 let broken = 0,
   successes = 0,
-  failures = 0;
+  failures = 0
 
 const runTestSuite = (testFileName, callback) => {
-  let testPath = path.join(cwd, testFileName);
-  let runner = require(testPath);
+  const testPath = path.join(cwd, testFileName)
+  const runner = require(testPath)
   if (!_.isFunction(runner)) {
-    callback(new Error(`Path ${testFileName} does not return a function`));
+    callback(new Error(`Path ${testFileName} does not return a function`))
   } else {
     runner((err, suiteBroken, suiteSuccesses, suiteFailures) => {
       if (err) {
-        callback(err);
+        callback(err)
       } else if (!_.isNumber(suiteBroken)) {
-        callback(new Error(`suiteBroken for ${testFileName} should be a number, is ${suiteBroken}`));
+        callback(new Error(`suiteBroken for ${testFileName} should be a number, is ${suiteBroken}`))
       } else if (!_.isNumber(suiteSuccesses)) {
-        callback(new Error(`suiteSuccesses for ${testFileName} should be a number, is ${suiteSuccesses}`));
+        callback(new Error(`suiteSuccesses for ${testFileName} should be a number, is ${suiteSuccesses}`))
       } else if (!_.isNumber(suiteFailures)) {
-        callback(new Error(`suiteFailures for ${testFileName} should be a number, is ${suiteFailures}`));
+        callback(new Error(`suiteFailures for ${testFileName} should be a number, is ${suiteFailures}`))
       } else {
-        debug(`Finished suite ${testFileName}: ${suiteBroken}, ${suiteSuccesses}, ${suiteFailures}`);
-        broken += suiteBroken;
-        successes += suiteSuccesses;
-        failures += suiteFailures;
-        callback(null);
+        debug(`Finished suite ${testFileName}: ${suiteBroken}, ${suiteSuccesses}, ${suiteFailures}`)
+        broken += suiteBroken
+        successes += suiteSuccesses
+        failures += suiteFailures
+        callback(null)
       }
-    });
+    })
   }
-};
+}
 
 async.eachSeries(argv._, runTestSuite, (err) => {
   if (err) {
-    console.error(err);
+    console.error(err)
   } else {
-    console.log("SUMMARY");
-    console.log(`\tBroken:\t\t${broken}`);
-    console.log(`\tSuccesses:\t${successes}`);
-    console.log(`\tFailures:\t${failures}`);
+    console.log('SUMMARY')
+    console.log(`\tBroken:\t\t${broken}`)
+    console.log(`\tSuccesses:\t${successes}`)
+    console.log(`\tFailures:\t${failures}`)
     if (broken > 0 || failures > 0) {
-      process.exit(1);
+      process.exit(1)
     } else {
-      process.exit(0);
+      process.exit(0)
     }
   }
-});
+})

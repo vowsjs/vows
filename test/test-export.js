@@ -16,42 +16,42 @@
 
 /* jshint esversion: 6 */
 
-"use strict";
+'use strict'
 
-const fs = require('fs');
+const fs = require('fs')
 
-const _ = require('lodash');
+const _ = require('lodash')
 
-const vows = require('../lib/index');
-const assert = vows.assert;
+const vows = require('../lib/index')
+const assert = vows.assert
 
 vows
   .describe('export(module) test')
   .addBatch({
     'When we open a file': {
-      topic() {
-        fs.open("/tmp/fakefile", "w", this.callback);
-        return undefined;
+      topic () {
+        fs.open('/tmp/fakefile', 'w', this.callback)
+        return undefined
       },
-      ['it works'](err, fd) {
-        assert.ifError(err);
-        return assert.isNumber(fd);
+      'it works' (err, fd) {
+        assert.ifError(err)
+        return assert.isNumber(fd)
       },
-      teardown(fd) {
-        fs.close(fd, this.callback);
-        return undefined;
+      teardown (fd) {
+        fs.close(fd, this.callback)
+        return undefined
       },
       'and we write to the file': {
-        topic(fd) {
-          fs.write(fd, "My dog has fleas\n", this.callback);
-          return undefined;
+        topic (fd) {
+          fs.write(fd, 'My dog has fleas\n', this.callback)
+          return undefined
         },
-        ['it works'](err, written, buffer) {
-          assert.ifError(err);
-          assert.greater(written, 0);
-          return assert.isString(buffer);
+        'it works' (err, written, buffer) {
+          assert.ifError(err)
+          assert.greater(written, 0)
+          return assert.isString(buffer)
         }
       }
     }
   })
-  .export(module);
+  .export(module)

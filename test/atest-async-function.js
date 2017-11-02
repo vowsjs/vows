@@ -16,33 +16,33 @@
 
 /* jshint esversion: 6 */
 
-"use strict";
+'use strict'
 
-const fs = require('fs');
+const fs = require('fs')
 
-const _ = require('lodash');
-const promisify = require('util-promisify');
+const _ = require('lodash')
+const promisify = require('util-promisify')
 
-const vows = require('../lib/index');
-const assert = vows.assert;
+const vows = require('../lib/index')
+const assert = vows.assert
 
-const open = promisify(fs.open);
-const close = promisify(fs.close);
+const open = promisify(fs.open)
+const close = promisify(fs.close)
 
 vows
   .describe('using an async function as a topic and teardown')
   .addBatch({
     'When we create a topic that returns a Promise': {
-      topic: async function() {
-        return await open("/tmp/fakefile", "w");
+      topic: async function () {
+        return await open('/tmp/fakefile', 'w')
       },
       'it works': (err, fd) => {
-        assert.ifError(err);
-        assert.isNumber(fd, (fd instanceof Promise) ? "fd is a Promise" : "fd is not a number");
+        assert.ifError(err)
+        assert.isNumber(fd, (fd instanceof Promise) ? 'fd is a Promise' : 'fd is not a number')
       },
-      'teardown': async function(fd) {
-        return await close(fd);
+      'teardown': async function (fd) {
+        return await close(fd)
       }
     }
   })
-  .export(module);
+  .export(module)

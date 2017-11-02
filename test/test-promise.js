@@ -16,45 +16,45 @@
 
 /* jshint esversion: 6 */
 
-"use strict";
+'use strict'
 
-const fs = require('fs');
+const fs = require('fs')
 
-const _ = require('lodash');
+const _ = require('lodash')
 
-const vows = require('../lib/index');
-const assert = vows.assert;
+const vows = require('../lib/index')
+const assert = vows.assert
 
 vows
   .describe('returning a Promise from a topic')
   .addBatch({
     'When we create a topic that returns a Promise': {
-      topic() {
+      topic () {
         return new Promise((resolve, reject) => {
-          fs.open("/tmp/fakefile", "w", (err, fd) => {
+          fs.open('/tmp/fakefile', 'w', (err, fd) => {
             if (err) {
-              reject(err);
+              reject(err)
             } else {
-              resolve(fd);
+              resolve(fd)
             }
-          });
-        });
+          })
+        })
       },
       'it works': (err, fd) => {
-        assert.ifError(err);
-        assert.isNumber(fd, (fd instanceof Promise) ? "fd is a Promise" : "fd is not a number");
+        assert.ifError(err)
+        assert.isNumber(fd, (fd instanceof Promise) ? 'fd is a Promise' : 'fd is not a number')
       },
       'teardown': (fd) => {
         return new Promise((resolve, reject) => {
           fs.close(fd, (err) => {
             if (err) {
-              reject(err);
+              reject(err)
             } else {
-              resolve();
+              resolve()
             }
-          });
-        });
+          })
+        })
       }
     }
   })
-  .export(module);
+  .export(module)

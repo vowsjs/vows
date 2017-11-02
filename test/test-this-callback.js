@@ -16,37 +16,37 @@
 
 /* jshint esversion: 6 */
 
-'use strict';
+'use strict'
 
-const vows = require('../lib/index');
-const assert = vows.assert;
+const vows = require('../lib/index')
+const assert = vows.assert
 
 vows
   .describe('this.callback()')
   .addBatch({
     'this.callback': {
-      topic() {
+      topic () {
         // We can't return this.callback directly because if it's undefined, Perjury thinks it's an async batch
-        return {cb: this.callback};
+        return {cb: this.callback}
       },
       'is a function': (err, obj) => {
-        assert.isObject(obj);
+        assert.isObject(obj)
 
-        const cb = obj.cb;
-        assert.isFunction(cb);
+        const cb = obj.cb
+        assert.isFunction(cb)
       },
       'in a sub-batch': {
-        topic() {
-          return {cb: this.callback};
+        topic () {
+          return {cb: this.callback}
         },
         'is a function': (err, obj) => {
-          assert.isObject(obj);
+          assert.isObject(obj)
 
-          const cb = obj.cb;
-          assert.isFunction(cb);
+          const cb = obj.cb
+          assert.isFunction(cb)
         }
 
-      }       
+      }
     }
   })
-  .export(module);
+  .export(module)

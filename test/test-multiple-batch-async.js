@@ -16,31 +16,31 @@
 
 /* jshint esversion: 6 */
 
-"use strict";
+'use strict'
 
-const fs = require('fs');
+const fs = require('fs')
 
-const _ = require('lodash');
-const debug = require('debug')('perjury:test-multiple-batch-async');
+const _ = require('lodash')
+const debug = require('debug')('perjury:test-multiple-batch-async')
 
-const vows = require('../lib/index');
-const assert = vows.assert;
+const vows = require('../lib/index')
+const assert = vows.assert
 
-let numberBatchAsync = (num) => {
-  let batch = {};
+const numberBatchAsync = (num) => {
+  const batch = {}
   batch[`When we return ${num}`] = {
-    topic() {
-      this.callback(null, num);
-      return undefined;
+    topic () {
+      this.callback(null, num)
+      return undefined
     },
     'it works': (err, value) => {
-      assert.ifError(err);
-      assert.isNumber(value);
-      assert.equal(value, num);
+      assert.ifError(err)
+      assert.isNumber(value)
+      assert.equal(value, num)
     }
-  };
-  return batch;
-};
+  }
+  return batch
+}
 
 vows
   .describe('Multiple addBatch() calls with async results')
@@ -50,4 +50,4 @@ vows
   .addBatch(numberBatchAsync(16))
   .addBatch(numberBatchAsync(23))
   .addBatch(numberBatchAsync(42))
-  .export(module);
+  .export(module)
