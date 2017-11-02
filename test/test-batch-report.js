@@ -110,4 +110,132 @@ vows.describe('batch report')
       }
     }
   ))
+  .addBatch(br('When we run a batch with failures', 0, 2, 2, {
+      topic() {
+        return 3;
+      },
+      'it works': (err, result) => {
+        assert.ifError(err);
+      },
+      'it is a number': (err, result) => {
+        assert.ifError(err);
+        assert.isNumber(result)
+      },
+      'it equals 4': (err, result) => {
+        assert.ifError(err);
+        assert.equal(result, 4)
+      },
+      'it is greater than 7': (err, result) => {
+        assert.ifError(err)
+        assert.greater(result, 7)
+      }
+    }
+  ))
+  .addBatch(br('When we run a batch with failures in the sub-batches', 0, 6, 4, {
+      topic() {
+        return 3;
+      },
+      'it works': (err, result) => {
+        assert.ifError(err);
+      },
+      'it is a number': (err, result) => {
+        assert.ifError(err);
+        assert.isNumber(result)
+      },
+      'and we run a sub-batch': {
+        topic() {
+          return 2;
+        },
+        'it works': (err, result) => {
+          assert.ifError(err);
+        },
+        'it is a number': (err, result) => {
+          assert.ifError(err);
+          assert.isNumber(result)
+        },
+        'it equals 4': (err, result) => {
+          assert.ifError(err);
+          assert.equal(result, 4)
+        },
+        'it is greater than 7': (err, result) => {
+          assert.ifError(err)
+          assert.greater(result, 7)
+        }
+      },
+      'and we run another sub-batch': {
+        topic() {
+          return 5;
+        },
+        'it works': (err, result) => {
+          assert.ifError(err);
+        },
+        'it is a number': (err, result) => {
+          assert.ifError(err);
+          assert.isNumber(result)
+        },
+        'it equals 4': (err, result) => {
+          assert.ifError(err);
+          assert.equal(result, 4)
+        },
+        'it is greater than 7': (err, result) => {
+          assert.ifError(err)
+          assert.greater(result, 7)
+        }
+      }
+    }
+  ))
+  .addBatch(br('When we run a batch with an error', 1, 2, 3, {
+      topic() {
+        this.callback(new Error('Sample error'), 3)
+        return undefined;
+      },
+      'it works': (err, result) => {
+        assert.ifError(err);
+      },
+      'it is a number': (err, result) => {
+        assert.isNumber(result)
+      },
+      'it is the right value': (err, result) => {
+        assert.equal(result, 3)
+      },
+      'it is greater than 7': (err, result) => {
+        assert.greater(result, 7)
+      },
+      'it is less than 0': (err, result) => {
+        assert.lesser(result, 0)
+      }
+    }
+  ))
+  .addBatch(br('When we run a batch with a sub-batch with an error', 1, 3, 3, {
+    topic() {
+      return 4;
+    },
+    'it works': (err, result) => {
+      assert.ifError(err)
+      assert.isNumber(result)
+      assert.equal(result, 4)
+    },
+    'and we run the sub-batch': {
+        topic() {
+          this.callback(new Error('Sample error'), 3)
+          return undefined;
+        },
+        'it works': (err, result) => {
+          assert.ifError(err);
+        },
+        'it is a number': (err, result) => {
+          assert.isNumber(result)
+        },
+        'it is the right value': (err, result) => {
+          assert.equal(result, 3)
+        },
+        'it is greater than 7': (err, result) => {
+          assert.greater(result, 7)
+        },
+        'it is less than 0': (err, result) => {
+          assert.lesser(result, 0)
+        }
+      }
+    }
+  ))
   .export(module);
