@@ -20,11 +20,10 @@
 
 const fs = require('fs')
 
-const _ = require('lodash')
 const promisify = require('util-promisify')
 
 const vows = require('../lib/index')
-const assert = vows.assert
+const {assert} = vows
 
 const open = promisify(fs.open)
 const close = promisify(fs.close)
@@ -34,14 +33,16 @@ vows
   .addBatch({
     'When we create a topic that returns a Promise': {
       topic: async function () {
-        return await open('/tmp/fakefile', 'w')
+        const result = await open('/tmp/fakefile', 'w')
+        return result
       },
       'it works': (err, fd) => {
         assert.ifError(err)
         assert.isNumber(fd, (fd instanceof Promise) ? 'fd is a Promise' : 'fd is not a number')
       },
       'teardown': async function (fd) {
-        return await close(fd)
+        const result = await close(fd)
+        return result
       }
     }
   })
