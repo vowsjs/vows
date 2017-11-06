@@ -19,11 +19,8 @@
 
 'use strict'
 
-const _ = require('lodash')
-const debug = require('debug')('perjury:test-asynchronous-callback-arguments')
-
 const vows = require('../lib/index')
-const assert = vows.assert
+const {assert} = vows
 
 vows
   .describe('Asynchronous topic callback arguments')
