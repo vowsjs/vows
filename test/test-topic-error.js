@@ -20,10 +20,8 @@
 
 const fs = require('fs')
 
-const _ = require('lodash')
-
 const vows = require('../lib/index')
-const assert = vows.assert
+const {assert} = vows
 
 vows
   .describe('throwing an error in a topic')
@@ -80,9 +78,9 @@ vows
       },
       'and we run the suite': {
         topic (suite) {
-          let callback = this.callback,
-            oldWrite = process.stdout.write,
-            redir = fs.createWriteStream('/dev/null', {defaultEncoding: 'utf8'})
+          const {callback} = this
+          const oldWrite = process.stdout.write
+          const redir = fs.createWriteStream('/dev/null', {defaultEncoding: 'utf8'})
           process.stdout.write = redir.write.bind(redir)
           suite.run((err, broken, successes, failures) => {
             process.stdout.write = oldWrite
