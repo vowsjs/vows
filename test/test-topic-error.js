@@ -21,7 +21,7 @@
 const fs = require('fs')
 
 const vows = require('../lib/index')
-const {assert} = vows
+const assert = vows.assert
 
 vows
   .describe('throwing an error in a topic')
@@ -78,7 +78,7 @@ vows
       },
       'and we run the suite': {
         topic (suite) {
-          const {callback} = this
+          const callback = this.callback
           const oldWrite = process.stdout.write
           const redir = fs.createWriteStream('/dev/null', {defaultEncoding: 'utf8'})
           process.stdout.write = redir.write.bind(redir)

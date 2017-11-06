@@ -21,7 +21,7 @@
 const debug = require('debug')('perjury:test-topic-argument')
 
 const vows = require('../lib/index')
-const {assert} = vows
+const assert = vows.assert
 
 const js = JSON.stringify
 

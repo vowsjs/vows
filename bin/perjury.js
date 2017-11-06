@@ -30,8 +30,9 @@ const debug = require('debug')('perjury:command-line')
 
 require('coffee-script/register')
 
-const {argv} = require('yargs')
+const argv = require('yargs')
   .help('h')
+  .argv
 
 const cwd = process.cwd()
 

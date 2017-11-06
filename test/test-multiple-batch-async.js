@@ -19,7 +19,7 @@
 'use strict'
 
 const vows = require('../lib/index')
-const {assert} = vows
+const assert = vows.assert
 
 const numberBatchAsync = (num) => {
   const batch = {}

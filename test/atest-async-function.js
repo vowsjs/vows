@@ -23,7 +23,7 @@ const fs = require('fs')
 const promisify = require('util-promisify')
 
 const vows = require('../lib/index')
-const {assert} = vows
+const assert = vows.assert
 
 const open = promisify(fs.open)
 const close = promisify(fs.close)

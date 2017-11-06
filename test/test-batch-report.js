@@ -21,7 +21,7 @@
 const vows = require('../lib/index')
 const Batch = require('../lib/batch')
 const Report = require('../lib/report')
-const {assert} = vows
+const assert = vows.assert
 
 const br = (title, broken, successes, failures, def) => {
   const bd = {}

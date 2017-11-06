@@ -21,7 +21,7 @@
 const fs = require('fs')
 
 const vows = require('../lib/index')
-const {assert} = vows
+const assert = vows.assert
 
 vows
   .describe('export(module) test')

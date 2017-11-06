@@ -19,7 +19,7 @@
 'use strict'
 
 const vows = require('../lib/index')
-const {assert} = vows
+const assert = vows.assert
 
 vows
   .describe('this.callback()')
@@ -32,7 +32,7 @@ vows
       'is a function': (err, obj) => {
         assert.ifError(err)
         assert.isObject(obj)
-        const {cb} = obj
+        const cb = obj.cb
         assert.isFunction(cb)
       },
       'in a sub-batch': {
@@ -42,7 +42,7 @@ vows
         'is a function': (err, obj) => {
           assert.ifError(err)
           assert.isObject(obj)
-          const {cb} = obj
+          const cb = obj.cb
           assert.isFunction(cb)
         }
       }
