@@ -1,6 +1,6 @@
-// test.js -- A test script that uses perjury
+// standalone.js -- A test script that uses perjury
 //
-// Copyright 2016 fuzzy.ai <evan@fuzzy.ai>
+// Copyright 2016, 2017 fuzzy.ai <evan@fuzzy.ai>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,9 +20,8 @@
 
 const fs = require('fs')
 
-const _ = require('lodash')
 const vows = require('../lib/index')
-const assert = vows.assert
+const {assert} = vows
 
 vows.describe('run() test')
   .addBatch({
