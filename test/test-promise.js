@@ -20,10 +20,8 @@
 
 const fs = require('fs')
 
-const _ = require('lodash')
-
 const vows = require('../lib/index')
-const assert = vows.assert
+const {assert} = vows
 
 vows
   .describe('returning a Promise from a topic')
