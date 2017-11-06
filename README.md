@@ -149,9 +149,11 @@ result returned by the `topic` function is `undefined`.
 
 ```javascript
 let batch = {
-  "When we get the answer":  {
+  "When we get the answer asynchronously":  {
     topic() {
-      this.callback(null, 6 * 7);
+      setImmediate(() => {
+        this.callback(null, 6 * 7);
+      });
       return undefined;
     },
     "it equals 42": (err, answer) => {
@@ -192,6 +194,11 @@ Note that all test functions receive at least an `err` argument, and then one or
 more arguments. Synchronous batches can only have one test argument; asynchronous
 batches can have a lot.
 
+For backwards compatibility, it's possible to call `this.callback` synchronously
+in your `topic`. Perjury will simply call `setImmediate` to call the callback
+later. But that is a tricky and confusing way to write your tests, and you
+should probably avoid it.
+
 A batch can also have sub-batches. These are just properties of the batch that are
 also batch objects, with their own `topic`, tests, sub-batches, `teardown`, etc.
 The argument to the topic will be the results of the parent batch, in reverse
@@ -201,8 +208,7 @@ order up the hierarchy.
 let batch = {
   "When we get the answer":  {
     topic() {
-      this.callback(null, 6 * 7);
-      return undefined;
+      return 6 * 7;
     },
     "it equals 42": (err, answer) => {
       assert.ifError(err);
@@ -211,26 +217,27 @@ let batch = {
     },
     "and we ask a couple of questions": {
       topic(answer) {
-        this.callback(null, "What is six times seven?", "How many roads must a person walk down?");
-        return undefined;
+        return ["What is six times seven?", "How many roads must a person walk down?"];
       },
-      "they look plausible": (err, question1, question2) => {
+      "they look plausible": (err, questions) => {
         assert.ifError(err);
-        assert.isString(question1);
-        assert.equal(question1[question1.length - 1], '?');
-        assert.isString(question2);
-        assert.equal(question2[question2.length - 1], '?');
+        assert.isString(question[0]);
+        assert.equal(question[0][question[0].length - 1], '?');
+        assert.isString(question[1]);
+        assert.equal(question[1][question[1].length - 1], '?');
       },
       "and we compare the answer and the question": {
-        topic(question1, question2, answer) {
-          this.callback(null, question1, question2, answer);
+        topic(questions, answer) {
+          setImmediate(() => {
+            this.callback(null, questions[0], questions[1], answer);
+          });
           return undefined;
         },
-        "they match up well": (err, question1, question2, answer) => {
+        "they match up well": (err, question0, question1, answer) => {
           assert.ifError(err);
           // NB: you need to implement isAnswerTo yourself
+          assert(isAnswerTo(answer, question0));
           assert(isAnswerTo(answer, question1));
-          assert(isAnswerTo(answer, question2));
         }
       }
     }
@@ -238,9 +245,9 @@ let batch = {
 };
 ```
 
-Note that if a batch's `topic` returns more than one value, they will be provided
-*in order* for any sub-batches' `topic`, but hierarchically *in reverse order*.
-This may be a little confusing.
+Note that if a batch's `topic` returns more than one value to its callback, they
+will be provided *in order* for any sub-batches' `topic`, but hierarchically
+*in reverse order*. This may be a little confusing.
 
 Note also that if an error occurs, in either the topic or the tests, the
 sub-batches will not be run.
