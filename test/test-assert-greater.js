@@ -18,15 +18,8 @@
 
 'use strict'
 
-const fs = require('fs')
-
-const _ = require('lodash')
-const debug = require('debug')('perjury:test-assert-greater')
-
 const vows = require('../lib/index')
-const assert = vows.assert
-
-const js = JSON.stringify
+const {assert} = vows
 
 const shouldSucceed = (actual, expected) => {
   const batch = {
