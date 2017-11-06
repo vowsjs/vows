@@ -18,13 +18,10 @@
 
 'use strict'
 
-const fs = require('fs')
-
-const _ = require('lodash')
 const vows = require('../lib/index')
 const Batch = require('../lib/batch')
 const Report = require('../lib/report')
-const assert = vows.assert
+const {assert} = vows
 
 const br = (title, broken, successes, failures, def) => {
   const bd = {}
@@ -192,15 +189,19 @@ vows.describe('batch report')
     'it works': (err, result) => {
       assert.ifError(err)
     },
+    // eslint-disable-next-line handle-callback-err
     'it is a number': (err, result) => {
       assert.isNumber(result)
     },
+    // eslint-disable-next-line handle-callback-err
     'it is the right value': (err, result) => {
       assert.equal(result, 3)
     },
+    // eslint-disable-next-line handle-callback-err
     'it is greater than 7': (err, result) => {
       assert.greater(result, 7)
     },
+    // eslint-disable-next-line handle-callback-err
     'it is less than 0': (err, result) => {
       assert.lesser(result, 0)
     }
@@ -223,15 +224,19 @@ vows.describe('batch report')
       'it works': (err, result) => {
         assert.ifError(err)
       },
+      // eslint-disable-next-line handle-callback-err
       'it is a number': (err, result) => {
         assert.isNumber(result)
       },
+      // eslint-disable-next-line handle-callback-err
       'it is the right value': (err, result) => {
         assert.equal(result, 3)
       },
+      // eslint-disable-next-line handle-callback-err
       'it is greater than 7': (err, result) => {
         assert.greater(result, 7)
       },
+      // eslint-disable-next-line handle-callback-err
       'it is less than 0': (err, result) => {
         assert.lesser(result, 0)
       }
