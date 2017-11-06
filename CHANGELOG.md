@@ -1,8 +1,44 @@
-q# Perjury change log
+# Perjury change log
 
 Perjury adheres to [Semantic Versioning](http://semver.org/).
 
-## 1.0.4 - future
+## 1.0.10 - 2017-11-02
+
+### Fixed
+
+* Resolve Node 4 crashes due to ES6 rest parameter use
+
+## 1.0.9 - 2017-11-01
+
+### Changed
+
+* Switch from JSHint to ESLint and fix ESLint errors
+
+## 1.0.8 - 2017-11-01
+
+### Added
+
+* Test that the report shows the right number of errors
+
+## 1.0.7 - 2017-11-01
+
+### Fixed
+
+* Add a missing `'use strict';` statement
+
+## 1.0.6 - 2017-11-01
+
+### Changed
+
+* Test results are now indented
+
+## 1.0.5 - 2017-11-01
+
+### Fixed
+
+* Update package-lock.json
+
+## 1.0.4 - 2017-11-01
 
 ### Added
 
@@ -10,6 +46,7 @@ Perjury adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+* Correctly display batch output near the batch title
 * Fix typo in compatibility notes
 
 ## 1.0.3 - 2017-10-25
