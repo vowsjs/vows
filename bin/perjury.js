@@ -30,15 +30,14 @@ const debug = require('debug')('perjury:command-line')
 
 require('coffee-script/register')
 
-const argv = require('yargs')
+const {argv} = require('yargs')
   .help('h')
-  .argv
 
 const cwd = process.cwd()
 
-let broken = 0,
-  successes = 0,
-  failures = 0
+let broken = 0
+let successes = 0
+let failures = 0
 
 const runTestSuite = (testFileName, callback) => {
   const testPath = path.join(cwd, testFileName)
