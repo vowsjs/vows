@@ -19,7 +19,7 @@
 'use strict'
 
 const vows = require('../lib/index')
-const assert = vows.assert
+const {assert} = vows
 
 vows
   .describe('bare assert()')
