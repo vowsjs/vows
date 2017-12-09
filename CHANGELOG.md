@@ -1,6 +1,6 @@
 # Perjury change log
 
-Perjury adheres to [Semantic Versioning](http://semver.org/).
+Perjury adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
 ## 1.0.10 - 2017-11-02
 
