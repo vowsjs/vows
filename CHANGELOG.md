@@ -2,6 +2,28 @@
 
 Perjury adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## 1.1.0 - 2017-11-06
+
+### Changed
+
+* Explicitly allow calling `this.callback()` synchronously in topic
+
+## 1.0.12
+
+### Fixed
+
+* Resolve Node 4 crashes due to ES6 spread/rest/destructuring u	se
+
+## 1.0.11 - 2017-11-06
+
+### Changed
+
+* Improve `atMostOnce()` behavior to have a more specific error and provide debugging output
+
+### Fixed
+
+* Resolve many linter errors
+
 ## 1.0.10 - 2017-11-02
 
 ### Fixed
