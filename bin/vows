@@ -493,11 +493,6 @@ function importSuites(files) {
             var args = [process.argv[1], '--json', f],
                 result;
 
-            // --supress-stdout stops the stream too early on win32
-            if(process.platform !== 'win32') {
-                args.push( '--supress-stdout');
-            }
-
             var p = spawn(process.execPath, args);
 
             //
