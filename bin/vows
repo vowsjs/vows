@@ -193,17 +193,9 @@ if (options.nocolor) {
 
 if (options.supressStdout) {
     _reporter.setStream && _reporter.setStream(process.stdout);
-    var devNullStream = null;
-
-    if(process.platform === 'win32'){
-        devNullStream = new NopStream ();
-    } else {
-        devNullStream = fs.createWriteStream('/dev/null');
-    }
-
-    process.__defineGetter__('stdout', function () {
-        return devNullStream;
-    });
+    process.stdout.write = function() {
+      return true;
+    };
 }
 
 if (options.watch) {
