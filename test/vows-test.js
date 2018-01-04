@@ -83,9 +83,9 @@ vows.describe("Vows").addBatch({
             },
             'after a successful `fs.open`': {
                 topic: function (fd, stat) {
-                    fs.read(fd, stat.size, 0, "utf8", this.callback);
+                    fs.read(fd, Buffer.alloc(stat.size), 0, stat.size, null, this.callback);
                 },
-                'after a successful `fs.read`': function (data) {
+                'after a successful `fs.read`': function (err, len, data) {
                     assert.match (data, /after a successful `fs.read`/);
                 }
             }
