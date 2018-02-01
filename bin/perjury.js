@@ -28,7 +28,7 @@ const debug = require('debug')('perjury:command-line')
 
 // This registers a hook so that coffeescript modules can be loaded
 
-require('coffee-script/register')
+require('coffeescript/register')
 
 const argv = require('yargs')
   .help('h')
