@@ -18,7 +18,7 @@
 
 'use strict'
 
-const debug = require('debug')('perjury:test-topic-argument')
+const debug = require('debug')('vows:test-topic-argument')
 
 const vows = require('../lib/index')
 const assert = vows.assert
