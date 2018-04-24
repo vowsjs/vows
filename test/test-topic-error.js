@@ -1,4 +1,4 @@
-// test-topic-error.js -- A test script that uses perjury
+// test-topic-error.js -- Test topics that throw errors
 //
 // Copyright 2016 fuzzy.ai <evan@fuzzy.ai>
 //

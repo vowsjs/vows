@@ -1,4 +1,4 @@
-// test-export.js -- A test script that uses perjury
+// test-topic-argument.js -- Test passing arguments to sub-batches
 //
 // Copyright 2016 fuzzy.ai <evan@fuzzy.ai>
 //

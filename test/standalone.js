@@ -1,4 +1,4 @@
-// standalone.js -- A test script that uses perjury
+// standalone.js -- A test script that uses vows
 //
 // Copyright 2016, 2017 fuzzy.ai <evan@fuzzy.ai>
 //

@@ -1,4 +1,4 @@
-# test-export.coffee -- A test script that uses perjury
+# test-export.coffee -- A test script that uses vows
 #
 # Copyright 2016 fuzzy.ai <evan@fuzzy.ai>
 #

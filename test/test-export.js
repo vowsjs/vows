@@ -1,4 +1,4 @@
-// test-export.js -- A test script that uses perjury
+// test-export.js -- A test script that uses vows
 //
 // Copyright 2016 fuzzy.ai <evan@fuzzy.ai>
 //

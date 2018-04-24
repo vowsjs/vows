@@ -1,4 +1,4 @@
-// test-promise.js -- Test returning a promise from the topic
+// atest-async-function.js -- Test async topic
 //
 // Copyright 2017 fuzzy.ai <evan@fuzzy.ai>
 //

@@ -1,4 +1,4 @@
-// test-assert-root.js -- Test this.callback()
+// test-this-callback.js -- Test this.callback()
 //
 // Copyright 2017 AJ Jordan <alex@strugee.net>
 //
@@ -26,7 +26,7 @@ vows
   .addBatch({
     'this.callback': {
       topic () {
-        // We can't return this.callback directly because if it's undefined, Perjury thinks it's an async batch
+        // We can't return this.callback directly because if it's undefined, vows thinks it's an async batch
         return {cb: this.callback}
       },
       'is a function': (err, obj) => {
