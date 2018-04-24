@@ -1,8 +1,8 @@
 {
-  "name": "perjury",
-  "version": "1.1.1",
+  "name": "vows",
+  "version": "1.0.0-alpha1",
   "license": "Apache-2.0",
-  "description": "testing framework with similar structure to vows.js",
+  "description": "testing framework",
   "keywords": [
     "unit test",
     "vows",
@@ -13,16 +13,16 @@
     "email": "evan@fuzzy.ai"
   },
   "main": "lib/index.js",
-  "bin": "./bin/perjury.js",
+  "bin": "./bin/vows.js",
   "scripts": {
     "lint": "eslint bin/*.js lib/*.js test/*.js",
-    "test": "node test/standalone.js && node bin/perjury.js test/test-*.* && (check-node-version --node '< 7.10.1' --quiet || node bin/perjury.js test/atest-*.js)",
+    "test": "node test/standalone.js && node bin/vows.js test/test-*.* && (check-node-version --node '< 7.10.1' --quiet || node bin/vows.js test/atest-*.js)",
     "test-coverage": "nyc -r lcov npm test"
   },
   "directories": {
     "lib": "./lib"
   },
-  "repository": "fuzzy-ai/perjury",
+  "repository": "vowsjs/vows",
   "dependencies": {
     "async": "^2.6.0",
     "coffeescript": "^1.12.7",

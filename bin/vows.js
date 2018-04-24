@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// perjury.js -- command-line driver for perjury test scripts
+// vows.js -- command-line driver for vows test scripts
 //
 // Copyright 2016 fuzzy.ai <evan@fuzzy.ai>
 //
@@ -24,7 +24,7 @@ const path = require('path')
 
 const _ = require('lodash')
 const async = require('async')
-const debug = require('debug')('perjury:command-line')
+const debug = require('debug')('vows:command-line')
 
 // This registers a hook so that coffeescript modules can be loaded
 
