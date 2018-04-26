@@ -454,6 +454,23 @@ small ways.
     test instead. So, if your tests expect to receive a Promise passed
     synchronously, you should change that.
 
+-   vows 1.x does not pass `this.context` to the topic.
+
+-   vows 1.x does not support many of the undocumented features of vows 0.x,
+    including `vows.prepare()`, `beforeSuite()`, `afterSuite()`, and
+    `vows.options`.
+
+-   vows 1.x only provides a single, default reporter.
+
+-   vows 1.x does not support command-line control of verbosity (`-v` or `-s`).
+
+-   vows 1.x does not support the `-m` or `-r` command-line flags.
+
+-   vows 0.x automatically runs any tests in the `test` or `spec` directory.
+    vows 1.x requires that you specify the tests you want to run.
+
+-   vows 1.x does not support the `-i` (isolate) command-line flag.
+
 ## assert
 
 The exposed `assert` module-ish object has a number of useful methods for doing
