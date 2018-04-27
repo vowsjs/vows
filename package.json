@@ -28,7 +28,7 @@
     "coffeescript": "^1.12.7",
     "debug": "^3.1.0",
     "lodash": "^4.17.10",
-    "yargs": "^11.0.0"
+    "yargs": "^11.1.0"
   },
   "devDependencies": {
     "check-node-version": "^3.2.0",
