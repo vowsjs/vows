@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "check-node-version": "^3.2.0",
-    "coveralls": "^3.0.0",
     "eslint": "^4.16.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.8.0",
