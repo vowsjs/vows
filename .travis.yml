@@ -7,11 +7,11 @@ node_js:
 - '5'
 - '4'
 script: npm run test
-deploy:
-  provider: npm
-  email: evan@fuzzy.ai
-  api_key:
-    secure: GBaiqCYxs6sYyGoyqWx/B066cJMe7wdeaVW6WCIJRJSkUO34ZKLI19sUCM8P6fV4qnhoIQH6LlnmWcu/8LpswCmx+5DWhNdcVzIWWJ4ewheccSlckdI2crqCaAkE52fQxLZbI/g+xiwE4QcYHNgmJIcONbf8PQwSPtYDK44Edh8ILxO+VdYg/AHpQyoCn8afovuh7nzNCdsR0iDBAY20RoSNungB/360riCCCaUxc95d/gzMccase2/z78zgQoz84ffarP1N5GjZlMsCm0u8aIMjI3YPiOWjwClXP7ZUH/VDrKpYhKxbFo2jb2h0ynhhneg+jK2b7rR5zXSK/koagT6y/IGl75/M5i9CTAEc6BlKBEa/KLDVl89IdXAr7b3KYY1KQdNuwpuxnX6QwIDRVqKdFzknkiUYttWvyL9SG/c6WfucYS07f+FKC4qrAcAjgt7VLV7N72amrFleTazQ67NSPpLaxjjX8qffRbjaACJwO2ydhVcKOXe3CqDxGgh3uvK90qfcBvO8U8fDz6759FT2HxYjpnYV7DXRuC47TDwQHHDNOQFDgFwOb2F1FqQAws9BWwbKtZWwPBdYaT0L3GYwlTMaL816D9sCxyo9whXPz0k7s59uks+VrP6t1x/WBFd68XTsGB7/B2h9LglLkQOFFl7PbOdQfqQZJqYA2uo=
-  on:
-    tags: true
-    repo: vowsjs/vows
+# deploy:
+#   provider: npm
+#   email: evan@fuzzy.ai
+#   api_key:
+#     secure: GBaiqCYxs6sYyGoyqWx/B066cJMe7wdeaVW6WCIJRJSkUO34ZKLI19sUCM8P6fV4qnhoIQH6LlnmWcu/8LpswCmx+5DWhNdcVzIWWJ4ewheccSlckdI2crqCaAkE52fQxLZbI/g+xiwE4QcYHNgmJIcONbf8PQwSPtYDK44Edh8ILxO+VdYg/AHpQyoCn8afovuh7nzNCdsR0iDBAY20RoSNungB/360riCCCaUxc95d/gzMccase2/z78zgQoz84ffarP1N5GjZlMsCm0u8aIMjI3YPiOWjwClXP7ZUH/VDrKpYhKxbFo2jb2h0ynhhneg+jK2b7rR5zXSK/koagT6y/IGl75/M5i9CTAEc6BlKBEa/KLDVl89IdXAr7b3KYY1KQdNuwpuxnX6QwIDRVqKdFzknkiUYttWvyL9SG/c6WfucYS07f+FKC4qrAcAjgt7VLV7N72amrFleTazQ67NSPpLaxjjX8qffRbjaACJwO2ydhVcKOXe3CqDxGgh3uvK90qfcBvO8U8fDz6759FT2HxYjpnYV7DXRuC47TDwQHHDNOQFDgFwOb2F1FqQAws9BWwbKtZWwPBdYaT0L3GYwlTMaL816D9sCxyo9whXPz0k7s59uks+VrP6t1x/WBFd68XTsGB7/B2h9LglLkQOFFl7PbOdQfqQZJqYA2uo=
+#   on:
+#     tags: true
+#     repo: vowsjs/vows
