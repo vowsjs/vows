@@ -15,9 +15,9 @@
     "Jerry Sievert <jerry@legitimatesounding.com>"
   ],
   "dependencies": {
-    "eyes": "~0.1.6",
     "diff": "~1.0.8",
-    "glob": "~4.0.6"
+    "eyes": "~0.1.6",
+    "glob": "^7.1.2"
   },
   "main": "./lib/vows",
   "repository": {
