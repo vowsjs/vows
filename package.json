@@ -15,7 +15,7 @@
     "Jerry Sievert <jerry@legitimatesounding.com>"
   ],
   "dependencies": {
-    "diff": "~1.0.8",
+    "diff": "^4.0.1",
     "eyes": "~0.1.6",
     "glob": "^7.1.2"
   },
