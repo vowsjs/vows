@@ -1,3 +1,7 @@
+v0.8.3 / Tue, 15 Oct 2019
+========================
+
+  * Update `diff` dependency to fix regexp denial-of-service vulnerability (`Trott`)
 
 v0.8.0 / Tue, 4 Nov 2014
 ========================
