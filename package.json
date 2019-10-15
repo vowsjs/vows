@@ -1,6 +1,6 @@
 {
   "name": "vows",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Asynchronous BDD & continuous integration for node.js",
   "url": "http://vowsjs.org",
   "keywords": [
