@@ -40,7 +40,7 @@ vows
         assert.ifError(err)
         assert.isNumber(fd, (fd instanceof Promise) ? 'fd is a Promise' : 'fd is not a number')
       },
-      'teardown': async function (fd) {
+      teardown: async function (fd) {
         const result = await close(fd)
         return result
       }

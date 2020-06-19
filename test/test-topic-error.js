@@ -80,7 +80,7 @@ vows
         topic (suite) {
           const callback = this.callback
           const oldWrite = process.stdout.write
-          const redir = fs.createWriteStream('/dev/null', {defaultEncoding: 'utf8'})
+          const redir = fs.createWriteStream('/dev/null', { defaultEncoding: 'utf8' })
           process.stdout.write = redir.write.bind(redir)
           suite.run((err, broken, successes, failures) => {
             process.stdout.write = oldWrite

@@ -27,7 +27,7 @@ vows
     'this.callback': {
       topic () {
         // We can't return this.callback directly because if it's undefined, vows thinks it's an async batch
-        return {cb: this.callback}
+        return { cb: this.callback }
       },
       'is a function': (err, obj) => {
         assert.ifError(err)
@@ -37,7 +37,7 @@ vows
       },
       'in a sub-batch': {
         topic () {
-          return {cb: this.callback}
+          return { cb: this.callback }
         },
         'is a function': (err, obj) => {
           assert.ifError(err)

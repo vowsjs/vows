@@ -42,7 +42,7 @@ vows
         assert.ifError(err)
         assert.isNumber(fd, (fd instanceof Promise) ? 'fd is a Promise' : 'fd is not a number')
       },
-      'teardown': (fd) => {
+      teardown: (fd) => {
         return new Promise((resolve, reject) => {
           fs.close(fd, (err) => {
             if (err) {
