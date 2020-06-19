@@ -16,7 +16,7 @@
   "bin": "./bin/vows.js",
   "scripts": {
     "lint": "eslint bin/*.js lib/*.js test/*.js",
-    "test": "node test/standalone.js && node bin/vows.js test/test-*.* && (check-node-version --node '< 7.10.1' --quiet || node bin/vows.js test/atest-*.js)",
+    "test": "node test/standalone.js && node bin/vows.js test/test-*",
     "test-coverage": "nyc -r lcov npm test"
   },
   "directories": {
@@ -38,7 +38,6 @@
     "yargs": "^11.1.0"
   },
   "devDependencies": {
-    "check-node-version": "^3.2.0",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.11.0",
