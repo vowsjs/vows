@@ -2,7 +2,7 @@ v1.0.0 / (?)
 ============
   * [perjury](https://github.com/fuzzy-ai/perjury), a vows work-alike with a new
     codebase, becomes the new vows.
-  * the minimum required Node version is now Node 8 (4, 5, and 6 were previously supported by perjury and are now dropped; 7 was never supported)
+  * the minimum required Node version is now Node 9 (4, 5, 6, and 8 were previously supported by perjury and are now dropped; 7 was never supported)
 
 v0.8.1 / Fri, 21 Nov 2014
 =========================
