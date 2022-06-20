@@ -41,8 +41,7 @@ let successes = 0
 let failures = 0
 
 const runTestSuite = (testFileName, callback) => {
-  const testPath = path.join(cwd, testFileName)
-  const runner = require(testPath)
+  const runner = require(testFileName)
   if (!_.isFunction(runner)) {
     callback(new Error(`Path ${testFileName} does not return a function`))
   } else {
