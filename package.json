@@ -1,6 +1,7 @@
 {
   "name": "vows",
   "version": "1.0.0-alpha.1",
+  "type": "module",
   "license": "Apache-2.0",
   "description": "testing framework",
   "keywords": [
@@ -12,42 +13,68 @@
     "name": "Evan Prodromou",
     "email": "evan@fuzzy.ai"
   },
-  "main": "lib/index.js",
-  "bin": "./bin/vows.js",
-  "scripts": {
-    "lint": "eslint bin/*.js lib/*.js test/*.js",
-    "test": "node test/standalone.js && node bin/vows.js test/test-*",
-    "test-coverage": "nyc -r lcov npm test"
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./assert": {
+      "types": "./dist/assert.d.ts",
+      "default": "./src/assert.js"
+    }
   },
-  "directories": {
-    "lib": "./lib"
+  "bin": {
+    "vows": "./bin/vows.js"
+  },
+  "scripts": {
+    "test": "node --test ./test/*.test.js",
+    "test:coverage": "c8 node --test ./test/*.test.js",
+    "build:types": "tsc",
+    "lint": "biome lint src test bin",
+    "lint:fix": "biome lint --write src test bin",
+    "lint:md": "markdownlint-cli2 \"README.md\"",
+    "format": "biome format --write src test bin",
+    "format:check": "biome format src test bin",
+    "check": "biome check src test bin && pnpm run build:types",
+    "check:fix": "biome check --write src test bin",
+    "prepublishOnly": "pnpm run build:types"
   },
   "files": [
     "bin/*",
-    "lib/*",
+    "src/*",
+    "dist/*",
     "CHANGELOG.md",
     "LICENSE",
     "README.md"
   ],
   "repository": "vowsjs/vows",
   "dependencies": {
-    "async": "^3.2.0",
-    "coffeescript": "^1.12.7",
-    "debug": "^4.1.1",
-    "lodash": "^4.17.11",
-    "yargs": "^11.1.0"
+    "debug": "^4.4.0"
   },
   "devDependencies": {
-    "eslint": "^7.3.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.11.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "nyc": "^15.1.0",
-    "util-promisify": "^2.1.0"
+    "@biomejs/biome": "^2.0.0",
+    "@types/debug": "^4.1.12",
+    "@types/node": "^25.2.1",
+    "c8": "^10.1.3",
+    "markdownlint-cli2": "^0.17.2",
+    "typescript": "^5.7.3"
   },
   "engines": {
-    "node": ">=9 <=14"
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.6.1",
+  "c8": {
+    "all": true,
+    "include": [
+      "src/**/*.js"
+    ],
+    "exclude": [
+      "test/**"
+    ],
+    "reporter": [
+      "text",
+      "lcov",
+      "html"
+    ]
   }
 }
