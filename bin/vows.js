@@ -16,23 +16,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* jshint esversion: 6 */
+import path from 'node:path'
+import { pathToFileURL } from 'node:url'
+import { parseArgs } from 'node:util'
+import createDebug from 'debug'
 
-'use strict'
+const debug = createDebug('vows:command-line')
 
-const path = require('path')
+const { values, positionals } = parseArgs({
+  allowPositionals: true,
+  options: {
+    help: {
+      type: 'boolean',
+      short: 'h'
+    }
+  }
+})
 
-const _ = require('lodash')
-const async = require('async')
-const debug = require('debug')('vows:command-line')
-
-// This registers a hook so that coffeescript modules can be loaded
-
-require('coffeescript/register')
-
-const argv = require('yargs')
-  .help('h')
-  .argv
+if (values.help) {
+  console.log('Usage: vows [options] <test-files...>')
+  console.log('')
+  console.log('Options:')
+  console.log('  -h, --help  Show this help message')
+  process.exit(0)
+}
 
 const cwd = process.cwd()
 
@@ -40,44 +47,61 @@ let broken = 0
 let successes = 0
 let failures = 0
 
-const runTestSuite = (testFileName, callback) => {
+async function runTestSuite(testFileName) {
   const testPath = path.join(cwd, testFileName)
-  const runner = require(testPath)
-  if (!_.isFunction(runner)) {
-    callback(new Error(`Path ${testFileName} does not return a function`))
-  } else {
+  const testUrl = pathToFileURL(testPath).href
+  const module = await import(testUrl)
+  const runner = module.default || module
+
+  if (typeof runner !== 'function') {
+    throw new Error(`Path ${testFileName} does not return a function`)
+  }
+
+  return new Promise((resolve, reject) => {
     runner((err, suiteBroken, suiteSuccesses, suiteFailures) => {
       if (err) {
-        callback(err)
-      } else if (!_.isNumber(suiteBroken)) {
-        callback(new Error(`suiteBroken for ${testFileName} should be a number, is ${suiteBroken}`))
-      } else if (!_.isNumber(suiteSuccesses)) {
-        callback(new Error(`suiteSuccesses for ${testFileName} should be a number, is ${suiteSuccesses}`))
-      } else if (!_.isNumber(suiteFailures)) {
-        callback(new Error(`suiteFailures for ${testFileName} should be a number, is ${suiteFailures}`))
+        reject(err)
+      } else if (typeof suiteBroken !== 'number') {
+        reject(new Error(`suiteBroken for ${testFileName} should be a number, is ${suiteBroken}`))
+      } else if (typeof suiteSuccesses !== 'number') {
+        reject(
+          new Error(`suiteSuccesses for ${testFileName} should be a number, is ${suiteSuccesses}`)
+        )
+      } else if (typeof suiteFailures !== 'number') {
+        reject(
+          new Error(`suiteFailures for ${testFileName} should be a number, is ${suiteFailures}`)
+        )
       } else {
         debug(`Finished suite ${testFileName}: ${suiteBroken}, ${suiteSuccesses}, ${suiteFailures}`)
         broken += suiteBroken
         successes += suiteSuccesses
         failures += suiteFailures
-        callback(null)
+        resolve()
       }
     })
-  }
+  })
 }
 
-async.eachSeries(argv._, runTestSuite, (err) => {
-  if (err) {
-    console.error(err)
-  } else {
+async function main() {
+  try {
+    for (const testFile of positionals) {
+      await runTestSuite(testFile)
+    }
+
     console.log('SUMMARY')
     console.log(`\tBroken:\t\t${broken}`)
     console.log(`\tSuccesses:\t${successes}`)
     console.log(`\tFailures:\t${failures}`)
+
     if (broken > 0 || failures > 0) {
       process.exit(1)
     } else {
       process.exit(0)
     }
+  } catch (err) {
+    console.error(err)
+    process.exit(1)
   }
-})
+}
+
+main()
