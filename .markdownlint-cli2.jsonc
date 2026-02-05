@@ -1,0 +1,9 @@
+{
+  "default": true,
+  // Disable line length rule
+  "MD013": false,
+  // Allow certain HTML elements
+  "MD033": {
+    "allowed_elements": ["br", "img"]
+  }
+}

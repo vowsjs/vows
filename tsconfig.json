@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "lib": ["es2024"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "es2024",
+    "skipLibCheck": true,
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.js"],
+  "exclude": ["node_modules", "dist", "coverage", "test"]
+}
