@@ -48,6 +48,6 @@
     "util-promisify": "^2.1.0"
   },
   "engines": {
-    "node": ">=9 <=14"
+    "node": ">=9 <=25"
   }
 }
